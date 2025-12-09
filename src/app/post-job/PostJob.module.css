@@ -1,0 +1,87 @@
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background: #fdfdfd;
+}
+
+.title {
+    font-size: 20px;
+    color: var(--mcm-green);
+    border-bottom: 2px solid var(--mcm-green);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .formGrid {
+        grid-template-columns: 200px 1fr;
+    }
+}
+
+.label {
+    font-weight: bold;
+    font-size: 13px;
+    text-align: left;
+    padding-right: 0;
+    color: #333;
+}
+
+@media (min-width: 768px) {
+    .label {
+        text-align: right;
+        padding-right: 16px;
+    }
+}
+
+.input {
+    width: 100%;
+    max-width: 400px;
+    height: 32px;
+}
+
+.textarea {
+    width: 100%;
+    max-width: 500px;
+    height: 100px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.sectionHeader {
+    grid-column: 1 / -1;
+    background: #eee;
+    padding: 6px 12px;
+    font-weight: bold;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin: 16px 0 8px 0;
+    color: #000;
+}
+
+.submitRow {
+    grid-column: 2;
+    margin-top: 20px;
+}
+
+.submitButton {
+    background: var(--mcm-yellow);
+    border: 1px solid #cc9900;
+    padding: 10px 30px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.submitButton:hover {
+    background: #ffdb4d;
+}

@@ -1,0 +1,70 @@
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+}
+
+@media (min-width: 768px) {
+    .pageContainer {
+        flex-direction: row;
+    }
+}
+
+.content {
+    flex: 1;
+    overflow-x: auto;
+    /* Allow tables to scroll if they get too wide */
+}
+
+.breadcrumbs {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.categoryTitle {
+    font-size: 20px;
+    color: var(--mcm-green);
+    margin-bottom: 16px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+
+/* Table Styles */
+.jobTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.jobTable th {
+    text-align: left;
+    background: #f0f0f0;
+    padding: 6px 8px;
+    border-bottom: 1px solid #999;
+    font-weight: bold;
+}
+
+.jobTable td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+}
+
+.jobTable tr:hover td {
+    background: #ffffcc;
+    /* Classic yellow highlight */
+    cursor: pointer;
+}
+
+.jobTitle {
+    font-weight: bold;
+    color: var(--mcm-link);
+    display: block;
+}
+
+.jobSnippet {
+    color: #666;
+    font-size: 11px;
+    margin-top: 2px;
+}

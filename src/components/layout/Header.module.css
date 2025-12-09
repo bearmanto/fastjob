@@ -1,0 +1,171 @@
+.header {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 4px solid var(--hunter-green);
+    background: #fff;
+}
+
+.topRow {
+    display: block;
+    /* Visible on all screens now */
+    font-size: 11px;
+    color: #666;
+    border-bottom: 1px solid #eee;
+    padding: 4px 0;
+}
+
+/* @media (min-width: 768px) {
+    .topRow was previously handling display changes
+} */
+
+.utilityLinks a {
+    margin-left: 10px;
+    color: var(--hunter-green);
+    font-weight: bold;
+}
+
+.divider {
+    margin-left: 10px;
+    color: #ccc;
+}
+
+/* Inner container for Main Row */
+.innerMainRow {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (min-width: 768px) {
+    .innerMainRow {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+    }
+}
+
+.mainRow {
+    display: block;
+    /* changed from flex */
+    /* padding: 12px 16px; handled by container */
+    padding: 12px 0;
+    /* Vertical padding only */
+}
+
+/* @media (min-width: 768px) {
+    .mainRow {
+       Refactored to innerMainRow
+    }
+} */
+
+.logo {
+    font-family: Impact, "Arial Black", sans-serif;
+    font-size: 24px;
+    /* Slightly smaller on mobile */
+    color: var(--hunter-green);
+    text-decoration: none !important;
+    letter-spacing: -1px;
+    /* Ensure Logo is always first */
+    order: 1;
+}
+
+@media (min-width: 768px) {
+    .logo {
+        font-size: 28px;
+        order: 0;
+    }
+}
+
+.postJob {
+    /* On mobile, put this next to Logo */
+    order: 2;
+}
+
+@media (min-width: 768px) {
+    .postJob {
+        order: 0;
+    }
+}
+
+.searchContainer {
+    width: 100%;
+    display: flex;
+    height: 36px;
+    /* On mobile, push search to new line */
+    order: 3;
+}
+
+@media (min-width: 768px) {
+    .searchContainer {
+        flex: 1;
+        width: auto;
+        order: 0;
+    }
+}
+
+.searchContainer {
+    width: 100%;
+    display: flex;
+    height: 36px;
+}
+
+@media (min-width: 768px) {
+    .searchContainer {
+        flex: 1;
+    }
+}
+
+.searchInput {
+    flex: 1;
+    border: 1px solid var(--mcm-green);
+    padding: 0 10px;
+    font-size: 16px;
+}
+
+.searchInput:focus {
+    outline: 2px solid var(--mcm-yellow);
+}
+
+.searchButton {
+    background: var(--mcm-green);
+    color: #fff;
+    border: none;
+    padding: 0 20px;
+    font-weight: bold;
+}
+
+.postButton {
+    display: inline-block;
+    background: var(--mcm-yellow);
+    color: var(--mcm-text);
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 14px;
+    border: 1px solid #cc9900;
+    text-decoration: none !important;
+}
+
+.postButton:hover {
+    background: #ffd633;
+}
+
+.navBar {
+    background: var(--mcm-green);
+    color: #fff;
+    padding: 6px 0;
+    /* Vertical only */
+    display: block;
+    /* changed from flex */
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.navBar a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.navBar a:hover {
+    text-decoration: underline;
+}

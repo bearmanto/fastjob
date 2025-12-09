@@ -1,0 +1,32 @@
+.breadcrumbs {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.item {
+    display: inline-flex;
+    align-items: center;
+}
+
+.link {
+    color: var(--hunter-green);
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.label {
+    color: #333;
+    font-weight: bold;
+}
+
+.separator {
+    margin: 0 6px;
+    color: #999;
+}

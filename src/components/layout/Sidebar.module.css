@@ -1,0 +1,53 @@
+.sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        width: 200px;
+        flex-shrink: 0;
+        border-right: 1px solid #ddd;
+        border-bottom: none;
+        padding-right: 16px;
+        margin-right: 16px;
+    }
+}
+
+/* On mobile, maybe hide sections or make them side-by-side? 
+   For now, we just let them stack naturally. */
+.section {
+    margin-bottom: 24px;
+}
+
+.header {
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--mcm-green);
+    border-bottom: 1px solid var(--mcm-green);
+    padding-bottom: 2px;
+    margin-bottom: 8px;
+}
+
+.filterList {
+    list-style: none;
+    padding: 0;
+}
+
+.filterList li {
+    margin-bottom: 4px;
+}
+
+.filterList a {
+    color: #333;
+    text-decoration: none;
+}
+
+.filterList a:hover {
+    text-decoration: underline;
+    color: var(--mcm-link);
+}

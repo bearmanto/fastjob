@@ -1,0 +1,125 @@
+.section {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.sectionHeader {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--hunter-green);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .formGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.fullWidth {
+    grid-column: 1 / -1;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #666;
+}
+
+.input,
+.textarea {
+    padding: 6px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    font-family: inherit;
+    width: 100%;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.saveButton {
+    background: var(--hunter-green);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.saveButton:hover {
+    background: var(--pine-teal);
+}
+
+.fileInput {
+    font-size: 12px;
+}
+
+.resumeLink {
+    font-size: 12px;
+    color: var(--mcm-link);
+    margin-top: 4px;
+    display: inline-block;
+}
+
+/* List Items */
+.listItem {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.listItem:last-child {
+    border-bottom: none;
+}
+
+.itemHeader {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.itemSub {
+    font-size: 11px;
+    color: #666;
+}
+
+.deleteButton {
+    background: none;
+    border: none;
+    color: #cc0000;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.addButton {
+    background: #eee;
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+    font-size: 11px;
+    cursor: pointer;
+}
