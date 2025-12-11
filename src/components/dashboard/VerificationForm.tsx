@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { submitVerification } from '@/app/dashboard/actions';
 import { createClient } from '@/utils/supabase/client';
 import styles from '@/app/profile/Profile.module.css';
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function VerificationForm({ companyId }: Props) {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [docType, setDocType] = useState('nib');
@@ -60,7 +62,7 @@ export function VerificationForm({ companyId }: Props) {
             setMessage(result.message);
             if (result.success) {
                 // simple reload to show pending state
-                window.location.reload();
+                router.refresh();
             }
         } catch (err: any) {
             console.error(err);

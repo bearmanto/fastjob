@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import styles from '@/app/dashboard/Dashboard.module.css';
 
 interface Props {
@@ -51,17 +52,7 @@ export function SeekerDashboard({ profile, applications }: Props) {
                                         <td style={{ padding: '12px 0' }}>{app.job.company.name}</td>
                                         <td style={{ padding: '12px 0' }}>{new Date(app.created_at).toLocaleDateString()}</td>
                                         <td style={{ padding: '12px 0' }}>
-                                            <span style={{
-                                                padding: '4px 8px',
-                                                borderRadius: '4px',
-                                                background: app.status === 'new' ? '#e6f4f1' : '#eee',
-                                                color: app.status === 'new' ? '#005f4b' : '#666',
-                                                textTransform: 'uppercase',
-                                                fontSize: '11px',
-                                                fontWeight: 'bold'
-                                            }}>
-                                                {app.status}
-                                            </span>
+                                            <StatusBadge status={app.status} />
                                         </td>
                                     </tr>
                                 ))}

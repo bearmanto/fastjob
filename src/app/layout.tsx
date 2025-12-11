@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
+import { ToastProvider } from '@/components/ui/Toast';
 
 export const metadata: Metadata = {
   title: 'FastJob - Industrial Hiring Platform',
@@ -16,10 +17,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="layout-wrapper">
-          <Header />
-          <main className="container main-content">
-            {children}
-          </main>
+          <ToastProvider>
+            <Header />
+            <main className="container main-content">
+              {children}
+            </main>
+          </ToastProvider>
         </div>
       </body>
     </html>

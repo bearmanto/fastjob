@@ -13,55 +13,21 @@ export async function updateBasicProfile(formData: FormData) {
     }
 
     const headline = formData.get('headline') as string;
+    const location = formData.get('location') as string;
     const summary = formData.get('summary') as string;
     const phone = formData.get('phone') as string;
     const linkedin = formData.get('linkedin') as string;
     const full_name = formData.get('full_name') as string;
-    const resumeFile = formData.get('resume') as File | null;
-
-    let resumeUrl = formData.get('current_resume_url') as string;
-
-    // Handle File Upload if a new file is provided
-    if (resumeFile && resumeFile.size > 0) {
-        // Validate File Size (e.g., 5MB) and Type
-        if (resumeFile.size > 5 * 1024 * 1024) {
-            // ideally return error state, but for now throwing
-            throw new Error('File size too large. Max 5MB.');
-        }
-        if (resumeFile.type !== 'application/pdf') {
-            throw new Error('Only PDF files are allowed.');
-        }
-
-        const filename = `${user.id}/${Date.now()}_${resumeFile.name}`;
-
-        const { error: uploadError } = await supabase.storage
-            .from('resumes')
-            .upload(filename, resumeFile, {
-                upsert: true,
-            });
-
-        if (uploadError) {
-            console.error('Upload error:', uploadError);
-            throw new Error('Failed to upload resume');
-        }
-
-        // Get Public URL (if bucket is public) or we store the path
-        // For private buckets, we might just store the path and sign it on read.
-        // But for simplicity in "Easy Apply", let's assume we want a downloadable link.
-        // If the bucket is initialized as private, we need createSignedUrl logic on read.
-        // For now, let's just store the path.
-        resumeUrl = filename;
-    }
 
     const { error } = await supabase
         .from('profiles')
         .update({
             full_name,
             headline,
+            location,
             summary,
             phone,
             linkedin,
-            resume_url: resumeUrl,
         })
         .eq('id', user.id);
 
@@ -70,6 +36,47 @@ export async function updateBasicProfile(formData: FormData) {
         throw new Error('Failed to update profile');
     }
 
+    if (error) {
+        console.error('Profile update error:', error);
+        throw new Error('Failed to update profile');
+    }
+
+    revalidatePath('/profile');
+}
+
+export async function saveResume(filePath: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+
+    const { data: { publicUrl } } = supabase.storage.from('resumes').getPublicUrl(filePath);
+
+    const { error } = await supabase
+        .from('profiles')
+        .update({ resume_url: publicUrl })
+        .eq('id', user.id);
+
+    if (error) {
+        console.error('Resume save error:', error);
+        throw new Error('Failed to save resume URL');
+    }
+    revalidatePath('/profile');
+}
+
+export async function deleteResume() {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+
+    const { error } = await supabase
+        .from('profiles')
+        .update({ resume_url: null })
+        .eq('id', user.id);
+
+    if (error) {
+        console.error('Resume delete error:', error);
+        throw new Error('Failed to delete resume');
+    }
     revalidatePath('/profile');
 }
 

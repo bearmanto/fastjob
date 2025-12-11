@@ -74,3 +74,77 @@ export async function submitVerification(formData: FormData) {
     revalidatePath('/company/profile');
     return { success: true, message: 'Verification requested! We will review your documents shortly.' };
 }
+
+// ============================================
+// APPLICATION STATUS MANAGEMENT
+// ============================================
+
+type ApplicationStatus = 'applied' | 'viewed' | 'shortlisted' | 'interview' | 'processing' | 'hired' | 'rejected';
+
+export async function updateApplicationStatus(applicationId: string, newStatus: ApplicationStatus) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { success: false, message: 'Not authenticated' };
+    }
+
+    // RLS policy ensures only hirers can update their own job applications
+    const { error } = await supabase
+        .from('applications')
+        .update({
+            status: newStatus,
+            status_updated_at: new Date().toISOString()
+        })
+        .eq('id', applicationId);
+
+    if (error) {
+        console.error('Error updating application status:', error);
+        return { success: false, message: 'Failed to update status.' };
+    }
+
+    revalidatePath('/dashboard');
+    return { success: true, message: `Status updated to ${newStatus}.` };
+}
+
+// ============================================
+// JOB LIFECYCLE MANAGEMENT
+// ============================================
+
+export async function closeJob(jobId: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { success: false, message: 'Not authenticated' };
+    }
+
+    // Verify ownership through company
+    const { data: company } = await supabase
+        .from('companies')
+        .select('id')
+        .eq('owner_id', user.id)
+        .single();
+
+    if (!company) {
+        return { success: false, message: 'No company found.' };
+    }
+
+    // Close the job (one-way, cannot reopen)
+    const { error } = await supabase
+        .from('jobs')
+        .update({
+            status: 'closed',
+            closed_at: new Date().toISOString()
+        })
+        .eq('id', jobId)
+        .eq('company_id', company.id);
+
+    if (error) {
+        console.error('Error closing job:', error);
+        return { success: false, message: 'Failed to close job.' };
+    }
+
+    revalidatePath('/dashboard');
+    return { success: true, message: 'Job closed successfully.' };
+}

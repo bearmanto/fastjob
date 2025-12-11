@@ -129,3 +129,15 @@ button {
   font-family: inherit;
   font-size: 13px;
 }
+
+/* Subtle transitions - McMaster industrial style */
+button,
+a,
+select {
+  transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+}
+
+input,
+textarea {
+  transition: border-color 0.1s ease, outline 0.1s ease;
+}

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { verifyCompany } from './actions';
 import { createClient } from '@/utils/supabase/client';
 import tableStyles from '@/app/category/[slug]/Category.module.css';
+import { useToast } from '@/components/ui/Toast';
 
 interface Company {
     id: string;
@@ -19,6 +20,7 @@ interface Company {
 
 export function VerificationQueue({ companies }: { companies: Company[] }) {
     const [loading, setLoading] = useState<string | null>(null);
+    const { showToast } = useToast();
 
     async function handleVerify(companyId: string, action: 'approve' | 'reject') {
         if (!confirm(`Are you sure you want to ${action} this company?`)) return;
@@ -32,9 +34,9 @@ export function VerificationQueue({ companies }: { companies: Company[] }) {
             }
 
             const result = await verifyCompany(companyId, action, reason || undefined);
-            alert(result.message);
+            showToast(result.message, result.success ? 'success' : 'error');
         } catch (e) {
-            alert("Error verifying company.");
+            showToast("Error verifying company.", 'error');
         } finally {
             setLoading(null);
         }
@@ -50,7 +52,7 @@ export function VerificationQueue({ companies }: { companies: Company[] }) {
         if (data?.signedUrl) {
             window.open(data.signedUrl, '_blank');
         } else {
-            alert("Could not Generate Link. You might not have permission (Check Admin RLS).");
+            showToast("Could not Generate Link. Check permissions.", 'error');
         }
     }
 

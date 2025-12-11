@@ -29,7 +29,7 @@ export async function applyForJob(jobId: string) {
         .insert({
             job_id: jobId,
             applicant_id: user.id,
-            status: 'new'
+            status: 'applied'
         });
 
     if (error) {

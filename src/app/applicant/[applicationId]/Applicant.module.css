@@ -1,0 +1,268 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 24px;
+}
+
+.name {
+    font-size: 24px;
+    color: var(--hunter-green);
+    margin-bottom: 4px;
+}
+
+.headline {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.email {
+    font-size: 13px;
+    color: #999;
+    font-style: italic;
+}
+
+.meta {
+    text-align: right;
+}
+
+.metaItem {
+    margin-bottom: 4px;
+}
+
+.metaLabel {
+    font-size: 11px;
+    color: #999;
+    text-transform: uppercase;
+    margin-right: 8px;
+}
+
+.metaValue {
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Actions Bar */
+.actionsBar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    align-items: center;
+}
+
+.statusBadge {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.actionButton {
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: white;
+    transition: all 0.1s ease;
+}
+
+.actionButton:hover {
+    background: #f0f0f0;
+}
+
+.actionButton.primary {
+    background: var(--hunter-green);
+    color: white;
+    border-color: var(--hunter-green);
+}
+
+.actionButton.primary:hover {
+    background: var(--pine-teal);
+}
+
+.actionButton.danger {
+    color: #c62828;
+    border-color: #c62828;
+}
+
+.actionButton.danger:hover {
+    background: #ffebee;
+}
+
+.actionButton.success {
+    color: #2e7d32;
+    border-color: #2e7d32;
+}
+
+.actionButton.success:hover {
+    background: #e8f5e9;
+}
+
+.actionButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Sections */
+.section {
+    margin-bottom: 32px;
+}
+
+.sectionTitle {
+    font-size: 16px;
+    color: var(--hunter-green);
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+
+.summaryText {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Timeline */
+.timeline {
+    border-left: 2px solid #e0e0e0;
+    padding-left: 16px;
+}
+
+.timelineItem {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.timelineItem::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--hunter-green);
+}
+
+.timelineHeader {
+    font-size: 14px;
+    color: #333;
+}
+
+.timelineDate {
+    font-size: 12px;
+    color: #999;
+    margin-top: 2px;
+}
+
+.timelineDesc {
+    font-size: 13px;
+    color: #666;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+.emptyState {
+    font-size: 13px;
+    color: #999;
+    font-style: italic;
+}
+
+/* Interview Info */
+.interviewInfo {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.interviewInfo strong {
+    color: #1565c0;
+}
+
+/* Modal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal {
+    background: white;
+    padding: 24px;
+    width: 400px;
+    max-width: 90vw;
+    border: 1px solid var(--hunter-green);
+}
+
+.modalTitle {
+    font-size: 18px;
+    color: var(--hunter-green);
+    margin-bottom: 16px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.formGroup {
+    margin-bottom: 16px;
+}
+
+.formLabel {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.formInput {
+    width: 100%;
+    padding: 8px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+
+.formTextarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    min-height: 80px;
+    resize: vertical;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}

@@ -4,6 +4,7 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { BasicInfoForm } from './BasicInfoForm';
 import { ExperienceSection } from './ExperienceSection';
 import { EducationSection } from './EducationSection';
+import { ResumeSection } from './ResumeSection';
 import styles from '../dashboard/Dashboard.module.css';
 
 export default async function ProfilePage() {
@@ -41,13 +42,8 @@ export default async function ProfilePage() {
         .order('start_date', { ascending: false });
 
     // Generate Resume URL if exists
-    let resumeDownloadUrl = null;
-    if (profile?.resume_url) {
-        const { data } = await supabase.storage
-            .from('resumes')
-            .createSignedUrl(profile.resume_url, 3600); // 1 hour link
-        resumeDownloadUrl = data?.signedUrl;
-    }
+    // Resume is public, so we just use the stored URL
+    const resumeDownloadUrl = profile?.resume_url;
 
     return (
         <div className={styles.dashboardContainer}>
@@ -57,7 +53,8 @@ export default async function ProfilePage() {
             </h1>
 
             <div style={{ maxWidth: '800px' }}>
-                <BasicInfoForm profile={profile || {}} resumeDownloadUrl={resumeDownloadUrl} />
+                <BasicInfoForm profile={profile || {}} />
+                <ResumeSection resumeUrl={profile?.resume_url} resumeDownloadUrl={resumeDownloadUrl} />
                 <ExperienceSection experiences={experiences || []} />
                 <EducationSection education={education || []} />
             </div>

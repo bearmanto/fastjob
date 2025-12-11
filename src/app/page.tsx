@@ -2,6 +2,9 @@ import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
 import styles from './page.module.css';
 
+// ISR: Regenerate page every 60 seconds (cached between requests)
+export const revalidate = 60;
+
 export default async function Home() {
   const supabase = await createClient();
 
@@ -52,7 +55,6 @@ export default async function Home() {
                 {job.company?.name} {job.company?.verified && '✅'} &mdash; {job.location}
               </div>
               <div className={styles.streamMeta}>
-                {/* Format Salary */}
                 {job.salary_min && job.salary_max ?
                   `IDR ${(job.salary_min / 1000000).toFixed(0)}mn - ${(job.salary_max / 1000000).toFixed(0)}mn`
                   : 'Salary Disclosed'

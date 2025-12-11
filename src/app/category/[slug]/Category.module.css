@@ -46,25 +46,47 @@
 }
 
 .jobTable td {
-    padding: 6px 8px;
+    padding: 10px 12px;
     border-bottom: 1px solid #eee;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 .jobTable tr:hover td {
     background: #ffffcc;
-    /* Classic yellow highlight */
     cursor: pointer;
 }
 
 .jobTitle {
-    font-weight: bold;
+    font-weight: 600;
     color: var(--mcm-link);
-    display: block;
+    text-decoration: none;
 }
 
 .jobSnippet {
     color: #666;
     font-size: 11px;
     margin-top: 2px;
+}
+
+.actionButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.2;
+    transition: all 0.1s ease;
+}
+
+.actionButton:hover {
+    background: #f5f5f5;
+    border-color: #999;
+    color: #000;
 }

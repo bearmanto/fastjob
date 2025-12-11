@@ -23,6 +23,7 @@ export default async function DashboardPage() {
     const role = profile?.role ?? 'seeker';
 
     if (role === 'seeker') {
+        // Seeker: Just fetch applications
         const { data: applications } = await supabase
             .from('applications')
             .select(`
@@ -32,6 +33,7 @@ export default async function DashboardPage() {
                 job:jobs (
                     id,
                     title,
+                    status,
                     location,
                     salary_min,
                     salary_max,
@@ -46,12 +48,126 @@ export default async function DashboardPage() {
         return <SeekerDashboard profile={profile} applications={applications || []} />;
     }
 
+    // Hirer: Fetch company first
     const { data: company } = await supabase
         .from('companies')
         .select('*')
         .eq('owner_id', user.id)
         .single();
 
-    return <HirerDashboard company={company} />;
-}
+    if (!company) {
+        return <HirerDashboard company={null} jobs={[]} applications={[]} />;
+    }
 
+    // Fetch jobs for this company
+    const { data: jobs } = await supabase
+        .from('jobs')
+        .select(`
+            id, 
+            title, 
+            category_slug, 
+            status,
+            closes_at,
+            closed_at,
+            created_at,
+            applications(id)
+        `)
+        .eq('company_id', company.id)
+        .order('created_at', { ascending: false });
+
+    const jobIds = (jobs || []).map(j => j.id);
+
+    // Fetch applications using job IDs (reliable filtering)
+    let applications: any[] = [];
+    let experienceMap: Record<string, any> = {};
+    let educationMap: Record<string, any> = {};
+
+    if (jobIds.length > 0) {
+        console.log('Fetching applications for jobs:', jobIds);
+        const { data: appsData, error: appsError } = await supabase
+            .from('applications')
+            .select(`
+                id,
+                status,
+                status_updated_at,
+                created_at,
+                job_id,
+                applicant_id,
+                applicant:profiles!applications_applicant_id_fkey (
+                    id,
+                    full_name,
+                    headline,
+                    location,
+                    resume_url
+                )
+            `)
+            .in('job_id', jobIds)
+            .order('created_at', { ascending: false });
+
+        if (appsError) {
+            console.error('Error fetching applications:', JSON.stringify(appsError, null, 2));
+        } else {
+            console.log('Fetched applications count:', appsData?.length);
+        }
+
+        // Manually stitch job data (we already have it)
+        applications = (appsData || []).map(app => {
+            const job = (jobs || []).find(j => j.id === app.job_id);
+            return {
+                ...app,
+                job: {
+                    id: job?.id,
+                    title: job?.title,
+                    status: job?.status
+                }
+            };
+        });
+
+        // Fetch experience and education for all applicants
+        const applicantIds = applications
+            .map(app => app.applicant_id)
+            .filter(Boolean);
+
+        if (applicantIds.length > 0) {
+            const [expResult, eduResult] = await Promise.all([
+                supabase
+                    .from('profile_experience')
+                    .select('*')
+                    .in('profile_id', applicantIds)
+                    .order('start_date', { ascending: false }),
+                supabase
+                    .from('profile_education')
+                    .select('*')
+                    .in('profile_id', applicantIds)
+                    .order('start_date', { ascending: false })
+            ]);
+
+            // Group by profile_id (take most recent)
+            (expResult.data || []).forEach(exp => {
+                if (!experienceMap[exp.profile_id]) {
+                    experienceMap[exp.profile_id] = exp;
+                }
+            });
+            (eduResult.data || []).forEach(edu => {
+                if (!educationMap[edu.profile_id]) {
+                    educationMap[edu.profile_id] = edu;
+                }
+            });
+        }
+    }
+
+    // Enrich applications with experience/education
+    const enrichedApplications = applications.map(app => ({
+        ...app,
+        recentExperience: experienceMap[app.applicant_id] || null,
+        recentEducation: educationMap[app.applicant_id] || null
+    }));
+
+    return (
+        <HirerDashboard
+            company={company}
+            jobs={jobs || []}
+            applications={enrichedApplications}
+        />
+    );
+}
