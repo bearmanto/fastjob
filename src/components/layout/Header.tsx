@@ -23,32 +23,6 @@ export async function Header() {
 
     return (
         <header className={styles.header}>
-            <div className={styles.topRow}>
-                <div className={`container ${styles.topRowContainer}`}>
-                    {/* Jargon removed as requested */}
-                    <div className={styles.utilityLinks}>
-                        {user ? (
-                            <>
-                                {/* Both roles go to Dashboard now. Dashboard will link to Profile for Seekers. */}
-                                <Link href="/dashboard">Dashboard</Link>
-                                <span className={styles.divider}>|</span>
-                                <form action={signout} className={styles.inlineForm}>
-                                    <button type="submit" className={styles.logoutButton}>
-                                        Logout
-                                    </button>
-                                </form>
-                            </>
-                        ) : (
-                            <>
-                                <Link href="/login">Log in</Link>
-                                <span className={styles.divider}>|</span>
-                                <Link href="/register">Register</Link>
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
-
             <div className={styles.mainRow}>
                 <div className={`container ${styles.innerMainRow}`}>
                     <Link href="/" className={styles.logo}>
@@ -64,8 +38,26 @@ export async function Header() {
                         <button className={styles.searchButton}>GO</button>
                     </div>
 
-                    <div className={styles.postJob}>
-                        {/* Only show Post Job if NOT logged in, or if logged in as HIRER */}
+                    <div className={styles.rightActions}>
+                        {user ? (
+                            <div className={styles.userNav}>
+                                <Link href="/dashboard" className={styles.dashboardLink}>
+                                    Dashboard
+                                </Link>
+                                <form action={signout} className={styles.inlineForm}>
+                                    <button type="submit" className={styles.logoutButton}>
+                                        Logout
+                                    </button>
+                                </form>
+                            </div>
+                        ) : (
+                            <div className={styles.authLinks}>
+                                <Link href="/login">Log in</Link>
+                                <span className={styles.divider}>/</span>
+                                <Link href="/register">Register</Link>
+                            </div>
+                        )}
+
                         {(!user || isHirer) && (
                             <Link href="/post-job" className={styles.postButton}>
                                 POST A JOB

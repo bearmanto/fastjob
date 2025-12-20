@@ -1,3 +1,4 @@
+/* Main Header Layout */
 .header {
     display: flex;
     flex-direction: column;
@@ -5,177 +6,176 @@
     background: var(--color-white);
 }
 
-.topRow {
-    display: block;
-    /* Visible on all screens now */
-    font-size: 11px;
-    color: var(--mcm-gray-dark);
-    border-bottom: 1px solid var(--mcm-gray-light);
-    padding: 4px 0;
+.mainRow {
+    padding: 16px 0;
 }
 
-/* @media (min-width: 768px) {
-    .topRow was previously handling display changes
-} */
-
-.utilityLinks a {
-    margin-left: 10px;
-    color: var(--hunter-green);
-    font-weight: bold;
-}
-
-.divider {
-    margin-left: 10px;
-    color: var(--mcm-gray-border);
-}
-
-/* Inner container for Main Row */
 .innerMainRow {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    flex-wrap: wrap;
+    /* Allow wrapping on mobile */
+    align-items: center;
+    gap: 16px;
+    justify-content: space-between;
 }
-
-@media (min-width: 768px) {
-    .innerMainRow {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 24px;
-    }
-}
-
-.mainRow {
-    display: block;
-    /* changed from flex */
-    /* padding: 12px 16px; handled by container */
-    padding: 12px 0;
-    /* Vertical padding only */
-}
-
-/* @media (min-width: 768px) {
-    .mainRow {
-       Refactored to innerMainRow
-    }
-} */
 
 .logo {
     font-family: Impact, "Arial Black", sans-serif;
-    font-size: 24px;
-    /* Slightly smaller on mobile */
+    font-size: 28px;
     color: var(--hunter-green);
     text-decoration: none !important;
     letter-spacing: -1px;
-    /* Ensure Logo is always first */
-    order: 1;
+    line-height: 1;
 }
 
-@media (min-width: 768px) {
-    .logo {
-        font-size: 28px;
-        order: 0;
-    }
-}
-
-.postJob {
-    /* On mobile, put this next to Logo */
-    order: 2;
-}
-
-@media (min-width: 768px) {
-    .postJob {
-        order: 0;
-    }
-}
-
+/* Search Bar */
 .searchContainer {
-    width: 100%;
     display: flex;
-    height: 36px;
-    /* On mobile, push search to new line */
-    order: 3;
-}
-
-@media (min-width: 768px) {
-    .searchContainer {
-        flex: 1;
-        width: auto;
-        order: 0;
-    }
-}
-
-.searchContainer {
-    width: 100%;
-    display: flex;
-    height: 36px;
-}
-
-@media (min-width: 768px) {
-    .searchContainer {
-        flex: 1;
-    }
+    height: 40px;
+    flex: 1;
+    /* Take available space */
+    min-width: 280px;
+    /* Prevent crushing on medium screens */
+    margin: 0 24px;
 }
 
 .searchInput {
     flex: 1;
-    border: 1px solid var(--mcm-green);
-    padding: 0 10px;
+    border: 2px solid var(--mcm-green);
+    padding: 0 12px;
     font-size: 16px;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
 }
 
 .searchInput:focus {
-    outline: 2px solid var(--mcm-yellow);
+    outline: none;
+    border-color: var(--mcm-yellow);
 }
 
 .searchButton {
     background: var(--mcm-green);
     color: var(--color-white);
     border: none;
-    padding: 0 20px;
+    padding: 0 24px;
     font-weight: bold;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.searchButton:hover {
+    background: var(--hunter-green);
+}
+
+/* Right Side Actions */
+.rightActions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.userNav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+}
+
+.dashboardLink {
+    font-weight: bold;
+    color: var(--hunter-green);
+    text-decoration: none;
+}
+
+.dashboardLink:hover {
+    text-decoration: underline;
+}
+
+.logoutButton {
+    background: none;
+    border: none;
+    color: var(--mcm-gray-dark);
+    font-weight: normal;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+}
+
+.logoutButton:hover {
+    color: var(--color-error);
+    text-decoration: underline;
+}
+
+.authLinks {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.authLinks a {
+    color: var(--hunter-green);
+    text-decoration: none;
+}
+
+.authLinks a:hover {
+    text-decoration: underline;
+}
+
+.divider {
+    margin: 0 8px;
+    color: var(--mcm-gray-border);
 }
 
 .postButton {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--mcm-yellow);
-    color: var(--mcm-text);
-    padding: 8px 16px;
-    font-weight: bold;
+    color: var(--color-black);
+    padding: 10px 20px;
+    font-weight: 800;
     font-size: 14px;
-    border: 1px solid var(--color-accent-dark);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     text-decoration: none !important;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
 .postButton:hover {
-    background: var(--color-accent-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #e6b800;
+    /* Darker yellow */
 }
 
-/* Top Row Container */
-.topRowContainer {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    align-items: center;
+/* Mobile Responsive */
+@media (max-width: 900px) {
+    .searchContainer {
+        order: 3;
+        /* Move search below logo/actions */
+        margin: 0;
+        width: 100%;
+        min-width: 100%;
+        margin-top: 12px;
+    }
+
+    .rightActions {
+        margin-left: auto;
+        /* Push to right */
+    }
+
+    .postButton {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
 }
 
 /* Inline form styling */
 .inlineForm {
     display: inline;
-}
-
-/* Logout button */
-.logoutButton {
-    background: none;
-    border: none;
-    color: var(--hunter-green);
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0;
-    font-size: inherit;
-}
-
-.logoutButton:hover {
-    text-decoration: underline;
 }
 
 /* Nav Container */

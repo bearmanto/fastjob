@@ -48,8 +48,25 @@ export async function saveResume(filePath: string) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Not authenticated');
 
+    // 1. Check for existing resume to delete (Cleanup)
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('resume_url')
+        .eq('id', user.id)
+        .single();
+
+    if (profile?.resume_url) {
+        const urlParts = profile.resume_url.split('/resumes/');
+        if (urlParts.length > 1) {
+            const oldPath = urlParts[1];
+            await supabase.storage.from('resumes').remove([oldPath]);
+        }
+    }
+
+    // 2. Get Public URL for new file
     const { data: { publicUrl } } = supabase.storage.from('resumes').getPublicUrl(filePath);
 
+    // 3. Update DB
     const { error } = await supabase
         .from('profiles')
         .update({ resume_url: publicUrl })
@@ -67,6 +84,34 @@ export async function deleteResume() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Not authenticated');
 
+    // 1. Get current resume URL
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('resume_url')
+        .eq('id', user.id)
+        .single();
+
+    if (profile?.resume_url) {
+        // Extract file path from URL
+        // URL format: .../storage/v1/object/public/resumes/userId/timestamp.pdf
+        const urlParts = profile.resume_url.split('/resumes/');
+        if (urlParts.length > 1) {
+            const filePath = urlParts[1]; // e.g. "user-id/123456.pdf"
+
+            // 2. Delete from Storage
+            const { error: storageError } = await supabase
+                .storage
+                .from('resumes')
+                .remove([filePath]);
+
+            if (storageError) {
+                console.error('Storage delete error:', storageError);
+                // Continue to clear DB even if storage delete fails
+            }
+        }
+    }
+
+    // 3. Clear DB reference
     const { error } = await supabase
         .from('profiles')
         .update({ resume_url: null })
