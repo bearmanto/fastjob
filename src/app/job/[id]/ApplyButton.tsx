@@ -14,26 +14,15 @@ interface Props {
 
 function Modal({ title, children, actions }: { title: string, children: React.ReactNode, actions: React.ReactNode }) {
     return (
-        <div style={{
-            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999,
-            display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-            <div style={{
-                backgroundColor: 'white', padding: '24px', width: '320px',
-                border: '1px solid #005f4b', // Hunter Green
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-            }}>
-                <div style={{
-                    fontWeight: 'bold', fontSize: '16px', color: '#005f4b',
-                    marginBottom: '12px', borderBottom: '1px solid #eee', paddingBottom: '8px'
-                }}>
+        <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+                <div className={styles.modalTitle}>
                     {title}
                 </div>
-                <div style={{ fontSize: '13px', marginBottom: '24px', lineHeight: '1.5', color: '#333' }}>
+                <div className={styles.modalBody}>
                     {children}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '16px', alignItems: 'center' }}>
+                <div className={styles.modalActions}>
                     {actions}
                 </div>
             </div>
@@ -56,7 +45,7 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
 
     if (message === 'Applied') {
         return (
-            <button className={styles.applyButton} disabled style={{ background: '#ccc', cursor: 'not-allowed' }}>
+            <button className={`${styles.applyButton} ${styles.appliedButton}`} disabled>
                 APPLIED ✅
             </button>
         );
@@ -82,7 +71,7 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
                 setErrorMessage(result.message || 'Application failed.');
                 setActiveModal('error');
             }
-        } catch (e) {
+        } catch {
             setErrorMessage('Something went wrong.');
             setActiveModal('error');
         } finally {
@@ -114,8 +103,9 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
             // Show Success Modal instead of Alert
             setActiveModal('upload_success');
 
-        } catch (error: any) {
-            setErrorMessage('Upload failed: ' + error.message);
+        } catch (error: unknown) {
+            const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+            setErrorMessage('Upload failed: ' + errorMsg);
             setActiveModal('error');
         } finally {
             setUploading(false);
@@ -136,7 +126,7 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
                 await supabase.from('profiles').update({ resume_url: null }).eq('id', user.id);
                 window.location.reload();
             }
-        } catch (e) {
+        } catch {
             setErrorMessage('Failed to delete CV');
             setActiveModal('error');
         } finally {
@@ -154,19 +144,13 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
                         <>
                             <button
                                 onClick={() => setActiveModal(null)}
-                                style={{
-                                    border: 'none', background: 'none', color: '#666',
-                                    cursor: 'pointer', textDecoration: 'underline', fontSize: '13px'
-                                }}
+                                className={styles.cancelButton}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={executeApply}
-                                style={{
-                                    background: '#005f4b', color: 'white', border: 'none',
-                                    padding: '8px 16px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', borderRadius: '2px'
-                                }}
+                                className={styles.primaryButton}
                             >
                                 Confirm Apply
                             </button>
@@ -175,7 +159,7 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
                 >
                     You are about to Easy Apply with your FastJob Profile.
                     <br /><br />
-                    <span style={{ fontSize: '12px', color: '#666' }}>Your resume and profile details will be sent to the employer.</span>
+                    <span className={styles.modalNote}>Your resume and profile details will be sent to the employer.</span>
                 </Modal>
             )}
 
@@ -187,19 +171,13 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
                         <>
                             <button
                                 onClick={() => setActiveModal(null)}
-                                style={{
-                                    border: 'none', background: 'none', color: '#cc0000',
-                                    cursor: 'pointer', textDecoration: 'underline', fontSize: '13px'
-                                }}
+                                className={styles.cancelButtonDanger}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={() => { setActiveModal(null); fileInputRef.current?.click(); }}
-                                style={{
-                                    background: '#005f4b', color: 'white', border: 'none',
-                                    padding: '8px 16px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', borderRadius: '2px'
-                                }}
+                                className={styles.primaryButton}
                             >
                                 Upload Now
                             </button>
@@ -217,10 +195,7 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
                     actions={
                         <button
                             onClick={() => window.location.reload()}
-                            style={{
-                                background: '#005f4b', color: 'white', border: 'none',
-                                padding: '8px 16px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', borderRadius: '2px'
-                            }}
+                            className={styles.primaryButton}
                         >
                             OK
                         </button>
@@ -238,19 +213,13 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
                         <>
                             <button
                                 onClick={() => setActiveModal(null)}
-                                style={{
-                                    border: 'none', background: 'none', color: '#666',
-                                    cursor: 'pointer', textDecoration: 'underline', fontSize: '13px'
-                                }}
+                                className={styles.cancelButton}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={executeDeleteCV}
-                                style={{
-                                    background: '#d32f2f', color: 'white', border: 'none',
-                                    padding: '8px 16px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', borderRadius: '2px'
-                                }}
+                                className={styles.dangerButton}
                             >
                                 Delete
                             </button>
@@ -268,10 +237,7 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
                     actions={
                         <button
                             onClick={() => setActiveModal(null)}
-                            style={{
-                                background: '#005f4b', color: 'white', border: 'none',
-                                padding: '8px 16px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', borderRadius: '2px'
-                            }}
+                            className={styles.primaryButton}
                         >
                             OK
                         </button>
@@ -284,7 +250,7 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
             <input
                 type="file"
                 ref={fileInputRef}
-                style={{ display: 'none' }}
+                className={styles.hiddenInput}
                 accept=".pdf,.doc,.docx"
                 onChange={handleFileUpload}
             />
@@ -297,19 +263,19 @@ export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
             </button>
 
             {resumeUrl && (
-                <div style={{ marginTop: '8px', fontSize: '11px', textAlign: 'center', color: '#666' }}>
-                    <div style={{ marginBottom: '4px' }}>CV On File ✅</div>
+                <div className={styles.cvInfoContainer}>
+                    <div className={styles.cvStatus}>CV On File ✅</div>
                     <button
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
-                        style={{ border: 'none', background: 'none', textDecoration: 'underline', cursor: 'pointer', marginRight: '12px', color: '#555' }}
+                        className={styles.cvLinkButton}
                     >
                         Replace
                     </button>
                     <button
                         onClick={handleDeleteCV}
                         disabled={uploading}
-                        style={{ border: 'none', background: 'none', textDecoration: 'underline', cursor: 'pointer', color: '#d32f2f' }}
+                        className={styles.cvDeleteButton}
                     >
                         Delete
                     </button>

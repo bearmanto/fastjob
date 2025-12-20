@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
 import { signout } from '@/app/login/actions';
 import styles from './Header.module.css';
+import { NavLink } from './NavLink';
 
 export async function Header() {
     const supabase = await createClient();
@@ -23,7 +24,7 @@ export async function Header() {
     return (
         <header className={styles.header}>
             <div className={styles.topRow}>
-                <div className="container" style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', alignItems: 'center' }}>
+                <div className={`container ${styles.topRowContainer}`}>
                     {/* Jargon removed as requested */}
                     <div className={styles.utilityLinks}>
                         {user ? (
@@ -31,16 +32,8 @@ export async function Header() {
                                 {/* Both roles go to Dashboard now. Dashboard will link to Profile for Seekers. */}
                                 <Link href="/dashboard">Dashboard</Link>
                                 <span className={styles.divider}>|</span>
-                                <form action={signout} style={{ display: 'inline' }}>
-                                    <button type="submit" style={{
-                                        background: 'none',
-                                        border: 'none',
-                                        color: 'var(--hunter-green)',
-                                        fontWeight: 'bold',
-                                        cursor: 'pointer',
-                                        padding: 0,
-                                        fontSize: 'inherit'
-                                    }}>
+                                <form action={signout} className={styles.inlineForm}>
+                                    <button type="submit" className={styles.logoutButton}>
                                         Logout
                                     </button>
                                 </form>
@@ -83,10 +76,10 @@ export async function Header() {
             </div>
 
             <div className={styles.navBar}>
-                <div className="container" style={{ display: 'flex', gap: '20px', width: '100%' }}>
-                    <Link href="/">All Jobs</Link>
-                    <Link href="/categories">Browse Categories</Link>
-                    {/* <Link href="/companies">Companies</Link> */}
+                <div className={`container ${styles.navContainer}`}>
+                    <NavLink href="/">All Jobs</NavLink>
+                    <NavLink href="/collections">Collections</NavLink>
+                    {/* <NavLink href="/companies">Companies</NavLink> */}
                 </div>
             </div>
         </header>

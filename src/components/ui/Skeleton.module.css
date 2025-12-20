@@ -1,0 +1,146 @@
+/* Skeleton Loading Styles */
+.skeletonRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.skeletonBlock {
+    background: var(--mcm-gray-bg);
+    border-radius: 2px;
+}
+
+.skeletonBlockLight {
+    background: var(--mcm-gray-light);
+    border-radius: 2px;
+}
+
+.skeletonBlockLighter {
+    background: #fafafa;
+    border-radius: 2px;
+}
+
+/* Specific skeleton sizes */
+.skeletonTitle {
+    height: 28px;
+    width: 250px;
+}
+
+.skeletonSubtitle {
+    height: 16px;
+    width: 150px;
+}
+
+.skeletonIntro {
+    height: 16px;
+    width: 300px;
+    margin-bottom: 32px;
+}
+
+.skeletonItemRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.skeletonItemTitle {
+    height: 20px;
+    width: 60%;
+}
+
+.skeletonItemDate {
+    height: 14px;
+    width: 80px;
+}
+
+.skeletonItemCompany {
+    height: 14px;
+    width: 40%;
+    margin-bottom: 8px;
+}
+
+.skeletonItemMeta {
+    height: 12px;
+    width: 30%;
+    margin-bottom: 12px;
+}
+
+.skeletonItemDesc {
+    height: 14px;
+    width: 90%;
+}
+
+/* Opacity variants for staggered loading effect */
+.opacity90 {
+    opacity: 0.9;
+}
+
+.opacity80 {
+    opacity: 0.8;
+}
+
+.opacity70 {
+    opacity: 0.7;
+}
+
+.opacity60 {
+    opacity: 0.6;
+}
+
+.opacity50 {
+    opacity: 0.5;
+}
+
+/* Job Page Skeleton */
+.skeletonBreadcrumb {
+    height: 20px;
+    width: 200px;
+    margin-bottom: 24px;
+}
+
+.skeletonJobTitle {
+    height: 32px;
+    width: 60%;
+    margin-bottom: 12px;
+}
+
+.skeletonJobCompany {
+    height: 18px;
+    width: 40%;
+    margin-bottom: 32px;
+}
+
+.skeletonSectionTitle {
+    height: 24px;
+    width: 30%;
+    margin-bottom: 16px;
+}
+
+.skeletonTableContainer {
+    background: #fafafa;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.skeletonTableRow {
+    height: 20px;
+    margin-bottom: 12px;
+}
+
+.skeletonSidePanel {
+    background: var(--mcm-gray-bg);
+    padding: 20px;
+    text-align: center;
+    color: var(--mcm-gray-medium);
+    font-size: 13px;
+}
+
+/* Main column layout helper */
+.mainColumn {
+    min-height: 400px;
+}
+
+.sideColumn {
+    min-height: 100px;
+}

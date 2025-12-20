@@ -1,0 +1,88 @@
+/* Shared Table Styles */
+.jobTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.jobTable th {
+    text-align: left;
+    background: var(--mcm-gray-bg);
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--mcm-gray-medium);
+    font-weight: bold;
+}
+
+.jobTable td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--mcm-gray-light);
+    vertical-align: middle;
+}
+
+.jobTable tr:hover td {
+    background: var(--color-warning-bg);
+    cursor: pointer;
+}
+
+.jobTitle {
+    font-weight: 600;
+    color: var(--mcm-link);
+    text-decoration: none;
+}
+
+.jobSnippet {
+    color: var(--mcm-gray-dark);
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.actionButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    background: var(--color-white);
+    border: 1px solid var(--mcm-gray-border);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--mcm-gray-darker);
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.2;
+    transition: all 0.1s ease;
+}
+
+.actionButton:hover {
+    background: var(--mcm-gray-bg);
+    border-color: var(--mcm-gray-medium);
+    color: var(--color-black);
+}
+
+/* Table Column Widths */
+.colRole {
+    width: 40%;
+}
+
+.colCompany {
+    width: 25%;
+}
+
+.colLocation {
+    width: 15%;
+}
+
+.colSalary {
+    width: 10%;
+}
+
+.colPosted {
+    width: 10%;
+}
+
+/* Empty State */
+.emptyRow {
+    padding: 20px;
+    text-align: center;
+    font-style: italic;
+}

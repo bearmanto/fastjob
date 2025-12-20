@@ -1,7 +1,7 @@
 .sidebar {
     width: 100%;
     border-right: none;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--mcm-gray-border);
     padding-bottom: 16px;
     margin-bottom: 16px;
     font-size: 12px;
@@ -11,7 +11,7 @@
     .sidebar {
         width: 200px;
         flex-shrink: 0;
-        border-right: 1px solid #ddd;
+        border-right: 1px solid var(--mcm-gray-border);
         border-bottom: none;
         padding-right: 16px;
         margin-right: 16px;
@@ -43,7 +43,7 @@
 }
 
 .filterList a {
-    color: #333;
+    color: var(--mcm-gray-darker);
     text-decoration: none;
 }
 

@@ -1,34 +1,30 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { updateBasicProfile } from './actions';
 import styles from './Profile.module.css';
-import { Country, City } from 'country-state-city';
+import { Country, City, ICountry, ICity } from 'country-state-city';
 
 interface Props {
-    profile: any;
+    profile: {
+        full_name?: string | null;
+        headline?: string | null;
+        summary?: string | null;
+        phone?: string | null;
+        linkedin?: string | null;
+        location?: string | null;
+    };
 }
 
 function LocationInput({ defaultValue }: { defaultValue?: string }) {
-    const [mounted, setMounted] = useState(false);
-    const [countries, setCountries] = useState<any[]>([]);
-    const [cities, setCities] = useState<any[]>([]);
-
-    // State for ISO codes
-    const [selectedCountryCode, setSelectedCountryCode] = useState('');
-    const [selectedCityCode, setSelectedCityCode] = useState(''); // City name is unique enough generally, but lib uses name as ID often or custom code
-
-    // Final string value to submit
-    const [finalValue, setFinalValue] = useState(defaultValue || '');
-
-    useEffect(() => {
-        setMounted(true);
+    // Lazy initialization function to avoid setState in useEffect
+    const getInitialState = () => {
         const allCountries = Country.getAllCountries();
-        setCountries(allCountries);
+        let initialCountryCode = '';
+        let initialCityCode = '';
+        let initialCities: ICity[] = [];
 
-        // Try to parse existing value to restore state
         if (defaultValue) {
-            // Check for "City, Country" format first
             const parts = defaultValue.split(', ');
             let countryName = '';
             let cityName = '';
@@ -42,31 +38,35 @@ function LocationInput({ defaultValue }: { defaultValue?: string }) {
 
             const foundCountry = allCountries.find(c => c.name === countryName);
             if (foundCountry) {
-                setSelectedCountryCode(foundCountry.isoCode);
+                initialCountryCode = foundCountry.isoCode;
 
-                // Load cities for this country immediately so we can select one
                 const countryCities = City.getCitiesOfCountry(foundCountry.isoCode);
-
-                // Deduplicate cities
-                const uniqueCitiesMap = new Map();
+                const uniqueCitiesMap = new Map<string, ICity>();
                 countryCities?.forEach(city => {
                     if (!uniqueCitiesMap.has(city.name)) {
                         uniqueCitiesMap.set(city.name, city);
                     }
                 });
-                const uniqueCities = Array.from(uniqueCitiesMap.values());
-                setCities(uniqueCities || []);
+                initialCities = Array.from(uniqueCitiesMap.values());
 
-                // If we have a city, find match
                 if (cityName) {
-                    const foundCity = uniqueCities?.find(c => c.name === cityName);
+                    const foundCity = initialCities.find(c => c.name === cityName);
                     if (foundCity) {
-                        setSelectedCityCode(foundCity.name);
+                        initialCityCode = foundCity.name;
                     }
                 }
             }
         }
-    }, [defaultValue]);
+
+        return { allCountries, initialCountryCode, initialCityCode, initialCities };
+    };
+
+    // Use lazy initialization to avoid useEffect + setState pattern
+    const [initialData] = useState(getInitialState);
+    const [countries] = useState<ICountry[]>(initialData.allCountries);
+    const [cities, setCities] = useState<ICity[]>(initialData.initialCities);
+    const [selectedCountryCode, setSelectedCountryCode] = useState(initialData.initialCountryCode);
+    const [selectedCityCode, setSelectedCityCode] = useState(initialData.initialCityCode);
 
     // Handle country change
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -80,43 +80,32 @@ function LocationInput({ defaultValue }: { defaultValue?: string }) {
         }
 
         const countryCities = City.getCitiesOfCountry(code);
-
-        // Deduplicate
-        const uniqueCitiesMap = new Map();
+        const uniqueCitiesMap = new Map<string, ICity>();
         countryCities?.forEach(city => {
             if (!uniqueCitiesMap.has(city.name)) {
                 uniqueCitiesMap.set(city.name, city);
             }
         });
         const uniqueCities = Array.from(uniqueCitiesMap.values());
-
-        setCities(uniqueCities || []);
-        setSelectedCityCode(''); // Reset city on manual change
+        setCities(uniqueCities);
+        setSelectedCityCode('');
     };
 
-    // Effect to update hidden input value
-    useEffect(() => {
-        if (!mounted) return;
+    // Compute final value using useMemo instead of useEffect + setState
+    const finalValue = useMemo(() => {
+        if (!selectedCountryCode) return defaultValue || '';
 
-        // If user hasn't touched controls yet, keep default (unless they cleared it)
-        // Actually, we want to construct from selection IF selection exists
-        if (selectedCountryCode) {
-            const country = countries.find(c => c.isoCode === selectedCountryCode);
-            // Case 1: Country + City
-            if (selectedCityCode && selectedCountryCode) {
-                const city = cities.find(c => c.name === selectedCityCode); // City doesn't have isoCode usually, uses name
-                if (city && country) {
-                    setFinalValue(`${city.name}, ${country.name}`); // e.g. "San Francisco, United States"
-                }
-            }
-            // Case 2: Country only
-            else if (country) {
-                setFinalValue(country.name);
+        const country = countries.find(c => c.isoCode === selectedCountryCode);
+        if (!country) return defaultValue || '';
+
+        if (selectedCityCode) {
+            const city = cities.find(c => c.name === selectedCityCode);
+            if (city) {
+                return `${city.name}, ${country.name}`;
             }
         }
-    }, [selectedCountryCode, selectedCityCode, countries, cities, mounted]);
-
-    if (!mounted) return <div className={styles.input}>Loading...</div>;
+        return country.name;
+    }, [selectedCountryCode, selectedCityCode, countries, cities, defaultValue]);
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -181,7 +170,7 @@ export function BasicInfoForm({ profile }: Props) {
 
                 <div className={styles.inputGroup}>
                     <label className={styles.label}>Location</label>
-                    <LocationInput defaultValue={profile.location} />
+                    <LocationInput defaultValue={profile.location || undefined} />
                 </div>
 
                 <div className={`${styles.inputGroup} ${styles.fullWidth}`}>

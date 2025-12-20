@@ -26,43 +26,41 @@ async function verifyHirerOwnership(supabase: any, applicationId: string, userId
     return true;
 }
 
-// Update application status
-async function updateStatus(applicationId: string, newStatus: ApplicationStatus) {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+// Re-use the centralized logic which handles emails
+import { updateApplicationStatus } from '../../dashboard/actions';
 
-    if (!user) {
-        return { success: false, message: 'Not authenticated' };
+// Wraps centralized action but ensures revalidation for this page
+async function localUpdateStatus(applicationId: string, newStatus: ApplicationStatus) {
+    const result = await updateApplicationStatus(applicationId, newStatus);
+    if (result.success) {
+        revalidatePath(`/applicant/${applicationId}`);
     }
+    return result;
+}
 
-    const isOwner = await verifyHirerOwnership(supabase, applicationId, user.id);
-    if (!isOwner) {
-        return { success: false, message: 'Unauthorized' };
-    }
+export async function shortlistApplicant(applicationId: string) {
+    return localUpdateStatus(applicationId, 'shortlisted');
+}
 
-    const { error } = await supabase
-        .from('applications')
-        .update({
-            status: newStatus,
-            status_updated_at: new Date().toISOString()
-        })
-        .eq('id', applicationId);
+export async function markProcessing(applicationId: string) {
+    return localUpdateStatus(applicationId, 'processing');
+}
 
-    if (error) {
-        console.error('Status update error:', error);
-        return { success: false, message: 'Failed to update status' };
-    }
+export async function hireApplicant(applicationId: string) {
+    return localUpdateStatus(applicationId, 'hired');
+}
 
-    revalidatePath('/dashboard');
-    revalidatePath(`/applicant/${applicationId}`);
-    return { success: true };
+export async function rejectApplicant(applicationId: string) {
+    return localUpdateStatus(applicationId, 'rejected');
 }
 
 // Called when hirer opens applicant profile
 export async function markViewed(applicationId: string) {
-    const supabase = await createClient();
+    // We can use localUpdateStatus here too, but we need to check current status first 
+    // to avoid overwriting advanced statuses.
+    // The previous implementation did this check.
 
-    // Only update if currently 'applied'
+    const supabase = await createClient();
     const { data: app } = await supabase
         .from('applications')
         .select('status')
@@ -70,25 +68,9 @@ export async function markViewed(applicationId: string) {
         .single();
 
     if (app?.status === 'applied') {
-        return updateStatus(applicationId, 'viewed');
+        return localUpdateStatus(applicationId, 'viewed');
     }
-    return { success: true }; // Already viewed or further along
-}
-
-export async function shortlistApplicant(applicationId: string) {
-    return updateStatus(applicationId, 'shortlisted');
-}
-
-export async function markProcessing(applicationId: string) {
-    return updateStatus(applicationId, 'processing');
-}
-
-export async function hireApplicant(applicationId: string) {
-    return updateStatus(applicationId, 'hired');
-}
-
-export async function rejectApplicant(applicationId: string) {
-    return updateStatus(applicationId, 'rejected');
+    return { success: true };
 }
 
 // Schedule interview - creates record, updates status, sends email

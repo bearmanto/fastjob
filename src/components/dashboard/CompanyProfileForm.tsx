@@ -41,7 +41,7 @@ export function CompanyProfileForm({ company }: { company: Company }) {
         try {
             const result = await updateCompanyProfile(formData);
             setMessage(result.message);
-        } catch (e) {
+        } catch {
             setMessage("Error updating profile.");
         } finally {
             setLoading(false);

@@ -5,6 +5,8 @@ import styles from './Job.module.css';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
 import { ApplyButton } from './ApplyButton';
+import { checkIsJobSaved } from '@/app/actions/savedJobs';
+import { BookmarkButton } from '@/components/jobs/BookmarkButton';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -14,8 +16,8 @@ export default async function JobPage({ params }: PageProps) {
     const { id } = await params;
     const supabase = await createClient();
 
-    // PARALLELIZE: Fetch user and job at the same time
-    const [userResult, jobResult] = await Promise.all([
+    // PARALLELIZE: Fetch user, job, and saved status
+    const [userResult, jobResult, isSaved] = await Promise.all([
         supabase.auth.getUser(),
         supabase
             .from('jobs')
@@ -24,7 +26,8 @@ export default async function JobPage({ params }: PageProps) {
                 company:companies(name, location)
             `)
             .eq('id', id)
-            .single()
+            .single(),
+        checkIsJobSaved(id)
     ]);
 
     const user = userResult.data?.user;
@@ -52,29 +55,32 @@ export default async function JobPage({ params }: PageProps) {
         postedAt: new Date(jobRaw.created_at).toLocaleDateString(),
         skills: jobRaw.skills || [],
         benefits: jobRaw.benefits || [],
-        description: jobRaw.description,
+        description: jobRaw.description || 'No description provided.',
         requirements: jobRaw.requirements,
-        descriptionSnippet: jobRaw.description_snippet
+        descriptionSnippet: jobRaw.description_snippet,
+        owner_id: jobRaw.owner_id
     } : {
         ...mockJob!,
         jobType: mockJob!.jobType || 'Full Time',
         workplaceType: mockJob!.workplaceType || 'On-site',
         description: null,
-        requirements: null
+        requirements: null,
+        skills: ['React', 'TypeScript', 'Next.js'],
+        benefits: ['Health Insurance', 'Remote Work'],
+
+        categorySlug: 'engineering'
     };
 
-    // Check Application Status - PARALLELIZE these too
-    let isSeeker = false;
+    // Check Application Status
     let hasApplied = false;
     let resumeUrl: string | null = null;
+    let isSeeker = false;
 
     if (user) {
         // Fetch profile and application status in parallel
         const [profileResult, applicationResult] = await Promise.all([
             supabase.from('profiles').select('role, resume_url').eq('id', user.id).single(),
-            jobRaw
-                ? supabase.from('applications').select('id').eq('job_id', id).eq('applicant_id', user.id).single()
-                : Promise.resolve({ data: null })
+            supabase.from('applications').select('id').eq('job_id', id).eq('applicant_id', user.id).single()
         ]);
 
         isSeeker = profileResult.data?.role === 'seeker';
@@ -82,19 +88,26 @@ export default async function JobPage({ params }: PageProps) {
         hasApplied = !!applicationResult.data;
     }
 
+    // Determine if user can apply (seeker only, and not owner)
+    const isOwner = user?.id === job.owner_id;
+    // user && !isOwner is handled by isSeeker check above, but for safety:
+    if (isOwner) isSeeker = false; // Override if owner
+
     return (
         <div className={styles.container}>
             <div className={styles.mainColumn}>
                 <Breadcrumbs
                     items={[
                         { label: 'Home', href: '/' },
-                        { label: 'Category', href: `/category/${job.categorySlug}` },
+                        { label: 'Collections', href: `/collections` },
                         { label: job.title }
                     ]}
                 />
 
                 <h1 className={styles.title}>{job.title}</h1>
                 <div className={styles.company}>{job.company} — {job.location}</div>
+
+                {/* Removed BookmarkButton from here */}
 
                 <h3 className={styles.sectionHeader}>Job Specifications</h3>
                 <table className={styles.specTable}>
@@ -105,7 +118,7 @@ export default async function JobPage({ params }: PageProps) {
                         </tr>
                         <tr>
                             <td className={styles.specLabel}>Location</td>
-                            <td>{job.location} <span style={{ color: '#666' }}>({job.workplaceType})</span></td>
+                            <td>{job.location} <span className={styles.workplaceNote}>({job.workplaceType})</span></td>
                         </tr>
                         <tr>
                             <td className={styles.specLabel}>Salary</td>
@@ -123,39 +136,23 @@ export default async function JobPage({ params }: PageProps) {
                 </table>
 
                 {/* Skills & Benefits */}
-                <div style={{ margin: '24px 0' }}>
-                    <h3 className={styles.sectionHeader} style={{ marginBottom: '12px' }}>Required Skills</h3>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+                <div className={styles.skillSection}>
+                    <h3 className={`${styles.sectionHeader} ${styles.sectionHeaderMargin}`}>Required Skills</h3>
+                    <div className={styles.tagContainer}>
                         {job.skills && job.skills.length > 0 ? job.skills.map((s: string) => (
-                            <span key={s} style={{
-                                background: '#f5f5f5',
-                                padding: '6px 10px',
-                                fontSize: '12px',
-                                borderRadius: '4px',
-                                border: '1px solid #e0e0e0',
-                                color: '#333',
-                                fontWeight: 500
-                            }}>
+                            <span key={s} className={styles.skillTag}>
                                 {s}
                             </span>
-                        )) : <span style={{ fontSize: '13px', color: '#999' }}>No specific skills listed.</span>}
+                        )) : <span className={styles.emptyTags}>No specific skills listed.</span>}
                     </div>
 
-                    <h3 className={styles.sectionHeader} style={{ marginBottom: '12px' }}>Benefits</h3>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    <h3 className={`${styles.sectionHeader} ${styles.sectionHeaderMargin}`}>Benefits</h3>
+                    <div className={styles.tagContainer}>
                         {job.benefits && job.benefits.length > 0 ? job.benefits.map((b: string) => (
-                            <span key={b} style={{
-                                background: '#e8f5e9',
-                                padding: '6px 10px',
-                                fontSize: '12px',
-                                borderRadius: '4px',
-                                border: '1px solid #c8e6c9',
-                                color: '#2e7d32',
-                                fontWeight: 500
-                            }}>
+                            <span key={b} className={styles.benefitTag}>
                                 {b}
                             </span>
-                        )) : <span style={{ fontSize: '13px', color: '#999' }}>No specific benefits listed.</span>}
+                        )) : <span className={styles.emptyTags}>No specific benefits listed.</span>}
                     </div>
                 </div>
 
@@ -163,20 +160,20 @@ export default async function JobPage({ params }: PageProps) {
                     <h3 className={styles.sectionHeader}>Full Description</h3>
                     <div className={styles.descriptionContent}>
                         {job.description ? (
-                            <div style={{ whiteSpace: 'pre-wrap', marginBottom: '20px' }}>{job.description}</div>
+                            <div className={styles.descriptionText}>{job.description}</div>
                         ) : (
                             <p>{job.descriptionSnippet}</p>
                         )}
 
                         {job.requirements && (
                             <>
-                                <h4 style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '8px', borderBottom: '1px solid #eee', paddingBottom: '4px' }}>Requirements</h4>
-                                <div style={{ whiteSpace: 'pre-wrap' }}>{job.requirements}</div>
+                                <h4 className={styles.requirementsTitle}>Requirements</h4>
+                                <div className={styles.requirementsText}>{job.requirements}</div>
                             </>
                         )}
 
                         {!jobRaw && !job.description && (
-                            <div style={{ marginTop: '20px', color: '#666', fontStyle: 'italic' }}>
+                            <div className={styles.mockNote}>
                                 (Mock Job: Description snippet shown above.)
                             </div>
                         )}
@@ -190,24 +187,32 @@ export default async function JobPage({ params }: PageProps) {
 
                     {isSeeker ? (
                         <>
-                            <p style={{ fontSize: '12px', marginBottom: '8px' }}>
+                            <p className={styles.applyText}>
                                 Use your FastJob Profile.
                             </p>
-                            <ApplyButton jobId={id} hasApplied={hasApplied} isSeeker={isSeeker} resumeUrl={resumeUrl} />
+                            <ApplyButton jobId={job.id} hasApplied={hasApplied} isSeeker={!!isSeeker} resumeUrl={resumeUrl} />
+
+                            {/* Saved Job Button - Sidebar */}
+                            <BookmarkButton
+                                jobId={job.id}
+                                initialSaved={isSaved}
+                                withText={true}
+                                className={styles.savedJobButton}
+                            />
                         </>
                     ) : (
                         <>
                             {!user ? (
-                                <Link href="/login" className={styles.applyButton} style={{ textAlign: 'center', display: 'block' }}>
+                                <Link href="/login" className={styles.applyButton}>
                                     LOGIN TO APPLY
                                 </Link>
                             ) : (
-                                <p style={{ fontSize: '12px' }}>Hirer Account - View Only</p>
+                                <p className={styles.applyText}>Hirer Account - View Only</p>
                             )}
                         </>
                     )}
 
-                    <div style={{ marginTop: '12px', fontSize: '11px', color: '#666', borderTop: '1px solid #ccc', paddingTop: '8px' }}>
+                    <div className={styles.applyMeta}>
                         Reference: FJ-{job.id.substring(0, 8)}<br />
                         Verified Employer ✅
                     </div>

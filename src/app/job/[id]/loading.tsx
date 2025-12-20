@@ -1,38 +1,34 @@
 import styles from './Job.module.css';
+import skeleton from '@/components/ui/Skeleton.module.css';
 
 export default function JobLoading() {
+    const ROW_WIDTHS = ['65%', '70%', '75%', '80%', '85%'];
+
     return (
         <div className={styles.container}>
             <div className={styles.mainColumn}>
                 {/* Skeleton breadcrumb */}
-                <div style={{ height: '20px', background: '#f0f0f0', width: '200px', marginBottom: '24px' }} />
+                <div className={`${skeleton.skeletonBlock} ${skeleton.skeletonBreadcrumb}`} />
 
                 {/* Skeleton title */}
-                <div style={{ height: '32px', background: '#f0f0f0', width: '60%', marginBottom: '12px' }} />
-                <div style={{ height: '18px', background: '#f5f5f5', width: '40%', marginBottom: '32px' }} />
+                <div className={`${skeleton.skeletonBlock} ${skeleton.skeletonJobTitle}`} />
+                <div className={`${skeleton.skeletonBlockLight} ${skeleton.skeletonJobCompany}`} />
 
                 {/* Skeleton table */}
-                <div style={{ height: '24px', background: '#f0f0f0', width: '30%', marginBottom: '16px' }} />
-                <div style={{ background: '#fafafa', padding: '16px', marginBottom: '24px' }}>
-                    {[1, 2, 3, 4, 5].map(i => (
-                        <div key={i} style={{
-                            height: '20px',
-                            background: '#f0f0f0',
-                            marginBottom: '12px',
-                            width: `${60 + i * 5}%`
-                        }} />
+                <div className={`${skeleton.skeletonBlock} ${skeleton.skeletonSectionTitle}`} />
+                <div className={skeleton.skeletonTableContainer}>
+                    {ROW_WIDTHS.map((width, i) => (
+                        <div
+                            key={i}
+                            className={`${skeleton.skeletonBlock} ${skeleton.skeletonTableRow}`}
+                            style={{ width }}
+                        />
                     ))}
                 </div>
             </div>
 
             <div className={styles.sideColumn}>
-                <div style={{
-                    background: '#f5f5f5',
-                    padding: '20px',
-                    textAlign: 'center',
-                    color: '#999',
-                    fontSize: '13px'
-                }}>
+                <div className={skeleton.skeletonSidePanel}>
                     Loading...
                 </div>
             </div>

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { SeekerDashboard } from '@/components/dashboard/SeekerDashboard';
 import { HirerDashboard } from '@/components/dashboard/HirerDashboard';
+import { getSavedJobs } from '@/app/actions/savedJobs';
 
 export default async function DashboardPage() {
     const supabase = await createClient();
@@ -23,6 +24,8 @@ export default async function DashboardPage() {
     const role = profile?.role ?? 'seeker';
 
     if (role === 'seeker') {
+        const savedJobs = await getSavedJobs();
+
         // Seeker: Just fetch applications
         const { data: applications } = await supabase
             .from('applications')
@@ -45,7 +48,7 @@ export default async function DashboardPage() {
             .eq('applicant_id', user.id)
             .order('created_at', { ascending: false });
 
-        return <SeekerDashboard profile={profile} applications={applications || []} />;
+        return <SeekerDashboard profile={profile} applications={applications || []} savedJobs={savedJobs} />;
     }
 
     // Hirer: Fetch company first
@@ -79,11 +82,10 @@ export default async function DashboardPage() {
 
     // Fetch applications using job IDs (reliable filtering)
     let applications: any[] = [];
-    let experienceMap: Record<string, any> = {};
-    let educationMap: Record<string, any> = {};
+    const experienceMap: Record<string, unknown> = {};
+    const educationMap: Record<string, unknown> = {};
 
     if (jobIds.length > 0) {
-        console.log('Fetching applications for jobs:', jobIds);
         const { data: appsData, error: appsError } = await supabase
             .from('applications')
             .select(`
@@ -105,9 +107,7 @@ export default async function DashboardPage() {
             .order('created_at', { ascending: false });
 
         if (appsError) {
-            console.error('Error fetching applications:', JSON.stringify(appsError, null, 2));
-        } else {
-            console.log('Fetched applications count:', appsData?.length);
+            // Silent error handling - logged server-side
         }
 
         // Manually stitch job data (we already have it)

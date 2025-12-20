@@ -16,17 +16,40 @@
   --mcm-yellow-pale: var(--dust-grey);
   /* Background highlights */
 
+  /* Gray Scale */
   --mcm-gray-bg: #f5f5f5;
-  /* Keep standard grays for contrast */
   --mcm-gray-border: #ccc;
   --mcm-gray-light: #eee;
+  --mcm-gray-dark: #666;
+  --mcm-gray-darker: #333;
+  --mcm-gray-medium: #999;
 
+  /* Status Colors */
+  --color-success: #2e7d32;
+  --color-success-bg: #e8f5e9;
+  --color-success-light: #e6f4ea;
+  --color-error: #c62828;
+  --color-error-bg: #ffebee;
+  --color-warning: #f9a825;
+  --color-warning-bg: #fff8e1;
+  --color-info: #1565c0;
+  --color-info-bg: #e3f2fd;
+  --color-info-border: #90caf9;
+
+  /* Accent Colors (Yellow/Gold) */
+  --color-accent: #eebb00;
+  --color-accent-dark: #cc9900;
+  --color-accent-light: #ffd633;
+  --color-accent-lighter: #ffdb4d;
+
+  /* Text Colors */
   --mcm-text: var(--pine-teal);
-  /* Text is now very dark green */
   --mcm-text-muted: #576b5b;
-  /* Muted text slightly green-tinted */
   --mcm-link: var(--fern);
-  /* Links are brighter green */
+
+  /* White */
+  --color-white: #fff;
+  --color-black: #000;
 
   --font-main: Arial, Helvetica, sans-serif;
 
@@ -134,10 +157,66 @@ button {
 button,
 a,
 select {
-  transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
 input,
 textarea {
-  transition: border-color 0.1s ease, outline 0.1s ease;
+  transition: border-color 0.2s ease, outline 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Enhanced Button Hover - Subtle lift effect */
+button:not(:disabled):hover,
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+button:not(:disabled):active,
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Ensure all clickables have pointer cursor */
+button,
+a,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+select,
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Safe area support for mobile */
+@supports(padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .container {
+    padding-left: max(var(--spacing-md), env(safe-area-inset-left));
+    padding-right: max(var(--spacing-md), env(safe-area-inset-right));
+  }
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--mcm-green);
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: var(--dry-sage);
+  color: var(--pine-teal);
 }

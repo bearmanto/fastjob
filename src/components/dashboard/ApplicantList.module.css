@@ -1,0 +1,131 @@
+.emptyState {
+    padding: 24px;
+    text-align: center;
+    color: var(--mcm-gray-dark);
+    font-size: 13px;
+}
+
+/* Filter Bar */
+.filterBar {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--mcm-gray-bg);
+    border-bottom: 1px solid var(--mcm-gray-border);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filterInput {
+    padding: 6px 10px;
+    font-size: 12px;
+    border: 1px solid var(--mcm-gray-border);
+    border-radius: 3px;
+    width: 160px;
+}
+
+.filterSelect {
+    padding: 6px 10px;
+    font-size: 12px;
+    border: 1px solid var(--mcm-gray-border);
+    border-radius: 3px;
+}
+
+.filterCount {
+    font-size: 12px;
+    color: var(--mcm-gray-dark);
+    margin-left: auto;
+}
+
+/* Applicant Card */
+.applicantLink {
+    text-decoration: none;
+    color: inherit;
+}
+
+.applicantCard {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 16px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--mcm-gray-light);
+    align-items: start;
+    cursor: pointer;
+    transition: background 0.1s ease;
+}
+
+.applicantCard:hover {
+    background: var(--mcm-gray-bg);
+}
+
+.candidateInfo {
+    min-width: 0;
+}
+
+.candidateLine1 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.candidateName {
+    font-weight: bold;
+    color: var(--hunter-green);
+    font-size: 14px;
+}
+
+.candidateRole {
+    font-size: 12px;
+    color: var(--mcm-gray-dark);
+}
+
+.candidateLine2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--mcm-gray-medium);
+}
+
+.appliedFor {
+    color: var(--mcm-gray-darker);
+}
+
+/* Meta Column */
+.metaColumn {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.applyDate {
+    font-size: 11px;
+    color: var(--mcm-gray-medium);
+    margin-bottom: 4px;
+}
+
+/* Action Column */
+.actionColumn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cvButton {
+    font-size: 11px;
+    padding: 4px 8px;
+    background: var(--mcm-gray-bg);
+    border: 1px solid var(--mcm-gray-border);
+    border-radius: 3px;
+    cursor: pointer;
+    color: var(--mcm-gray-dark);
+}
+
+.reviewButton {
+    font-size: 11px;
+    background: var(--hunter-green);
+    padding: 4px 10px;
+    border-radius: 3px;
+    color: var(--color-white);
+    font-weight: bold;
+}

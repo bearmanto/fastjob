@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import tableStyles from '@/app/category/[slug]/Category.module.css';
+import styles from './ApplicantList.module.css';
 
 interface Experience {
     id: string;
@@ -78,7 +78,7 @@ export function ApplicantList({ applications, jobs = [] }: Props) {
 
     if (!applications || applications.length === 0) {
         return (
-            <div style={{ padding: '24px', textAlign: 'center', color: '#666', fontSize: '13px' }}>
+            <div className={styles.emptyState}>
                 No applications yet. Share your job listings to attract candidates!
             </div>
         );
@@ -87,37 +87,18 @@ export function ApplicantList({ applications, jobs = [] }: Props) {
     return (
         <div>
             {/* Filter Bar */}
-            <div style={{
-                display: 'flex',
-                gap: '12px',
-                padding: '12px 16px',
-                background: '#fafafa',
-                borderBottom: '1px solid #e0e0e0',
-                flexWrap: 'wrap',
-                alignItems: 'center'
-            }}>
+            <div className={styles.filterBar}>
                 <input
                     type="text"
                     placeholder="Search by name..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{
-                        padding: '6px 10px',
-                        fontSize: '12px',
-                        border: '1px solid #ccc',
-                        borderRadius: '3px',
-                        width: '160px'
-                    }}
+                    className={styles.filterInput}
                 />
                 <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    style={{
-                        padding: '6px 10px',
-                        fontSize: '12px',
-                        border: '1px solid #ccc',
-                        borderRadius: '3px'
-                    }}
+                    className={styles.filterSelect}
                 >
                     {STATUSES.map(s => (
                         <option key={s.value} value={s.value}>{s.label}</option>
@@ -127,12 +108,7 @@ export function ApplicantList({ applications, jobs = [] }: Props) {
                     <select
                         value={jobFilter}
                         onChange={(e) => setJobFilter(e.target.value)}
-                        style={{
-                            padding: '6px 10px',
-                            fontSize: '12px',
-                            border: '1px solid #ccc',
-                            borderRadius: '3px'
-                        }}
+                        className={styles.filterSelect}
                     >
                         <option value="">All Jobs</option>
                         {jobs.map(j => (
@@ -140,69 +116,42 @@ export function ApplicantList({ applications, jobs = [] }: Props) {
                         ))}
                     </select>
                 )}
-                <span style={{ fontSize: '12px', color: '#666', marginLeft: 'auto' }}>
+                <span className={styles.filterCount}>
                     {filteredApplications.length} of {applications.length} applicants
                 </span>
             </div>
 
             {/* Dense Applicant List */}
-            <div style={{ padding: '0' }}>
+            <div>
                 {filteredApplications.length > 0 ? filteredApplications.map((app) => (
                     <Link
                         key={app.id}
                         href={`/applicant/${app.id}`}
                         target="_blank"
-                        style={{ textDecoration: 'none', color: 'inherit' }}
+                        className={styles.applicantLink}
                     >
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1fr auto auto',
-                            gap: '16px',
-                            padding: '14px 16px',
-                            borderBottom: '1px solid #eee',
-                            alignItems: 'start',
-                            cursor: 'pointer',
-                            transition: 'background 0.1s ease'
-                        }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = '#fafafa'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                        >
+                        <div className={styles.applicantCard}>
                             {/* Left: Candidate Info (2 lines) */}
-                            <div style={{ minWidth: 0 }}>
+                            <div className={styles.candidateInfo}>
                                 {/* Line 1: Name + Current Role/Headline */}
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    marginBottom: '4px'
-                                }}>
-                                    <span style={{
-                                        fontWeight: 'bold',
-                                        color: 'var(--hunter-green)',
-                                        fontSize: '14px'
-                                    }}>
+                                <div className={styles.candidateLine1}>
+                                    <span className={styles.candidateName}>
                                         {app.applicant?.full_name || 'Anonymous'}
                                     </span>
                                     {app.recentExperience && (
-                                        <span style={{ fontSize: '12px', color: '#666' }}>
+                                        <span className={styles.candidateRole}>
                                             • {app.recentExperience.title} @ {app.recentExperience.company}
                                         </span>
                                     )}
                                     {!app.recentExperience && app.applicant?.headline && (
-                                        <span style={{ fontSize: '12px', color: '#666' }}>
+                                        <span className={styles.candidateRole}>
                                             • {app.applicant.headline}
                                         </span>
                                     )}
                                 </div>
 
                                 {/* Line 2: Education + Location + Applied For */}
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '12px',
-                                    fontSize: '12px',
-                                    color: '#888'
-                                }}>
+                                <div className={styles.candidateLine2}>
                                     {app.recentEducation && (
                                         <span>
                                             🎓 {app.recentEducation.degree} — {app.recentEducation.school}
@@ -211,26 +160,22 @@ export function ApplicantList({ applications, jobs = [] }: Props) {
                                     {app.applicant?.location && (
                                         <span>📍 {app.applicant.location}</span>
                                     )}
-                                    <span style={{ color: '#333' }}>
+                                    <span className={styles.appliedFor}>
                                         Applied: <strong>{app.job.title}</strong>
                                     </span>
                                 </div>
                             </div>
 
                             {/* Middle: Date + Status */}
-                            <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                                <div style={{ fontSize: '11px', color: '#999', marginBottom: '4px' }}>
+                            <div className={styles.metaColumn}>
+                                <div className={styles.applyDate}>
                                     {new Date(app.created_at).toLocaleDateString()}
                                 </div>
                                 <StatusBadge status={app.status} size="small" />
                             </div>
 
                             {/* Right: Action */}
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px'
-                            }}>
+                            <div className={styles.actionColumn}>
                                 {app.applicant?.resume_url && (
                                     <span
                                         onClick={(e) => {
@@ -238,34 +183,19 @@ export function ApplicantList({ applications, jobs = [] }: Props) {
                                             e.stopPropagation();
                                             window.open(app.applicant?.resume_url || '', '_blank');
                                         }}
-                                        style={{
-                                            fontSize: '11px',
-                                            padding: '4px 8px',
-                                            background: '#f5f5f5',
-                                            border: '1px solid #ddd',
-                                            borderRadius: '3px',
-                                            cursor: 'pointer',
-                                            color: '#666'
-                                        }}
+                                        className={styles.cvButton}
                                     >
                                         📄 CV
                                     </span>
                                 )}
-                                <span style={{
-                                    fontSize: '11px',
-                                    background: 'var(--hunter-green)',
-                                    padding: '4px 10px',
-                                    borderRadius: '3px',
-                                    color: 'white',
-                                    fontWeight: 'bold'
-                                }}>
+                                <span className={styles.reviewButton}>
                                     Review →
                                 </span>
                             </div>
                         </div>
                     </Link>
                 )) : (
-                    <div style={{ padding: '24px', textAlign: 'center', color: '#666' }}>
+                    <div className={styles.emptyState}>
                         No applicants match your filters.
                     </div>
                 )}

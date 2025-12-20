@@ -1,9 +1,9 @@
 .authContainer {
     max-width: 400px;
     margin: 60px auto;
-    border: 1px solid #ccc;
+    border: 1px solid var(--mcm-gray-border);
     padding: 32px;
-    background: #f9f9f9;
+    background: var(--mcm-gray-bg);
 }
 
 .authTitle {
@@ -29,13 +29,13 @@
 .authInput {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--mcm-gray-border);
 }
 
 .authButton {
     width: 100%;
     background: var(--mcm-green);
-    color: #fff;
+    color: var(--color-white);
     padding: 12px;
     border: none;
     font-weight: bold;

@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { verifyCompany } from './actions';
 import { createClient } from '@/utils/supabase/client';
-import tableStyles from '@/app/category/[slug]/Category.module.css';
+import tableStyles from '@/components/ui/Table.module.css';
+import styles from './Admin.module.css';
 import { useToast } from '@/components/ui/Toast';
 
 interface Company {
@@ -35,7 +36,7 @@ export function VerificationQueue({ companies }: { companies: Company[] }) {
 
             const result = await verifyCompany(companyId, action, reason || undefined);
             showToast(result.message, result.success ? 'success' : 'error');
-        } catch (e) {
+        } catch {
             showToast("Error verifying company.", 'error');
         } finally {
             setLoading(null);
@@ -57,7 +58,7 @@ export function VerificationQueue({ companies }: { companies: Company[] }) {
     }
 
     return (
-        <div style={{ overflowX: 'auto' }}>
+        <div className={styles.tableWrapper}>
             <table className={tableStyles.jobTable}>
                 <thead>
                     <tr>
@@ -71,22 +72,22 @@ export function VerificationQueue({ companies }: { companies: Company[] }) {
                     {companies.map(c => (
                         <tr key={c.id}>
                             <td>
-                                <div style={{ fontWeight: 'bold', fontSize: '13px' }}>{c.name}</div>
-                                <div style={{ fontSize: '11px', color: '#666' }}>
+                                <div className={styles.companyName}>{c.name}</div>
+                                <div className={styles.companyMeta}>
                                     {c.location} • {c.industry}
                                 </div>
-                                <div style={{ fontSize: '11px', color: '#666' }}>NPWP: {c.npwp_number}</div>
+                                <div className={styles.companyMeta}>NPWP: {c.npwp_number}</div>
                             </td>
                             <td>
                                 <button
                                     onClick={() => handleViewDoc(c.npwp_url)}
-                                    style={{ display: 'block', fontSize: '11px', textDecoration: 'underline', border: 'none', background: 'none', padding: 0, cursor: 'pointer', marginBottom: '4px' }}
+                                    className={styles.docLink}
                                 >
                                     View NPWP
                                 </button>
                                 <button
                                     onClick={() => handleViewDoc(c.business_doc_url)}
-                                    style={{ display: 'block', fontSize: '11px', textDecoration: 'underline', border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
+                                    className={styles.docLink}
                                 >
                                     View {c.business_doc_type?.toUpperCase()}
                                 </button>
@@ -97,31 +98,25 @@ export function VerificationQueue({ companies }: { companies: Company[] }) {
                                         href={c.website.startsWith('http') ? c.website : `https://${c.website}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{ fontSize: '11px' }}
+                                        className={styles.websiteLink}
                                     >
                                         Website
                                     </a>
                                 )}
                             </td>
                             <td>
-                                <div style={{ display: 'flex', gap: '8px' }}>
+                                <div className={styles.actionRow}>
                                     <button
                                         onClick={() => handleVerify(c.id, 'approve')}
                                         disabled={loading === c.id}
-                                        style={{
-                                            background: '#2e7d32', color: '#fff', border: 'none',
-                                            padding: '4px 8px', fontSize: '11px', cursor: 'pointer', borderRadius: '3px'
-                                        }}
+                                        className={styles.approveButton}
                                     >
                                         Approve
                                     </button>
                                     <button
                                         onClick={() => handleVerify(c.id, 'reject')}
                                         disabled={loading === c.id}
-                                        style={{
-                                            background: '#c62828', color: '#fff', border: 'none',
-                                            padding: '4px 8px', fontSize: '11px', cursor: 'pointer', borderRadius: '3px'
-                                        }}
+                                        className={styles.rejectButton}
                                     >
                                         Reject
                                     </button>

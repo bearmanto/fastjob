@@ -10,7 +10,7 @@ interface Props {
     companyId: string;
 }
 
-export function VerificationForm({ companyId }: Props) {
+export function VerificationForm({ companyId: _companyId }: Props) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
@@ -75,11 +75,11 @@ export function VerificationForm({ companyId }: Props) {
     return (
         <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Company Verification</h2>
-            <div style={{ marginBottom: '16px', fontSize: '13px', color: '#666' }}>
+            <div className={styles.verificationIntro}>
                 To prevent fraud, FastJob requires all companies to verify their identity before posting jobs.
             </div>
 
-            {message && <div style={{ color: 'var(--hunter-green)', fontWeight: 'bold', marginBottom: '16px' }}>{message}</div>}
+            {message && <div className={styles.verificationMessage}>{message}</div>}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
                 {/* NPWP Section */}
@@ -99,7 +99,7 @@ export function VerificationForm({ companyId }: Props) {
                     />
                 </div>
 
-                <div style={{ gridColumn: '1 / -1', margin: '16px 0', borderTop: '1px solid #eee' }} />
+                <div className={styles.formDivider} />
 
                 {/* Business Doc Section */}
                 <div className={styles.inputGroup}>
@@ -129,7 +129,7 @@ export function VerificationForm({ companyId }: Props) {
                     />
                 </div>
 
-                <div className={styles.fullWidth} style={{ marginTop: '16px' }}>
+                <div className={`${styles.fullWidth} ${styles.submitRow}`}>
                     <button type="submit" className={styles.saveButton} disabled={loading}>
                         {loading ? 'Uploading...' : 'Submit for Verification'}
                     </button>

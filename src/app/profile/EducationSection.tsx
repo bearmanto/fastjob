@@ -3,8 +3,17 @@
 import { addEducation, deleteEducation } from './actions';
 import styles from './Profile.module.css';
 
+interface Education {
+    id: string;
+    school: string;
+    degree?: string;
+    field_of_study?: string;
+    start_date?: string;
+    end_date?: string;
+}
+
 interface Props {
-    education: any[];
+    education: Education[];
 }
 
 export function EducationSection({ education }: Props) {

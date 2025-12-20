@@ -66,7 +66,7 @@ export function ApplicantActions({ applicationId, currentStatus, resumeUrl, inte
                 </span>
 
                 {/* Spacer */}
-                <div style={{ flex: 1 }} />
+                <div className={styles.spacer} />
 
                 {/* Resume Download */}
                 {resumeUrl && (
@@ -207,7 +207,7 @@ function InterviewModal({
             } else {
                 setError(result.message || 'Failed to schedule interview');
             }
-        } catch (err) {
+        } catch {
             setError('Something went wrong');
         } finally {
             setLoading(false);
@@ -220,7 +220,7 @@ function InterviewModal({
                 <h3 className={styles.modalTitle}>📅 Schedule Interview</h3>
 
                 {error && (
-                    <div style={{ color: '#c62828', marginBottom: '16px', fontSize: '13px' }}>
+                    <div className={styles.errorMessage}>
                         ⚠️ {error}
                     </div>
                 )}
@@ -248,7 +248,7 @@ function InterviewModal({
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label className={styles.formLabel}>Location (or "Online")</label>
+                        <label className={styles.formLabel}>Location (or &quot;Online&quot;)</label>
                         <input
                             type="text"
                             name="location"
@@ -281,7 +281,7 @@ function InterviewModal({
                             type="button"
                             onClick={onClose}
                             disabled={loading}
-                            style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer' }}
+                            className={styles.cancelButtonText}
                         >
                             Cancel
                         </button>

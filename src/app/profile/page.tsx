@@ -5,6 +5,7 @@ import { BasicInfoForm } from './BasicInfoForm';
 import { ExperienceSection } from './ExperienceSection';
 import { EducationSection } from './EducationSection';
 import { ResumeSection } from './ResumeSection';
+import { AlertPreferencesSection } from './AlertPreferencesSection';
 import styles from '../dashboard/Dashboard.module.css';
 
 export default async function ProfilePage() {
@@ -57,6 +58,7 @@ export default async function ProfilePage() {
                 <ResumeSection resumeUrl={profile?.resume_url} resumeDownloadUrl={resumeDownloadUrl} />
                 <ExperienceSection experiences={experiences || []} />
                 <EducationSection education={education || []} />
+                <AlertPreferencesSection />
             </div>
         </div>
     );

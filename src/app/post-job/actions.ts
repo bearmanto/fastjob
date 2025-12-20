@@ -2,7 +2,6 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { JOBS } from '@/data/mockData'; // Fallback if DB fails? No, we must use DB.
 
 // We need to define the state type for useFormState/useActionState
 export type State = {
@@ -49,7 +48,7 @@ export async function createJob(prevState: State | null, formData: FormData): Pr
     try {
         skills = JSON.parse(formData.get('skills') as string || '[]');
         benefits = JSON.parse(formData.get('benefits') as string || '[]');
-    } catch (e) {
+    } catch {
         return { error: 'Invalid data format for skills or benefits.' };
     }
 

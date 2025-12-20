@@ -1,0 +1,98 @@
+/* Modal Overlay */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background-color: var(--color-white);
+    padding: 24px;
+    width: 320px;
+    border: 1px solid var(--mcm-green);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modalTitle {
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--mcm-green);
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--mcm-gray-light);
+    padding-bottom: 8px;
+}
+
+.modalBody {
+    font-size: 13px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+    color: var(--mcm-gray-darker);
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    align-items: center;
+}
+
+/* Buttons */
+.cancelButton {
+    border: none;
+    background: none;
+    color: var(--mcm-gray-dark);
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 13px;
+}
+
+.dangerButton {
+    background: var(--color-error);
+    color: var(--color-white);
+    border: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.dangerButton:disabled,
+.cancelButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Action Buttons Container */
+.actionGroup {
+    display: flex;
+    gap: 8px;
+}
+
+.viewButton {
+    font-size: 11px;
+    background: var(--color-white);
+    padding: 4px 8px;
+    border-radius: 3px;
+    text-decoration: none;
+    color: var(--mcm-gray-darker);
+    border: 1px solid var(--mcm-gray-border);
+    display: inline-block;
+}
+
+.closeButton {
+    font-size: 11px;
+    background: var(--color-white);
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+}

@@ -1,6 +1,6 @@
 .section {
-    background: #fff;
-    border: 1px solid #ccc;
+    background: var(--color-white);
+    border: 1px solid var(--mcm-gray-border);
     padding: 16px;
     margin-bottom: 24px;
 }
@@ -9,7 +9,7 @@
     font-size: 14px;
     font-weight: bold;
     color: var(--hunter-green);
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--mcm-gray-light);
     padding-bottom: 8px;
     margin-bottom: 16px;
     display: flex;
@@ -33,6 +33,29 @@
     grid-column: 1 / -1;
 }
 
+/* Verification Form Helpers */
+.verificationIntro {
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--mcm-gray-dark);
+}
+
+.verificationMessage {
+    color: var(--hunter-green);
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.formDivider {
+    grid-column: 1 / -1;
+    margin: 16px 0;
+    border-top: 1px solid var(--mcm-gray-light);
+}
+
+.submitRow {
+    margin-top: 16px;
+}
+
 .inputGroup {
     display: flex;
     flex-direction: column;
@@ -42,13 +65,13 @@
 .label {
     font-size: 11px;
     font-weight: bold;
-    color: #666;
+    color: var(--mcm-gray-dark);
 }
 
 .input,
 .textarea {
     padding: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--mcm-gray-border);
     font-size: 13px;
     font-family: inherit;
     width: 100%;
@@ -61,7 +84,7 @@
 
 .saveButton {
     background: var(--hunter-green);
-    color: white;
+    color: var(--color-white);
     border: none;
     padding: 8px 16px;
     font-weight: bold;
@@ -86,7 +109,7 @@
 
 /* List Items */
 .listItem {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--mcm-gray-light);
     padding-bottom: 12px;
     margin-bottom: 12px;
 }
@@ -104,22 +127,223 @@
 
 .itemSub {
     font-size: 11px;
-    color: #666;
+    color: var(--mcm-gray-dark);
 }
 
 .deleteButton {
     background: none;
     border: none;
-    color: #cc0000;
+    color: var(--color-error);
     font-size: 11px;
     cursor: pointer;
     text-decoration: underline;
 }
 
 .addButton {
-    background: #eee;
-    border: 1px solid #ccc;
+    background: var(--mcm-gray-light);
+    border: 1px solid var(--mcm-gray-border);
     padding: 4px 8px;
     font-size: 11px;
     cursor: pointer;
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background-color: var(--color-white);
+    padding: 24px;
+    width: 320px;
+    border: 1px solid var(--mcm-green);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modalTitle {
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--mcm-green);
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--mcm-gray-light);
+    padding-bottom: 8px;
+}
+
+.modalBody {
+    font-size: 13px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+    color: var(--mcm-gray-darker);
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    align-items: center;
+}
+
+.cancelButton {
+    border: none;
+    background: none;
+    color: var(--mcm-gray-dark);
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 13px;
+}
+
+.primaryButton {
+    background: var(--mcm-green);
+    color: var(--color-white);
+    border: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.dangerButton {
+    background: var(--color-error);
+    color: var(--color-white);
+    border: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+/* Hidden input */
+.hiddenInput {
+    display: none;
+}
+
+/* Resume Section */
+.resumeRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.resumeInfoText {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.resumeFileName {
+    font-size: 13px;
+    color: var(--mcm-gray-darker);
+    font-weight: bold;
+}
+
+.resumeStatus {
+    font-size: 11px;
+    color: var(--mcm-green);
+    margin-top: 4px;
+}
+
+.resumeActions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.viewLink {
+    text-decoration: underline;
+    cursor: pointer;
+    color: var(--mcm-green);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.replaceButton {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+    color: var(--mcm-gray-dark);
+    font-size: 12px;
+}
+
+/* Empty State */
+.resumeEmptyState {
+    text-align: center;
+    padding: 12px 0;
+}
+
+.resumeEmptyText {
+    color: var(--mcm-gray-dark);
+    margin-bottom: 12px;
+}
+
+/* Alert Preferences Section */
+.sectionTitle {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--hunter-green);
+    border-bottom: 2px solid var(--hunter-green);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+
+.sectionDescription {
+    font-size: 13px;
+    color: var(--mcm-gray-dark);
+    margin-bottom: 16px;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.selectInput,
+.textInput {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--mcm-gray-border);
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.chipContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.chip {
+    padding: 6px 12px;
+    background: var(--mcm-gray-light);
+    border: 1px solid var(--mcm-gray-border);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chip:hover {
+    background: var(--mcm-gray-bg);
+    border-color: var(--mcm-gray-dark);
+}
+
+.chipActive {
+    background: var(--hunter-green);
+    color: var(--color-white);
+    border-color: var(--hunter-green);
+}
+
+.chipActive:hover {
+    background: var(--pine-teal);
+    border-color: var(--pine-teal);
 }

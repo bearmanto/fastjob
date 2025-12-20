@@ -103,6 +103,44 @@ export async function updateApplicationStatus(applicationId: string, newStatus: 
         return { success: false, message: 'Failed to update status.' };
     }
 
+    // Send email notification for specific statuses
+    if (newStatus === 'shortlisted' || newStatus === 'rejected') {
+        const { data: application } = await supabase
+            .from('applications')
+            .select(`
+                applicant:profiles!applications_applicant_id_fkey (
+                    full_name,
+                    email
+                ),
+                job:jobs!inner (
+                    title,
+                    company:companies!inner (
+                        name
+                    )
+                )
+            `)
+            .eq('id', applicationId)
+            .single();
+
+        if (application) {
+            const { sendApplicationStatusUpdate } = await import('@/lib/email');
+
+            // Type casting for joined data
+            const applicant = application.applicant as unknown as { full_name: string; email: string };
+            const job = application.job as unknown as { title: string; company: { name: string } };
+
+            if (applicant?.email) {
+                await sendApplicationStatusUpdate({
+                    recipientName: applicant.full_name || 'Candidate',
+                    recipientEmail: applicant.email,
+                    jobTitle: job.title,
+                    companyName: job.company.name,
+                    status: newStatus
+                });
+            }
+        }
+    }
+
     revalidatePath('/dashboard');
     return { success: true, message: `Status updated to ${newStatus}.` };
 }

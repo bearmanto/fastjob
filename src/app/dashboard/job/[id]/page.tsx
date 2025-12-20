@@ -46,7 +46,7 @@ export default async function JobHistoryPage({ params }: Props) {
 
     // Fetch Applications for this job
     // We fetch ALL applications regardless of status
-    const { data: applications, error: appsError } = await supabase
+    const { data: applications } = await supabase
         .from('applications')
         .select(`
             id,
@@ -70,21 +70,9 @@ export default async function JobHistoryPage({ params }: Props) {
         .eq('job_id', jobId)
         .order('created_at', { ascending: false });
 
-    if (!applications || applications.length === 0) {
-        console.log(`[JobHistory] No applications found for job ${jobId}`);
-        // Double check raw count without joins to verify if it's RLS or Join issue
-        const { count } = await supabase
-            .from('applications')
-            .select('*', { count: 'exact', head: true })
-            .eq('job_id', jobId);
-        console.log(`[JobHistory] Raw count check: ${count}`);
-    } else {
-        console.log(`[JobHistory] Found ${applications.length} applications.`);
-    }
-
     // Fetch experience and education manually to avoid Join errors
-    let experienceMap: Record<string, any> = {};
-    let educationMap: Record<string, any> = {};
+    const experienceMap: Record<string, unknown> = {};
+    const educationMap: Record<string, unknown> = {};
 
     if (applications && applications.length > 0) {
         const applicantIds = applications.map((app: any) => app.applicant_id).filter(Boolean);
@@ -127,19 +115,12 @@ export default async function JobHistoryPage({ params }: Props) {
                 { label: `Job: ${job.title}` }
             ]} />
 
-            <div style={{ marginBottom: '24px' }}>
-                <h1 className={styles.heading} style={{ marginBottom: '8px' }}>
+            <div className={styles.jobHistoryHeader}>
+                <h1 className={`${styles.heading} ${styles.jobHistoryTitle}`}>
                     {job.title}
                 </h1>
-                <div style={{ display: 'flex', gap: '12px', fontSize: '13px', color: '#666' }}>
-                    <span style={{
-                        padding: '2px 8px',
-                        borderRadius: '4px',
-                        background: job.status === 'active' ? '#e6f4ea' : '#f5f5f5',
-                        color: job.status === 'active' ? 'green' : '#666',
-                        border: '1px solid currentColor',
-                        fontWeight: 'bold'
-                    }}>
+                <div className={styles.jobHistoryMeta}>
+                    <span className={`${styles.jobStatusTag} ${job.status === 'active' ? styles.active : styles.closed}`}>
                         {job.status.toUpperCase()}
                     </span>
                     <span>Posted: {new Date(job.created_at).toLocaleDateString()}</span>
@@ -149,19 +130,8 @@ export default async function JobHistoryPage({ params }: Props) {
                 </div>
             </div>
 
-            <div style={{
-                background: '#fff',
-                border: '1px solid #e0e0e0',
-                borderRadius: '4px'
-            }}>
-                <div style={{
-                    padding: '12px 16px',
-                    borderBottom: '1px solid #e0e0e0',
-                    background: '#f5f5f5',
-                    fontSize: '15px',
-                    fontWeight: 'bold',
-                    color: '#333'
-                }}>
+            <div className={styles.applicantPanel}>
+                <div className={styles.applicantPanelHeader}>
                     Applicant History
                 </div>
                 <ApplicantList applications={processedApplications} />

@@ -3,8 +3,19 @@
 import { addExperience, deleteExperience } from './actions';
 import styles from './Profile.module.css';
 
+interface Experience {
+    id: string;
+    title: string;
+    company: string;
+    location?: string;
+    start_date?: string;
+    end_date?: string;
+    is_current?: boolean;
+    description?: string;
+}
+
 interface Props {
-    experiences: any[];
+    experiences: Experience[];
 }
 
 export function ExperienceSection({ experiences }: Props) {

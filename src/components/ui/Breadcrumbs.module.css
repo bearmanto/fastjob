@@ -1,6 +1,6 @@
 .breadcrumbs {
     font-size: 11px;
-    color: #666;
+    color: var(--mcm-gray-dark);
     margin-bottom: 12px;
     display: flex;
     flex-wrap: wrap;
@@ -22,11 +22,11 @@
 }
 
 .label {
-    color: #333;
+    color: var(--mcm-gray-darker);
     font-weight: bold;
 }
 
 .separator {
     margin: 0 6px;
-    color: #999;
+    color: var(--mcm-gray-medium);
 }

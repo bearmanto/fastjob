@@ -2,15 +2,15 @@
     display: flex;
     flex-direction: column;
     border-bottom: 4px solid var(--hunter-green);
-    background: #fff;
+    background: var(--color-white);
 }
 
 .topRow {
     display: block;
     /* Visible on all screens now */
     font-size: 11px;
-    color: #666;
-    border-bottom: 1px solid #eee;
+    color: var(--mcm-gray-dark);
+    border-bottom: 1px solid var(--mcm-gray-light);
     padding: 4px 0;
 }
 
@@ -26,7 +26,7 @@
 
 .divider {
     margin-left: 10px;
-    color: #ccc;
+    color: var(--mcm-gray-border);
 }
 
 /* Inner container for Main Row */
@@ -129,7 +129,7 @@
 
 .searchButton {
     background: var(--mcm-green);
-    color: #fff;
+    color: var(--color-white);
     border: none;
     padding: 0 20px;
     font-weight: bold;
@@ -142,17 +142,52 @@
     padding: 8px 16px;
     font-weight: bold;
     font-size: 14px;
-    border: 1px solid #cc9900;
+    border: 1px solid var(--color-accent-dark);
     text-decoration: none !important;
 }
 
 .postButton:hover {
-    background: #ffd633;
+    background: var(--color-accent-dark);
+}
+
+/* Top Row Container */
+.topRowContainer {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    align-items: center;
+}
+
+/* Inline form styling */
+.inlineForm {
+    display: inline;
+}
+
+/* Logout button */
+.logoutButton {
+    background: none;
+    border: none;
+    color: var(--hunter-green);
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+}
+
+.logoutButton:hover {
+    text-decoration: underline;
+}
+
+/* Nav Container */
+.navContainer {
+    display: flex;
+    gap: 20px;
+    width: 100%;
 }
 
 .navBar {
     background: var(--mcm-green);
-    color: #fff;
+    color: var(--color-white);
     padding: 6px 0;
     /* Vertical only */
     display: block;
@@ -162,10 +197,26 @@
 }
 
 .navBar a {
-    color: #fff;
+    color: var(--color-white);
     text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
 }
 
 .navBar a:hover {
-    text-decoration: underline;
+    background-color: rgba(255, 255, 255, 0.15);
+    text-decoration: none;
+}
+
+/* Active nav link - for JavaScript-based active detection */
+.navBar a.active,
+.navBar a[aria-current="page"] {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-bottom: 2px solid var(--color-white);
+}
+
+/* Active class for NavLink component */
+.active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
 }

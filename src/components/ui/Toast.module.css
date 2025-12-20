@@ -13,11 +13,10 @@
 
 .toast {
     pointer-events: auto;
-    background-color: #333;
-    color: #fff;
+    background: var(--color-white);
+    color: var(--mcm-gray-darker);
     padding: 12px 24px;
     border-radius: 4px;
-    /* Slight rounded for modern feel, but still industrial */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     font-size: 13px;
     font-weight: 500;
@@ -26,19 +25,16 @@
     justify-content: space-between;
     min-width: 300px;
     animation: slideIn 0.3s ease-out;
-    border-left: 4px solid var(--hunter-green);
-    background: #fff;
-    color: #333;
-    border: 1px solid #ddd;
+    border: 1px solid var(--mcm-gray-border);
     border-left: 4px solid var(--hunter-green);
 }
 
 .toast.success {
-    border-left-color: #2e7d32;
+    border-left-color: var(--color-success);
 }
 
 .toast.error {
-    border-left-color: #c62828;
+    border-left-color: var(--color-error);
 }
 
 .toast.info {

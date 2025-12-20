@@ -1,0 +1,64 @@
+/* Admin Table Wrapper */
+.tableWrapper {
+    overflow-x: auto;
+}
+
+/* Company Info */
+.companyName {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.companyMeta {
+    font-size: 11px;
+    color: var(--mcm-gray-dark);
+}
+
+/* Document Links */
+.docLink {
+    display: block;
+    font-size: 11px;
+    text-decoration: underline;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    margin-bottom: 4px;
+    color: var(--mcm-green);
+}
+
+.docLink:last-child {
+    margin-bottom: 0;
+}
+
+/* Website Link */
+.websiteLink {
+    font-size: 11px;
+    color: var(--mcm-green);
+}
+
+/* Action Buttons */
+.actionRow {
+    display: flex;
+    gap: 8px;
+}
+
+.approveButton {
+    background: var(--color-success);
+    color: var(--color-white);
+    border: none;
+    padding: 4px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.rejectButton {
+    background: var(--color-error);
+    color: var(--color-white);
+    border: none;
+    padding: 4px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 3px;
+}

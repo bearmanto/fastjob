@@ -19,31 +19,31 @@
 
 .company {
     font-size: 14px;
-    color: #555;
+    color: var(--mcm-gray-dark);
     margin-bottom: 24px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--mcm-gray-border);
     padding-bottom: 12px;
 }
 
 /* Spec Table */
 .specTable {
     width: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid var(--mcm-gray-border);
     border-collapse: collapse;
     margin-bottom: 24px;
 }
 
 .specTable td {
     padding: 6px 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--mcm-gray-light);
     font-size: 13px;
 }
 
 .specLabel {
-    background: #f4f4f4;
+    background: var(--mcm-gray-bg);
     font-weight: bold;
     width: 30%;
-    color: #333;
+    color: var(--mcm-gray-darker);
 }
 
 /* Description */
@@ -54,7 +54,7 @@
 .sectionHeader {
     font-size: 14px;
     background: var(--mcm-green);
-    color: #fff;
+    color: var(--color-white);
     padding: 4px 8px;
     margin-bottom: 12px;
     display: inline-block;
@@ -69,7 +69,7 @@
 /* Apply Box */
 .applyBox {
     background: var(--mcm-yellow-pale);
-    border: 1px solid #eebb00;
+    border: 1px solid var(--color-accent);
     padding: 16px;
     position: sticky;
     top: 20px;
@@ -79,7 +79,7 @@
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 12px;
-    border-bottom: 1px solid #eebb00;
+    border-bottom: 1px solid var(--color-accent);
     padding-bottom: 4px;
 }
 
@@ -87,7 +87,7 @@
     display: block;
     width: 100%;
     background: var(--mcm-green);
-    color: #fff;
+    color: var(--color-white);
     text-align: center;
     padding: 10px 0;
     font-weight: bold;
@@ -100,4 +100,256 @@
 .applyButton:hover {
     background: var(--mcm-green-dark);
     text-decoration: none;
+}
+
+/* Skills & Benefits */
+.skillSection {
+    margin: 24px 0;
+}
+
+.tagContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.skillTag {
+    background: var(--mcm-gray-bg);
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid var(--mcm-gray-border);
+    color: var(--mcm-gray-darker);
+    font-weight: 500;
+}
+
+.benefitTag {
+    background: var(--color-success-bg);
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid var(--color-success-light);
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+.emptyTags {
+    font-size: 13px;
+    color: var(--mcm-gray-medium);
+}
+
+.sectionHeaderMargin {
+    margin-bottom: 12px;
+}
+
+/* Description */
+.descriptionText {
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+}
+
+.requirementsTitle {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--mcm-gray-light);
+    padding-bottom: 4px;
+}
+
+.requirementsText {
+    white-space: pre-wrap;
+}
+
+.mockNote {
+    margin-top: 20px;
+    color: var(--mcm-gray-dark);
+    font-style: italic;
+}
+
+/* Apply Section */
+.applyText {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.applyMeta {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--mcm-gray-dark);
+    border-top: 1px solid var(--mcm-gray-border);
+    padding-top: 8px;
+}
+
+.workplaceNote {
+    color: var(--mcm-gray-dark);
+}
+
+/* Modal Overlay */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background-color: var(--color-white);
+    padding: 24px;
+    width: 320px;
+    border: 1px solid var(--mcm-green);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modalTitle {
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--mcm-green);
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--mcm-gray-light);
+    padding-bottom: 8px;
+}
+
+.modalBody {
+    font-size: 13px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+    color: var(--mcm-gray-darker);
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    align-items: center;
+}
+
+/* Modal Buttons */
+.cancelButton {
+    border: none;
+    background: none;
+    color: var(--mcm-gray-dark);
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 13px;
+}
+
+.cancelButtonDanger {
+    border: none;
+    background: none;
+    color: var(--color-error);
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 13px;
+}
+
+.primaryButton {
+    background: var(--mcm-green);
+    color: var(--color-white);
+    border: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.dangerButton {
+    background: var(--color-error);
+    color: var(--color-white);
+    border: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.modalNote {
+    font-size: 12px;
+    color: var(--mcm-gray-dark);
+}
+
+/* Applied Button */
+.appliedButton {
+    background: var(--mcm-gray-border);
+    cursor: not-allowed;
+}
+
+/* Hidden Input */
+.hiddenInput {
+    display: none;
+}
+
+/* CV Info */
+.cvInfoContainer {
+    margin-top: 8px;
+    font-size: 11px;
+    text-align: center;
+    color: var(--mcm-gray-dark);
+}
+
+.cvStatus {
+    margin-bottom: 4px;
+}
+
+.cvLinkButton {
+    border: none;
+    background: none;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-right: 12px;
+    color: var(--mcm-gray-dark);
+}
+
+.cvDeleteButton {
+    border: none;
+    background: none;
+    text-decoration: underline;
+    cursor: pointer;
+    color: var(--color-error);
+}
+
+/* Header Section */
+.headerSection {
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--mcm-gray-border);
+    padding-bottom: 20px;
+}
+
+/* Action Row (Apply/Save buttons) */
+.actionRow {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Saved Job Button (in sidebar) */
+.savedJobButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 12px;
+    border: 1px solid var(--mcm-green);
+    background: transparent;
+    color: var(--mcm-green);
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px 0;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.savedJobButton:hover {
+    background: #e6f0ee;
+    /* Light green tint */
 }

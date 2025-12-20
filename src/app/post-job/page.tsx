@@ -46,25 +46,13 @@ function MultiSelect({
     };
 
     return (
-        <div ref={wrapperRef} style={{ position: 'relative' }}>
+        <div ref={wrapperRef} className={styles.multiSelectWrapper}>
             {/* Selected Chips */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
+            <div className={styles.chipContainer}>
                 {selected.map(item => (
-                    <span key={item} style={{
-                        background: '#e0f2f1',
-                        color: '#00695c',
-                        border: '1px solid #b2dfdb',
-                        borderRadius: '4px',
-                        padding: '4px 8px',
-                        fontSize: '13px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                    }}>
+                    <span key={item} className={styles.chip}>
                         {item}
-                        <button type="button" onClick={() => toggleOption(item)} style={{
-                            background: 'none', border: 'none', cursor: 'pointer', color: '#004d40', fontWeight: 'bold', fontSize: '14px', lineHeight: 1
-                        }}>×</button>
+                        <button type="button" onClick={() => toggleOption(item)} className={styles.chipRemove}>×</button>
                     </span>
                 ))}
             </div>
@@ -81,36 +69,17 @@ function MultiSelect({
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    right: 0,
-                    maxHeight: '200px',
-                    overflowY: 'auto',
-                    background: 'white',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    zIndex: 100,
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-                }}>
+                <div className={styles.dropdownMenu}>
                     {filteredOptions.length > 0 ? filteredOptions.map(option => (
                         <div
                             key={option}
                             onClick={() => toggleOption(option)}
-                            style={{
-                                padding: '8px 12px',
-                                cursor: 'pointer',
-                                fontSize: '13px',
-                                borderBottom: '1px solid #eee'
-                            }}
-                            onMouseEnter={e => e.currentTarget.style.background = '#f5f5f5'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'white'}
+                            className={styles.dropdownOption}
                         >
                             {option}
                         </div>
                     )) : (
-                        <div style={{ padding: '8px 12px', color: '#999', fontSize: '13px' }}>
+                        <div className={styles.dropdownEmpty}>
                             No matching options found.
                         </div>
                     )}
@@ -145,19 +114,8 @@ export default function PostJobPage() {
 
                 {/* Error Message */}
                 {state?.error && (
-                    <div style={{
-                        gridColumn: '1 / -1',
-                        background: '#ffebee',
-                        color: '#c62828',
-                        padding: '12px',
-                        borderRadius: '4px',
-                        border: '1px solid #ffcdd2',
-                        fontSize: '14px',
-                        fontWeight: 500
-                    }}>
+                    <div className={styles.errorMessage}>
                         ⚠️ {state.error}
-                        {/* Debugging info if needed */}
-                        {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
                     </div>
                 )}
 
@@ -184,7 +142,7 @@ export default function PostJobPage() {
                 </select>
 
                 <label className={styles.label}>Location</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', maxWidth: '400px' }}>
+                <div className={styles.locationGrid}>
                     <select
                         name="country"
                         className={styles.input}
@@ -213,11 +171,11 @@ export default function PostJobPage() {
                 <div className={styles.sectionHeader}>2. Compensation & Specifications</div>
 
                 <label className={styles.label}>Salary Range (Monthly)</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ fontSize: '13px' }}>IDR</span>
-                    <input name="salary_min" type="number" className={styles.input} style={{ width: '120px' }} placeholder="Min" />
-                    <span style={{ fontSize: '13px' }}>-</span>
-                    <input name="salary_max" type="number" className={styles.input} style={{ width: '120px' }} placeholder="Max" />
+                <div className={styles.salaryRow}>
+                    <span className={styles.salaryLabel}>IDR</span>
+                    <input name="salary_min" type="number" className={`${styles.input} ${styles.salaryInput}`} placeholder="Min" />
+                    <span className={styles.salaryLabel}>-</span>
+                    <input name="salary_max" type="number" className={`${styles.input} ${styles.salaryInput}`} placeholder="Max" />
                 </div>
 
                 <label className={styles.label}>Experience Level</label>
@@ -230,9 +188,9 @@ export default function PostJobPage() {
 
                 <div className={styles.sectionHeader}>3. Requirements & Benefits</div>
 
-                <label className={styles.label} style={{ alignSelf: 'start', marginTop: '8px' }}>
+                <label className={`${styles.label} ${styles.labelTop}`}>
                     Required Skills
-                    <div style={{ fontSize: '11px', color: '#666', fontWeight: 'normal' }}>Type to search and select</div>
+                    <div className={styles.helpText}>Type to search and select</div>
                 </label>
 
                 {/* Replaced Checkbox Grid with MultiSelect */}
@@ -246,14 +204,14 @@ export default function PostJobPage() {
                 {/* Hidden input to submit skills */}
                 <input type="hidden" name="skills" value={JSON.stringify(selectedSkills)} />
 
-                <label className={styles.label} style={{ alignSelf: 'start', marginTop: '16px' }}>
+                <label className={`${styles.label} ${styles.labelTopLarge}`}>
                     Benefits Offered
-                    <div style={{ fontSize: '11px', color: '#666', fontWeight: 'normal' }}>Type to search and select</div>
+                    <div className={styles.helpText}>Type to search and select</div>
                 </label>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                <div className={styles.benefitsGrid}>
                     {COMMON_BENEFITS.map(benefit => (
-                        <label key={benefit} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', cursor: 'pointer' }}>
+                        <label key={benefit} className={styles.benefitLabel}>
                             <input
                                 type="checkbox"
                                 checked={selectedBenefits.includes(benefit)}
@@ -265,23 +223,22 @@ export default function PostJobPage() {
                 </div>
                 <input type="hidden" name="benefits" value={JSON.stringify(selectedBenefits)} />
 
-                <label className={styles.label} style={{ alignSelf: 'start', marginTop: '16px' }}>Requirements</label>
+                <label className={`${styles.label} ${styles.labelTopLarge}`}>Requirements</label>
                 <textarea name="requirements" className={styles.textarea} placeholder="List specific requirements..." rows={4}></textarea>
 
-                <label className={styles.label} style={{ alignSelf: 'start', marginTop: '16px' }}>Job Description</label>
+                <label className={`${styles.label} ${styles.labelTopLarge}`}>Job Description</label>
                 <textarea name="description" className={styles.textarea} placeholder="Describe the role responsibilities..." rows={6}></textarea>
 
                 <div className={styles.sectionHeader}>4. Listing Options</div>
 
                 <label className={styles.label}>
                     Auto-Close Date (Optional)
-                    <div style={{ fontSize: '11px', color: '#666', fontWeight: 'normal' }}>Job will be automatically closed on this date</div>
+                    <div className={styles.helpText}>Job will be automatically closed on this date</div>
                 </label>
                 <input
                     name="closes_at"
                     type="date"
-                    className={styles.input}
-                    style={{ maxWidth: '200px' }}
+                    className={`${styles.input} ${styles.closesAtInput}`}
                     min={new Date().toISOString().split('T')[0]}
                 />
 

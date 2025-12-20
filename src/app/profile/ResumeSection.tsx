@@ -12,26 +12,15 @@ interface Props {
 
 function Modal({ title, children, actions }: { title: string, children: React.ReactNode, actions: React.ReactNode }) {
     return (
-        <div style={{
-            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999,
-            display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-            <div style={{
-                backgroundColor: 'white', padding: '24px', width: '320px',
-                border: '1px solid #005f4b',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-            }}>
-                <div style={{
-                    fontWeight: 'bold', fontSize: '16px', color: '#005f4b',
-                    marginBottom: '12px', borderBottom: '1px solid #eee', paddingBottom: '8px'
-                }}>
+        <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+                <div className={styles.modalTitle}>
                     {title}
                 </div>
-                <div style={{ fontSize: '13px', marginBottom: '24px', lineHeight: '1.5', color: '#333' }}>
+                <div className={styles.modalBody}>
                     {children}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '16px', alignItems: 'center' }}>
+                <div className={styles.modalActions}>
                     {actions}
                 </div>
             </div>
@@ -84,7 +73,7 @@ export function ResumeSection({ resumeUrl, resumeDownloadUrl }: Props) {
         try {
             await deleteResume();
             window.location.reload();
-        } catch (e) {
+        } catch {
             setErrorMessage('Failed to delete CV');
             setActiveModal('error');
         } finally {
@@ -101,10 +90,7 @@ export function ResumeSection({ resumeUrl, resumeDownloadUrl }: Props) {
                     actions={
                         <button
                             onClick={() => window.location.reload()}
-                            style={{
-                                background: '#005f4b', color: 'white', border: 'none',
-                                padding: '8px 16px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', borderRadius: '2px'
-                            }}
+                            className={styles.primaryButton}
                         >
                             OK
                         </button>
@@ -122,19 +108,13 @@ export function ResumeSection({ resumeUrl, resumeDownloadUrl }: Props) {
                         <>
                             <button
                                 onClick={() => setActiveModal(null)}
-                                style={{
-                                    border: 'none', background: 'none', color: '#666',
-                                    cursor: 'pointer', textDecoration: 'underline', fontSize: '13px'
-                                }}
+                                className={styles.cancelButton}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={executeDeleteCV}
-                                style={{
-                                    background: '#d32f2f', color: 'white', border: 'none',
-                                    padding: '8px 16px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', borderRadius: '2px'
-                                }}
+                                className={styles.dangerButton}
                             >
                                 Delete
                             </button>
@@ -152,10 +132,7 @@ export function ResumeSection({ resumeUrl, resumeDownloadUrl }: Props) {
                     actions={
                         <button
                             onClick={() => setActiveModal(null)}
-                            style={{
-                                background: '#005f4b', color: 'white', border: 'none',
-                                padding: '8px 16px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', borderRadius: '2px'
-                            }}
+                            className={styles.primaryButton}
                         >
                             OK
                         </button>
@@ -172,37 +149,31 @@ export function ResumeSection({ resumeUrl, resumeDownloadUrl }: Props) {
             <input
                 type="file"
                 ref={fileInputRef}
-                style={{ display: 'none' }}
+                className={styles.hiddenInput}
                 accept=".pdf,.doc,.docx"
                 onChange={handleFileUpload}
             />
 
             {resumeUrl ? (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className={styles.resumeRow}>
                     <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span style={{ fontSize: '13px', color: '#333', fontWeight: 'bold' }}>
+                        <div className={styles.resumeInfoText}>
+                            <span className={styles.resumeFileName}>
                                 Resume on File
                             </span>
                         </div>
-                        <div style={{ fontSize: '11px', color: '#005f4b', marginTop: '4px' }}>
+                        <div className={styles.resumeStatus}>
                             ✅ Ready for Easy Apply
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                    <div className={styles.resumeActions}>
                         {resumeDownloadUrl && (
                             <a
                                 href={resumeDownloadUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                style={{
-                                    textDecoration: 'underline',
-                                    cursor: 'pointer',
-                                    color: '#005f4b',
-                                    fontSize: '12px',
-                                    fontWeight: 'bold'
-                                }}
+                                className={styles.viewLink}
                             >
                                 View
                             </a>
@@ -211,14 +182,7 @@ export function ResumeSection({ resumeUrl, resumeDownloadUrl }: Props) {
                         <button
                             onClick={() => fileInputRef.current?.click()}
                             disabled={uploading}
-                            style={{
-                                background: 'none',
-                                border: 'none',
-                                textDecoration: 'underline',
-                                cursor: 'pointer',
-                                color: '#666',
-                                fontSize: '12px'
-                            }}
+                            className={styles.replaceButton}
                         >
                             Replace
                         </button>
@@ -233,9 +197,9 @@ export function ResumeSection({ resumeUrl, resumeDownloadUrl }: Props) {
                     </div>
                 </div>
             ) : (
-                <div style={{ textAlign: 'center', padding: '12px 0' }}>
-                    <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px' }}>
-                        Upload your CV to enable "Easy Apply" on job listings.
+                <div className={styles.resumeEmptyState}>
+                    <p className={styles.resumeEmptyText}>
+                        Upload your CV to enable &quot;Easy Apply&quot; on job listings.
                     </p>
                     <button
                         onClick={() => fileInputRef.current?.click()}

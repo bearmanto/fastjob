@@ -1,7 +1,8 @@
 import { redirect, notFound } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
-import { markViewed } from './actions';
+
 import { ApplicantActions } from './ApplicantActions';
+import { ViewTracker } from './ViewTracker';
 import styles from './Applicant.module.css';
 
 interface PageProps {
@@ -74,7 +75,7 @@ export default async function ApplicantProfilePage({ params }: PageProps) {
     }
 
     // 4. Auto-mark as viewed
-    await markViewed(applicationId);
+
 
     // 5. Fetch experience and education using applicantId directly (more reliable)
     const [expResult, eduResult] = await Promise.all([
@@ -132,7 +133,10 @@ export default async function ApplicantProfilePage({ params }: PageProps) {
                 currentStatus={application.status}
                 resumeUrl={applicant?.resume_url}
                 interview={interview}
+            // Pass auto-mark flag if needed, or handle in component
             />
+            {/* Auto-mark viewed component */}
+            <ViewTracker applicationId={applicationId} status={application.status} />
 
             {/* Summary */}
             {applicant?.summary && (

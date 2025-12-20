@@ -20,7 +20,7 @@ export default function LoginPage() {
                 </button>
             </form>
             <Link href="/register" className={styles.switchLink}>
-                Don't have an account? Register here.
+                Don&apos;t have an account? Register here.
             </Link>
         </div>
     );
