@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server';
-import { revalidatePath } from 'next/cache';
 
 export async function toggleSavedJob(jobId: string) {
     const supabase = await createClient();

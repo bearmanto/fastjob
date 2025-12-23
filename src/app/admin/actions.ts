@@ -21,7 +21,11 @@ export async function verifyCompany(companyId: string, action: 'approve' | 'reje
     }
 
     // Perform Update
-    const updates: any = {
+    const updates: {
+        verification_status: 'verified' | 'rejected';
+        verified?: boolean;
+        rejection_reason?: string;
+    } = {
         verification_status: action === 'approve' ? 'verified' : 'rejected'
     };
 

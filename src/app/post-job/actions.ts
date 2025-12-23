@@ -37,7 +37,9 @@ export async function createJob(prevState: State | null, formData: FormData): Pr
     const job_type = formData.get('job_type') as string;
     const description = formData.get('description') as string;
     const requirements = formData.get('requirements') as string;
-    const location = formData.get('location') as string; // "City, Country"
+    const countryCode = formData.get('country_code') as string;
+    const location = formData.get('location') as string; // City/Region
+    const isRemote = formData.get('is_remote') === 'on';
 
     const salary_min = Number(formData.get('salary_min'));
     const salary_max = Number(formData.get('salary_max'));
@@ -53,7 +55,7 @@ export async function createJob(prevState: State | null, formData: FormData): Pr
     }
 
     // 4. Validation (Basic)
-    if (!title || !location || !description) {
+    if (!title || !countryCode || !description) {
         return { error: 'Please fill in all required fields.' };
     }
 
@@ -61,16 +63,24 @@ export async function createJob(prevState: State | null, formData: FormData): Pr
     const closesAtRaw = formData.get('closes_at') as string;
     const closes_at = closesAtRaw ? new Date(closesAtRaw).toISOString() : null;
 
+    // Parse eligibility - worldwide option enables visa sponsorship
+    const acceptsWorldwide = formData.get('accepts_worldwide') === 'worldwide';
+    const visaSponsorship = acceptsWorldwide; // Visa sponsorship tied to worldwide
+
     // 5. Insert into DB
     const { data: job, error } = await supabase
         .from('jobs')
         .insert({
             title,
             company_id: company.id,
-            category_slug: category, // Assuming slug based on value
+            category_slug: category,
             workplace_type,
             job_type,
+            country_code: countryCode,
             location,
+            is_remote: isRemote,
+            accepts_worldwide: acceptsWorldwide,
+            visa_sponsorship: visaSponsorship,
             salary_min,
             salary_max,
             description_snippet: description.substring(0, 150) + '...',

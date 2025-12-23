@@ -70,8 +70,9 @@ export async function Header() {
             <div className={styles.navBar}>
                 <div className={`container ${styles.navContainer}`}>
                     <NavLink href="/">All Jobs</NavLink>
-                    <NavLink href="/collections">Collections</NavLink>
-                    {/* <NavLink href="/companies">Companies</NavLink> */}
+                    <NavLink href="/?collection=fresh">Fresh ⚡</NavLink>
+                    <NavLink href="/?collection=remote">Remote 🏠</NavLink>
+                    <NavLink href="/?collection=senior">Senior 💼</NavLink>
                 </div>
             </div>
         </header>

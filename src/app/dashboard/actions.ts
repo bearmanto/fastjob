@@ -12,6 +12,7 @@ export async function updateCompanyProfile(formData: FormData) {
     }
 
     const companyName = formData.get('name') as string;
+    const countryCode = formData.get('country_code') as string;
     const location = formData.get('location') as string;
     const website = formData.get('website') as string;
     const industry = formData.get('industry') as string;
@@ -25,6 +26,7 @@ export async function updateCompanyProfile(formData: FormData) {
         .from('companies')
         .update({
             name: companyName,
+            country_code: countryCode,
             location: location,
             website: website,
             industry: industry,

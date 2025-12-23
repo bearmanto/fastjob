@@ -17,6 +17,8 @@ export async function updateBasicProfile(formData: FormData) {
     const phone = formData.get('phone') as string;
     const linkedin = formData.get('linkedin') as string;
     const full_name = formData.get('full_name') as string;
+    const willing_to_relocate = formData.get('willing_to_relocate') === 'on';
+    const country_code = formData.get('country_code') as string;
 
     const { error } = await supabase
         .from('profiles')
@@ -27,6 +29,8 @@ export async function updateBasicProfile(formData: FormData) {
             summary,
             phone,
             linkedin,
+            willing_to_relocate,
+            country_code: country_code || null,
         })
         .eq('id', user.id);
 

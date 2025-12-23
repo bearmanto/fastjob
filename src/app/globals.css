@@ -1,28 +1,59 @@
 :root {
-  /* New Palette */
-  --dust-grey: #dad7cd;
-  --dry-sage: #a3b18a;
-  --fern: #588157;
-  --hunter-green: #3a5a40;
-  --pine-teal: #344e41;
+  /* New Palette (User Specified) */
+  --color-1: #cad2c5;
+  /* Lightest - backgrounds, borders */
+  --color-2: #84a98c;
+  /* Sage green - accents, links */
+  --color-3: #52796f;
+  /* Teal - primary buttons, headers */
+  --color-4: #354f52;
+  /* Dark teal - hover states */
+  --color-5: #2f3e46;
+  /* Darkest - text, footers */
 
-  /* Mappings to existing system (Renaming logic) */
-  --mcm-green: var(--hunter-green);
-  /* Main headers, primary buttons */
-  --mcm-green-dark: var(--pine-teal);
+  /* Semantic Mappings */
+  --mcm-green: var(--color-3);
+  /* Primary: Headers, buttons */
+  --mcm-green-dark: var(--color-4);
   /* Hover states */
-  --mcm-yellow: var(--dry-sage);
-  /* Accents, borders */
-  --mcm-yellow-pale: var(--dust-grey);
-  /* Background highlights */
+  --hunter-green: var(--color-3);
+  /* Alias for legacy usage */
+  --pine-teal: var(--color-5);
+  /* Alias for legacy usage */
+  --fern: var(--color-2);
+  /* Links, secondary accents */
+  --dry-sage: var(--color-2);
+  /* Accents */
+  --dust-grey: var(--color-1);
+  /* Light backgrounds */
 
-  /* Gray Scale */
-  --mcm-gray-bg: #f5f5f5;
-  --mcm-gray-border: #ccc;
-  --mcm-gray-light: #eee;
-  --mcm-gray-dark: #666;
-  --mcm-gray-darker: #333;
-  --mcm-gray-medium: #999;
+  /* Accent Colors (Use palette greens instead of yellow) */
+  --mcm-yellow: var(--color-2);
+  /* Soft accent (was yellow) */
+  --mcm-yellow-pale: var(--color-1);
+  /* Light backgrounds */
+  --color-accent: var(--color-2);
+  /* Buttons, CTAs */
+  --color-accent-dark: var(--color-4);
+  /* Hover */
+  --color-accent-light: var(--color-1);
+  /* Subtle highlights */
+  --color-accent-lighter: #d8e0d5;
+  /* Derived lighter from color-1 */
+
+  /* Gray Scale (Tuned to match palette) */
+  --mcm-gray-bg: #f0f2ed;
+  /* Warmer gray matching palette */
+  --mcm-gray-border: #c4c9c0;
+  /* Derived from color-1 */
+  --mcm-gray-light: #e8ebe5;
+  /* Light gray */
+  --mcm-gray-dark: #6b7c74;
+  /* Medium gray with green tint */
+  --mcm-gray-darker: var(--color-5);
+  /* Use darkest color */
+  --mcm-gray-medium: #8a9790;
+  /* Neutral medium */
 
   /* Status Colors */
   --color-success: #2e7d32;
@@ -36,18 +67,15 @@
   --color-info-bg: #e3f2fd;
   --color-info-border: #90caf9;
 
-  /* Accent Colors (Yellow/Gold) */
-  --color-accent: #eebb00;
-  --color-accent-dark: #cc9900;
-  --color-accent-light: #ffd633;
-  --color-accent-lighter: #ffdb4d;
-
   /* Text Colors */
-  --mcm-text: var(--pine-teal);
-  --mcm-text-muted: #576b5b;
-  --mcm-link: var(--fern);
+  --mcm-text: var(--color-5);
+  /* Body text: darkest */
+  --mcm-text-muted: var(--color-4);
+  /* Muted text */
+  --mcm-link: var(--color-3);
+  /* Links: teal */
 
-  /* White */
+  /* Core */
   --color-white: #fff;
   --color-black: #000;
 

@@ -1,0 +1,206 @@
+/* Analytics Dashboard Styles */
+.container {
+    padding: 20px 0;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.title {
+    font-size: 20px;
+    color: var(--hunter-green);
+    margin: 0;
+}
+
+.period {
+    font-size: 13px;
+    color: var(--mcm-gray-dark);
+    background: var(--mcm-gray-bg);
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+/* Stats Grid */
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.statCard {
+    background: var(--color-white);
+    border: 1px solid var(--mcm-gray-border);
+    padding: 20px;
+    text-align: center;
+}
+
+.statValue {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--hunter-green);
+    margin-bottom: 4px;
+}
+
+.statLabel {
+    font-size: 12px;
+    color: var(--mcm-gray-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Chart Container */
+.chartContainer {
+    background: var(--color-white);
+    border: 1px solid var(--mcm-gray-border);
+    padding: 20px;
+    margin-bottom: 32px;
+}
+
+.sectionTitle {
+    font-size: 14px;
+    color: var(--hunter-green);
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--mcm-gray-border);
+}
+
+.emptyChart {
+    text-align: center;
+    padding: 40px;
+    color: var(--mcm-gray-dark);
+    font-size: 14px;
+}
+
+/* Table */
+.tableContainer {
+    background: var(--color-white);
+    border: 1px solid var(--mcm-gray-border);
+    padding: 20px;
+}
+
+.analyticsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.analyticsTable th,
+.analyticsTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--mcm-gray-border);
+}
+
+.analyticsTable th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--mcm-gray-dark);
+    background: var(--mcm-gray-bg);
+}
+
+.analyticsTable td {
+    font-size: 14px;
+}
+
+.analyticsTable tr:hover {
+    background: var(--mcm-gray-bg);
+}
+
+.jobLink {
+    color: var(--hunter-green);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.jobLink:hover {
+    text-decoration: underline;
+}
+
+.emptyState {
+    text-align: center;
+    color: var(--mcm-gray-dark);
+    padding: 24px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .statValue {
+        font-size: 24px;
+    }
+
+    .analyticsTable th:nth-child(4),
+    .analyticsTable td:nth-child(4) {
+        display: none;
+    }
+}
+
+/* Chart Styles */
+.chart {
+    height: 200px;
+}
+
+.chartBars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 180px;
+    gap: 4px;
+}
+
+.barContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    max-width: 60px;
+}
+
+.bar {
+    width: 100%;
+    background: linear-gradient(180deg, var(--hunter-green) 0%, var(--pine-teal) 100%);
+    border-radius: 2px 2px 0 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 4px;
+    transition: opacity 0.2s;
+}
+
+.bar:hover {
+    opacity: 0.8;
+}
+
+.barValue {
+    font-size: 10px;
+    color: var(--color-white);
+    font-weight: bold;
+}
+
+.barLabel {
+    font-size: 9px;
+    color: var(--mcm-gray-dark);
+    margin-top: 4px;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .chartBars {
+        overflow-x: auto;
+    }
+
+    .barLabel {
+        display: none;
+    }
+}

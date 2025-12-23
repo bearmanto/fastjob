@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 type ApplicationStatus = 'applied' | 'viewed' | 'shortlisted' | 'interview' | 'processing' | 'hired' | 'rejected';
 
 // Helper to verify hirer owns the application's job
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function verifyHirerOwnership(supabase: any, applicationId: string, userId: string) {
     const { data: application } = await supabase
         .from('applications')

@@ -158,6 +158,26 @@
     color: var(--mcm-gray-darker);
 }
 
+.companyActions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.teamButton {
+    text-decoration: none;
+    background: var(--hunter-green);
+    color: var(--color-white);
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+}
+
+.teamButton:hover {
+    background: var(--pine-teal);
+}
+
 /* Panel Header */
 .panelHeader {
     display: flex;

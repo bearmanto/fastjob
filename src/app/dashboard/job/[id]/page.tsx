@@ -75,6 +75,7 @@ export default async function JobHistoryPage({ params }: Props) {
     const educationMap: Record<string, unknown> = {};
 
     if (applications && applications.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const applicantIds = applications.map((app: any) => app.applicant_id).filter(Boolean);
 
         if (applicantIds.length > 0) {
@@ -91,9 +92,11 @@ export default async function JobHistoryPage({ params }: Props) {
                     .order('start_date', { ascending: false })
             ]);
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (expResult.data || []).forEach((exp: any) => {
                 if (!experienceMap[exp.profile_id]) experienceMap[exp.profile_id] = exp;
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (eduResult.data || []).forEach((edu: any) => {
                 if (!educationMap[edu.profile_id]) educationMap[edu.profile_id] = edu;
             });
@@ -101,6 +104,7 @@ export default async function JobHistoryPage({ params }: Props) {
     }
 
     // Process applications to attach single recent experience/education
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const processedApplications = (applications || []).map((app: any) => ({
         ...app,
         recentExperience: experienceMap[app.applicant_id] || null,

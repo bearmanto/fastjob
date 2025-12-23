@@ -2,32 +2,53 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { submitVerification } from '@/app/dashboard/actions';
 import { createClient } from '@/utils/supabase/client';
+import { VERIFICATION_CATEGORIES } from '@/data/countries';
 import styles from '@/app/profile/Profile.module.css';
 
 interface Props {
     companyId: string;
 }
 
-export function VerificationForm({ companyId: _companyId }: Props) {
+interface DocumentUpload {
+    category: string;
+    subtype: string;
+    file: File | null;
+}
+
+export function VerificationForm({ companyId }: Props) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
-    const [docType, setDocType] = useState('nib');
 
-    // File states
-    const [npwpFile, setNpwpFile] = useState<File | null>(null);
-    const [businessFile, setBusinessFile] = useState<File | null>(null);
+    // Document state for each category
+    const [documents, setDocuments] = useState<DocumentUpload[]>([
+        { category: 'business_identity', subtype: '', file: null },
+        { category: 'representative_auth', subtype: '', file: null },
+        { category: 'personal_id', subtype: '', file: null },
+    ]);
+
+    const updateDocument = (index: number, field: 'subtype' | 'file', value: string | File | null) => {
+        setDocuments(prev => {
+            const updated = [...prev];
+            if (field === 'file') {
+                updated[index] = { ...updated[index], file: value as File | null };
+            } else {
+                updated[index] = { ...updated[index], subtype: value as string };
+            }
+            return updated;
+        });
+    };
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const form = e.currentTarget; // Capture form element immediately
         setLoading(true);
         setMessage(null);
 
-        if (!npwpFile || !businessFile) {
-            setMessage("Please upload both documents.");
+        // Validate all documents are selected
+        const missingDocs = documents.filter(d => !d.file || !d.subtype);
+        if (missingDocs.length > 0) {
+            setMessage("Please upload a document for each category.");
             setLoading(false);
             return;
         }
@@ -37,36 +58,51 @@ export function VerificationForm({ companyId: _companyId }: Props) {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error("Not authenticated");
 
-            // 1. Upload NPWP
-            const npwpPath = `${user.id}/npwp_${Date.now()}_${npwpFile.name}`;
-            const { error: npwpError } = await supabase.storage
-                .from('company_documents')
-                .upload(npwpPath, npwpFile);
+            // Upload each document
+            for (const doc of documents) {
+                if (!doc.file) continue;
 
-            if (npwpError) throw npwpError;
+                const filePath = `${user.id}/${doc.category}_${Date.now()}_${doc.file.name}`;
 
-            // 2. Upload Business Doc
-            const businessPath = `${user.id}/${docType}_${Date.now()}_${businessFile.name}`;
-            const { error: docError } = await supabase.storage
-                .from('company_documents')
-                .upload(businessPath, businessFile);
+                const { error: uploadError } = await supabase.storage
+                    .from('company_documents')
+                    .upload(filePath, doc.file);
 
-            if (docError) throw docError;
+                if (uploadError) throw uploadError;
 
-            // 3. Submit Form Data
-            const formData = new FormData(form);
-            formData.set('npwp_url', npwpPath);
-            formData.set('business_doc_url', businessPath);
+                // Get public URL
+                const { data: { publicUrl } } = supabase.storage
+                    .from('company_documents')
+                    .getPublicUrl(filePath);
 
-            const result = await submitVerification(formData);
-            setMessage(result.message);
-            if (result.success) {
-                // simple reload to show pending state
-                router.refresh();
+                // Insert document record
+                const { error: insertError } = await supabase
+                    .from('verification_documents')
+                    .insert({
+                        company_id: companyId,
+                        document_category: doc.category,
+                        document_subtype: doc.subtype,
+                        document_url: publicUrl
+                    });
+
+                if (insertError) throw insertError;
             }
-        } catch (err: any) {
+
+            // Update company status to pending
+            const { error: updateError } = await supabase
+                .from('companies')
+                .update({ verification_status: 'pending' })
+                .eq('id', companyId);
+
+            if (updateError) throw updateError;
+
+            setMessage("Verification documents submitted! We will review them shortly.");
+            router.refresh();
+
+        } catch (err) {
+            const errorMsg = err instanceof Error ? err.message : 'Unknown error';
             console.error(err);
-            setMessage(`Error: ${err.message}`);
+            setMessage(`Error: ${errorMsg}`);
         } finally {
             setLoading(false);
         }
@@ -77,59 +113,63 @@ export function VerificationForm({ companyId: _companyId }: Props) {
             <h2 className={styles.sectionTitle}>Company Verification</h2>
             <div className={styles.verificationIntro}>
                 To prevent fraud, FastJob requires all companies to verify their identity before posting jobs.
+                Please upload one document from each category below.
             </div>
 
-            {message && <div className={styles.verificationMessage}>{message}</div>}
-
-            <form onSubmit={handleSubmit} className={styles.formGrid}>
-                {/* NPWP Section */}
-                <div className={styles.inputGroup}>
-                    <label className={styles.label}>NPWP Number</label>
-                    <input name="npwp_number" required className={styles.input} placeholder="e.g. 12.345.678.9-000.000" />
+            {message && (
+                <div className={styles.verificationMessage} style={{
+                    background: message.startsWith('Error') ? '#ffe0e0' : '#e0ffe0',
+                    padding: '12px',
+                    marginBottom: '16px',
+                    border: message.startsWith('Error') ? '1px solid #ff6b6b' : '1px solid #52796f'
+                }}>
+                    {message}
                 </div>
+            )}
 
-                <div className={styles.inputGroup}>
-                    <label className={styles.label}>Upload NPWP Document (PDF/Jpg)</label>
-                    <input
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        required
-                        onChange={(e) => setNpwpFile(e.target.files?.[0] || null)}
-                        className={styles.fileInput}
-                    />
-                </div>
+            <form onSubmit={handleSubmit}>
+                {Object.entries(VERIFICATION_CATEGORIES).map(([key, category], index) => (
+                    <div key={key} className={styles.verificationCategory}>
+                        <h3 className={styles.categoryTitle}>
+                            {index + 1}. {category.label}
+                        </h3>
+                        <p className={styles.categoryDescription}>
+                            {category.description}
+                        </p>
 
-                <div className={styles.formDivider} />
+                        <div className={styles.inputGroup}>
+                            <label className={styles.label}>Document Type</label>
+                            <select
+                                className={styles.input}
+                                value={documents[index].subtype}
+                                onChange={(e) => updateDocument(index, 'subtype', e.target.value)}
+                                required
+                            >
+                                <option value="">Select document type...</option>
+                                {category.documentTypes.map(dt => (
+                                    <option key={dt.value} value={dt.value}>
+                                        {dt.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-                {/* Business Doc Section */}
-                <div className={styles.inputGroup}>
-                    <label className={styles.label}>Business Document Type</label>
-                    <select
-                        name="business_doc_type"
-                        className={styles.input}
-                        value={docType}
-                        onChange={(e) => setDocType(e.target.value)}
-                    >
-                        <option value="nib">Nomor Induk Berusaha (NIB)</option>
-                        <option value="siup">Surat Izin Usaha (SIUP)</option>
-                        <option value="akta">Akta Pendirian</option>
-                        <option value="sk_kemenhumkam">SK Kemenkumham</option>
-                        <option value="skdp">Surat Keterangan Domisili</option>
-                    </select>
-                </div>
+                        <div className={styles.inputGroup}>
+                            <label className={styles.label}>Upload Document (PDF/JPG/PNG)</label>
+                            <input
+                                type="file"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                required
+                                onChange={(e) => updateDocument(index, 'file', e.target.files?.[0] || null)}
+                                className={styles.fileInput}
+                            />
+                        </div>
 
-                <div className={styles.inputGroup}>
-                    <label className={styles.label}>Upload Document</label>
-                    <input
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        required
-                        onChange={(e) => setBusinessFile(e.target.files?.[0] || null)}
-                        className={styles.fileInput}
-                    />
-                </div>
+                        {index < 2 && <div className={styles.formDivider} />}
+                    </div>
+                ))}
 
-                <div className={`${styles.fullWidth} ${styles.submitRow}`}>
+                <div className={`${styles.fullWidth} ${styles.submitRow}`} style={{ marginTop: '20px' }}>
                     <button type="submit" className={styles.saveButton} disabled={loading}>
                         {loading ? 'Uploading...' : 'Submit for Verification'}
                     </button>

@@ -46,6 +46,34 @@
     color: var(--mcm-gray-darker);
 }
 
+.workplaceNote {
+    color: var(--mcm-gray-medium);
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+.remoteBadge {
+    display: inline-block;
+    margin-left: 8px;
+    background: var(--pine-teal);
+    color: var(--color-white);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.visaBadge {
+    display: inline-block;
+    margin-left: 8px;
+    background: #7b1fa2;
+    color: var(--color-white);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
 /* Description */
 .descriptionSection {
     margin-bottom: 32px;
@@ -352,4 +380,26 @@
 .savedJobButton:hover {
     background: #e6f0ee;
     /* Light green tint */
+}
+
+/* Ineligible State */
+.ineligibleBox {
+    background: #fff3e0;
+    border: 1px solid #ffcc80;
+    padding: 16px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.ineligibleTitle {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0 0 8px 0;
+    color: #e65100;
+}
+
+.ineligibleText {
+    font-size: 13px;
+    color: var(--mcm-gray-dark);
+    margin: 0;
 }

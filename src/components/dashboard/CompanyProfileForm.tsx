@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { updateCompanyProfile } from '@/app/dashboard/actions';
 import styles from '@/app/profile/Profile.module.css'; // Reuse profile styles
 
-import { INDUSTRIES, LOCATIONS } from '@/data/constants';
+import { INDUSTRIES } from '@/data/constants';
+import { COUNTRIES, getCountryFlag } from '@/data/countries';
 
 interface Company {
     name: string;
     location: string | null;
+    country_code: string | null;
     website: string | null;
     industry: string | null;
     description: string | null;
@@ -18,25 +20,19 @@ export function CompanyProfileForm({ company }: { company: Company }) {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
 
-    // Initial State Parsing
-    const initialLocation = company.location?.split(', ') || [];
-    const initialCity = initialLocation[0] || '';
-    const initialCountry = initialLocation[1] || 'Indonesia'; // Default to Indonesia if unknown
-
-    const [country, setCountry] = useState(initialCountry);
-    const [city, setCity] = useState(initialCity);
+    // Use country_code if available, otherwise try to parse from location
+    const [countryCode, setCountryCode] = useState(company.country_code || 'ID');
+    const [city, setCity] = useState(company.location || '');
     const [industry, setIndustry] = useState(company.industry || INDUSTRIES[0]);
-
-    const cities = LOCATIONS[country] || [];
 
     async function handleSubmit(formData: FormData) {
         setLoading(true);
         setMessage(null);
 
-        // Construct combined location
-        const fullLocation = `${city}, ${country}`;
-        formData.set('location', fullLocation);
-        formData.set('industry', industry); // Ensure industry is set from state
+        // Set country code and city as location
+        formData.set('country_code', countryCode);
+        formData.set('location', city);
+        formData.set('industry', industry);
 
         try {
             const result = await updateCompanyProfile(formData);
@@ -59,36 +55,31 @@ export function CompanyProfileForm({ company }: { company: Company }) {
                     <input name="name" defaultValue={company.name} required className={styles.input} />
                 </div>
 
-                {/* Location Split: Country & City */}
+                {/* Country Dropdown */}
                 <div className={styles.inputGroup}>
                     <label className={styles.label}>Country</label>
                     <select
-                        value={country}
-                        onChange={(e) => {
-                            setCountry(e.target.value);
-                            setCity(''); // Reset city when country changes
-                        }}
+                        value={countryCode}
+                        onChange={(e) => setCountryCode(e.target.value)}
                         className={styles.input}
                     >
-                        {Object.keys(LOCATIONS).map(c => (
-                            <option key={c} value={c}>{c}</option>
+                        {COUNTRIES.map(c => (
+                            <option key={c.code} value={c.code}>
+                                {c.flag} {c.name}
+                            </option>
                         ))}
                     </select>
                 </div>
 
+                {/* City/Region Free Text */}
                 <div className={styles.inputGroup}>
                     <label className={styles.label}>City / Region</label>
-                    <select
+                    <input
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
+                        placeholder="e.g., Jakarta, London, New York"
                         className={styles.input}
-                        disabled={!country}
-                    >
-                        <option value="">Select City...</option>
-                        {cities.map(c => (
-                            <option key={c} value={c}>{c}</option>
-                        ))}
-                    </select>
+                    />
                 </div>
 
                 <div className={styles.inputGroup}>

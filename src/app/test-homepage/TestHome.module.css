@@ -1,0 +1,261 @@
+/* Layout */
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+}
+
+.header {
+    padding: 32px 0 24px;
+    text-align: center;
+    background: var(--color-white);
+}
+
+.tagline {
+    font-size: 14px;
+    color: var(--mcm-gray-dark);
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+}
+
+.logo {
+    font-family: Impact, "Arial Black", sans-serif;
+    font-size: 36px;
+    color: var(--hunter-green);
+    text-decoration: none;
+    letter-spacing: -1px;
+}
+
+.highlight {
+    color: var(--color-black);
+}
+
+.splitContent {
+    display: flex;
+    flex: 1;
+}
+
+/* Sections */
+.section {
+    flex: 1;
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    transition: background 0.3s ease;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hirer Side (Left) */
+.hirerSection {
+    background: linear-gradient(135deg, #ffffff 0%, #f8faf8 100%);
+    border-right: 1px solid var(--mcm-gray-border);
+    animation-delay: 0.1s;
+}
+
+/* Seeker Side (Right) */
+.seekerSection {
+    background: linear-gradient(135deg, var(--mcm-gray-bg) 0%, #e8ebe5 100%);
+    animation-delay: 0.2s;
+}
+
+/* Typography */
+.label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    color: var(--mcm-gray-dark);
+    margin-bottom: 16px;
+    opacity: 0.8;
+}
+
+.headline {
+    font-size: 42px;
+    line-height: 1.15;
+    color: var(--hunter-green);
+    margin-bottom: 20px;
+    max-width: 380px;
+    font-weight: 800;
+}
+
+.subtext {
+    font-size: 17px;
+    color: var(--mcm-text);
+    margin-bottom: 32px;
+    max-width: 360px;
+    line-height: 1.6;
+}
+
+.uspList {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 36px;
+}
+
+.uspList li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: var(--mcm-gray-darker);
+}
+
+.check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: var(--color-success-light);
+    color: var(--color-success);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Buttons */
+.ctaButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ctaButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    text-decoration: none;
+}
+
+.ctaButton:active {
+    transform: translateY(0);
+}
+
+.hirerButton {
+    background: var(--hunter-green);
+    color: var(--color-white);
+}
+
+.hirerButton:hover {
+    background: var(--pine-teal);
+}
+
+.seekerButton {
+    background: var(--color-white);
+    color: var(--hunter-green);
+    border: 2px solid var(--hunter-green);
+}
+
+.seekerButton:hover {
+    background: var(--hunter-green);
+    color: var(--color-white);
+}
+
+/* Footer */
+.footer {
+    padding: 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--mcm-gray-dark);
+    border-top: 1px solid var(--mcm-gray-border);
+    background: var(--color-white);
+}
+
+.footerLinks {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 12px;
+}
+
+.footerLinks a {
+    color: var(--hunter-green);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footerLinks a:hover {
+    text-decoration: underline;
+}
+
+.copyright {
+    opacity: 0.6;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+    .splitContent {
+        flex-direction: column;
+    }
+
+    .section {
+        padding: 48px 24px;
+        align-items: center;
+        text-align: center;
+        border-right: none;
+        border-bottom: 1px solid var(--mcm-gray-border);
+    }
+
+    .headline {
+        font-size: 32px;
+        max-width: 100%;
+    }
+
+    .subtext {
+        max-width: 100%;
+    }
+
+    .uspList {
+        width: 100%;
+    }
+
+    .uspList li {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 24px 0;
+    }
+
+    .logo {
+        font-size: 28px;
+    }
+
+    .headline {
+        font-size: 28px;
+    }
+
+    .section {
+        padding: 40px 20px;
+    }
+
+    .ctaButton {
+        width: 100%;
+        padding: 16px;
+    }
+}

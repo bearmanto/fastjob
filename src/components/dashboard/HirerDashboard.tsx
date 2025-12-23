@@ -91,9 +91,17 @@ export function HirerDashboard({ company, jobs = [], applications = [] }: Props)
                             {company.location || 'Location not set'} • {company.industry || 'Industry not set'}
                         </div>
                     </div>
-                    <Link href="/company/profile" className={styles.editButton}>
-                        Edit Profile
-                    </Link>
+                    <div className={styles.companyActions}>
+                        <Link href="/dashboard/analytics" className={styles.teamButton}>
+                            📊 Analytics
+                        </Link>
+                        <Link href="/dashboard/team" className={styles.teamButton}>
+                            👥 Team
+                        </Link>
+                        <Link href="/company/profile" className={styles.editButton}>
+                            Edit Profile
+                        </Link>
+                    </div>
                 </div>
             )}
 

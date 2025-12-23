@@ -55,8 +55,9 @@ export function ResumeSection({ resumeUrl, resumeDownloadUrl }: Props) {
             await saveResume(fileName);
 
             setActiveModal('upload_success');
-        } catch (error: any) {
-            setErrorMessage('Upload failed: ' + error.message);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unknown error';
+            setErrorMessage('Upload failed: ' + message);
             setActiveModal('error');
         } finally {
             setUploading(false);

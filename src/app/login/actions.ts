@@ -58,7 +58,7 @@ export async function verifyOtp(formData: FormData) {
     const email = formData.get('email') as string;
     const token = formData.get('code') as string;
 
-    const { error } = await supabase.auth.verifyOtp({
+    const { data, error } = await supabase.auth.verifyOtp({
         email,
         token,
         type: 'signup',
@@ -66,6 +66,34 @@ export async function verifyOtp(formData: FormData) {
 
     if (error) {
         redirect(`/verify?email=${encodeURIComponent(email)}&error=${error.message}`);
+    }
+
+    // Check for pending team invites and auto-join
+    if (data.user) {
+        const { data: pendingInvites } = await supabase
+            .from('pending_team_invites')
+            .select('id, company_id, role')
+            .eq('email', email)
+            .gt('expires_at', new Date().toISOString());
+
+        if (pendingInvites && pendingInvites.length > 0) {
+            for (const invite of pendingInvites) {
+                // Add user to company_members
+                await supabase.from('company_members').insert({
+                    company_id: invite.company_id,
+                    user_id: data.user.id,
+                    role: invite.role,
+                    invited_by: null, // Could track this from the invite
+                    accepted_at: new Date().toISOString()
+                });
+
+                // Delete the pending invite
+                await supabase
+                    .from('pending_team_invites')
+                    .delete()
+                    .eq('id', invite.id);
+            }
+        }
     }
 
     revalidatePath('/', 'layout');

@@ -1,0 +1,220 @@
+/* Team Management Styles */
+.container {
+    padding: 20px 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.title {
+    font-size: 20px;
+    color: var(--hunter-green);
+    margin: 0;
+}
+
+/* Invite Form */
+.inviteForm {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.emailInput {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px 12px;
+    border: 1px solid var(--mcm-gray-border);
+    font-size: 14px;
+}
+
+.roleSelect {
+    padding: 8px 12px;
+    border: 1px solid var(--mcm-gray-border);
+    font-size: 14px;
+    min-width: 120px;
+}
+
+.inviteButton {
+    padding: 8px 16px;
+    background: var(--hunter-green);
+    color: var(--color-white);
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.inviteButton:hover {
+    background: var(--pine-teal);
+}
+
+/* Team Table */
+.teamTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+}
+
+.teamTable th,
+.teamTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--mcm-gray-border);
+}
+
+.teamTable th {
+    background: var(--mcm-gray-bg);
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.teamTable tr:hover {
+    background: var(--mcm-gray-bg);
+}
+
+/* Role Badge */
+.roleBadge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.roleAdmin {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.roleRecruiter {
+    background: var(--color-info-bg);
+    color: var(--color-info);
+}
+
+.roleViewer {
+    background: var(--mcm-gray-bg);
+    color: var(--mcm-gray-dark);
+}
+
+/* Status Badges */
+.pendingBadge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.expiredBadge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    background: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+.activeBadge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.expiredRow {
+    opacity: 0.6;
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.actionButton {
+    padding: 6px 12px;
+    font-size: 12px;
+    border: 1px solid var(--mcm-gray-border);
+    background: var(--color-white);
+    cursor: pointer;
+}
+
+.actionButton:hover {
+    border-color: var(--hunter-green);
+}
+
+.removeButton {
+    color: var(--color-error);
+    border-color: var(--color-error);
+}
+
+.removeButton:hover {
+    background: var(--color-error-bg);
+}
+
+/* Owner Badge */
+.ownerBadge {
+    font-size: 11px;
+    color: var(--mcm-gray-dark);
+    font-style: italic;
+}
+
+/* Messages */
+.error {
+    padding: 12px;
+    background: var(--color-error-bg);
+    color: var(--color-error);
+    margin-bottom: 16px;
+    border-radius: 4px;
+}
+
+.success {
+    padding: 12px;
+    background: var(--color-success-bg);
+    color: var(--color-success);
+    margin-bottom: 16px;
+    border-radius: 4px;
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: 40px;
+    color: var(--mcm-gray-dark);
+    background: var(--mcm-gray-bg);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .inviteForm {
+        flex-direction: column;
+    }
+
+    .emailInput,
+    .roleSelect {
+        width: 100%;
+    }
+
+    .teamTable {
+        font-size: 13px;
+    }
+
+    .teamTable th:nth-child(3),
+    .teamTable td:nth-child(3) {
+        display: none;
+    }
+}

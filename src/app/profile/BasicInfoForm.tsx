@@ -4,6 +4,19 @@ import { useState, useMemo } from 'react';
 import { updateBasicProfile } from './actions';
 import styles from './Profile.module.css';
 import { Country, City, ICountry, ICity } from 'country-state-city';
+import { COUNTRIES } from '@/data/countries';
+
+// Simple country select for eligibility
+function CountrySelect({ defaultValue }: { defaultValue: string }) {
+    return (
+        <select name="country_code" className={styles.input} defaultValue={defaultValue}>
+            <option value="">Select your country...</option>
+            {COUNTRIES.map(c => (
+                <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
+            ))}
+        </select>
+    );
+}
 
 interface Props {
     profile: {
@@ -13,6 +26,8 @@ interface Props {
         phone?: string | null;
         linkedin?: string | null;
         location?: string | null;
+        willing_to_relocate?: boolean | null;
+        country_code?: string | null;
     };
 }
 
@@ -173,6 +188,11 @@ export function BasicInfoForm({ profile }: Props) {
                     <LocationInput defaultValue={profile.location || undefined} />
                 </div>
 
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Country (for job eligibility)</label>
+                    <CountrySelect defaultValue={profile.country_code || ''} />
+                </div>
+
                 <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
                     <label className={styles.label}>Professional Summary</label>
                     <textarea
@@ -201,6 +221,17 @@ export function BasicInfoForm({ profile }: Props) {
                         name="linkedin"
                         defaultValue={profile.linkedin || ''}
                     />
+                </div>
+
+                <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                    <label className={styles.checkboxLabel}>
+                        <input
+                            type="checkbox"
+                            name="willing_to_relocate"
+                            defaultChecked={profile.willing_to_relocate || false}
+                        />
+                        Willing to Relocate for the Right Opportunity
+                    </label>
                 </div>
 
                 {/* Resume Section has been moved to a standalone component */}

@@ -12,6 +12,7 @@ type Application = any;
 interface Props {
     profile: Profile | null;
     applications: Application[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     savedJobs?: any[]; // TODO: Define proper type
 }
 

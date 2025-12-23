@@ -7,6 +7,8 @@ import { createClient } from '@/utils/supabase/server';
 import { ApplyButton } from './ApplyButton';
 import { checkIsJobSaved } from '@/app/actions/savedJobs';
 import { BookmarkButton } from '@/components/jobs/BookmarkButton';
+import { ViewTracker } from '@/components/analytics/ViewTracker';
+import { getCountryFlag, getCountryName } from '@/data/countries';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -46,6 +48,10 @@ export default async function JobPage({ params }: PageProps) {
         title: jobRaw.title,
         company: jobRaw.company?.name || 'Unknown Company',
         location: jobRaw.location,
+        countryCode: jobRaw.country_code || 'ID',
+        isRemote: jobRaw.is_remote || false,
+        acceptsWorldwide: jobRaw.accepts_worldwide || false,
+        visaSponsorship: jobRaw.visa_sponsorship || false,
         categorySlug: jobRaw.category_slug,
         salary: (jobRaw.salary_min && jobRaw.salary_max)
             ? `IDR ${jobRaw.salary_min.toLocaleString()} - ${jobRaw.salary_max.toLocaleString()}`
@@ -61,13 +67,16 @@ export default async function JobPage({ params }: PageProps) {
         owner_id: jobRaw.owner_id
     } : {
         ...mockJob!,
+        countryCode: 'ID',
+        isRemote: false,
+        acceptsWorldwide: false,
+        visaSponsorship: false,
         jobType: mockJob!.jobType || 'Full Time',
         workplaceType: mockJob!.workplaceType || 'On-site',
         description: null,
         requirements: null,
         skills: ['React', 'TypeScript', 'Next.js'],
         benefits: ['Health Insurance', 'Remote Work'],
-
         categorySlug: 'engineering'
     };
 
@@ -75,16 +84,18 @@ export default async function JobPage({ params }: PageProps) {
     let hasApplied = false;
     let resumeUrl: string | null = null;
     let isSeeker = false;
+    let seekerCountryCode: string | null = null;
 
     if (user) {
         // Fetch profile and application status in parallel
         const [profileResult, applicationResult] = await Promise.all([
-            supabase.from('profiles').select('role, resume_url').eq('id', user.id).single(),
+            supabase.from('profiles').select('role, resume_url, country_code').eq('id', user.id).single(),
             supabase.from('applications').select('id').eq('job_id', id).eq('applicant_id', user.id).single()
         ]);
 
         isSeeker = profileResult.data?.role === 'seeker';
         resumeUrl = profileResult.data?.resume_url || null;
+        seekerCountryCode = profileResult.data?.country_code || null;
         hasApplied = !!applicationResult.data;
     }
 
@@ -95,17 +106,22 @@ export default async function JobPage({ params }: PageProps) {
 
     return (
         <div className={styles.container}>
+            <ViewTracker jobId={job.id} source="direct" />
             <div className={styles.mainColumn}>
                 <Breadcrumbs
                     items={[
                         { label: 'Home', href: '/' },
-                        { label: 'Collections', href: `/collections` },
+                        { label: 'All Jobs', href: `/` },
                         { label: job.title }
                     ]}
                 />
 
                 <h1 className={styles.title}>{job.title}</h1>
-                <div className={styles.company}>{job.company} — {job.location}</div>
+                <div className={styles.company}>
+                    {job.company} — {getCountryFlag(job.countryCode)} {job.location || getCountryName(job.countryCode)}
+                    {job.isRemote && <span className={styles.remoteBadge}>🌍 Remote</span>}
+                    {job.visaSponsorship && <span className={styles.visaBadge}>✈️ Visa Sponsorship</span>}
+                </div>
 
                 {/* Removed BookmarkButton from here */}
 
@@ -118,7 +134,11 @@ export default async function JobPage({ params }: PageProps) {
                         </tr>
                         <tr>
                             <td className={styles.specLabel}>Location</td>
-                            <td>{job.location} <span className={styles.workplaceNote}>({job.workplaceType})</span></td>
+                            <td>
+                                {getCountryFlag(job.countryCode)} {job.location || getCountryName(job.countryCode)}
+                                <span className={styles.workplaceNote}>({job.workplaceType})</span>
+                                {job.isRemote && <span className={styles.remoteBadge}>Remote OK</span>}
+                            </td>
                         </tr>
                         <tr>
                             <td className={styles.specLabel}>Salary</td>
@@ -190,7 +210,15 @@ export default async function JobPage({ params }: PageProps) {
                             <p className={styles.applyText}>
                                 Use your FastJob Profile.
                             </p>
-                            <ApplyButton jobId={job.id} hasApplied={hasApplied} isSeeker={!!isSeeker} resumeUrl={resumeUrl} />
+                            <ApplyButton
+                                jobId={job.id}
+                                hasApplied={hasApplied}
+                                isSeeker={!!isSeeker}
+                                resumeUrl={resumeUrl}
+                                jobCountryCode={job.countryCode}
+                                acceptsWorldwide={job.acceptsWorldwide}
+                                seekerCountryCode={seekerCountryCode}
+                            />
 
                             {/* Saved Job Button - Sidebar */}
                             <BookmarkButton

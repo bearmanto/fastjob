@@ -41,7 +41,7 @@ export function ApplicantActions({ applicationId, currentStatus, resumeUrl, inte
     const [loading, setLoading] = useState(false);
     const [showInterviewModal, setShowInterviewModal] = useState(false);
 
-    const handleAction = async (action: () => Promise<any>) => {
+    const handleAction = async (action: () => Promise<unknown>) => {
         setLoading(true);
         try {
             await action();

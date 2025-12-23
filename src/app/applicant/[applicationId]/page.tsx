@@ -151,6 +151,7 @@ export default async function ApplicantProfilePage({ params }: PageProps) {
                 <h2 className={styles.sectionTitle}>Work Experience</h2>
                 {experiences && experiences.length > 0 ? (
                     <div className={styles.timeline}>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {experiences.map((exp: any) => (
                             <div key={exp.id} className={styles.timelineItem}>
                                 <div className={styles.timelineHeader}>
@@ -178,6 +179,7 @@ export default async function ApplicantProfilePage({ params }: PageProps) {
                 <h2 className={styles.sectionTitle}>Education</h2>
                 {education && education.length > 0 ? (
                     <div className={styles.timeline}>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {education.map((edu: any) => (
                             <div key={edu.id} className={styles.timelineItem}>
                                 <div className={styles.timelineHeader}>

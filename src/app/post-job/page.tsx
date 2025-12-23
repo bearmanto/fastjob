@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect, useActionState } from 'react';
 import styles from './PostJob.module.css';
-import { JOB_TYPES, WORKPLACE_TYPES, COMMON_SKILLS, COMMON_BENEFITS, INDUSTRIES, LOCATIONS } from '@/data/constants';
+import { JOB_TYPES, WORKPLACE_TYPES, COMMON_SKILLS, COMMON_BENEFITS, INDUSTRIES } from '@/data/constants';
+import { COUNTRIES } from '@/data/countries';
 import { createJob } from './actions';
 
 // Helper for multi-select dropdown
@@ -92,8 +93,9 @@ function MultiSelect({
 export default function PostJobPage() {
     const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
     const [selectedBenefits, setSelectedBenefits] = useState<string[]>([]);
-    const [country, setCountry] = useState('');
-    const [city, setCity] = useState(''); // Corrected line: removed typo
+    const [countryCode, setCountryCode] = useState('');
+    const [city, setCity] = useState('');
+    const [isRemote, setIsRemote] = useState(false);
 
     // Server Action State - Updated for React 19/Next 15
     const [state, formAction] = useActionState(createJob, null);
@@ -141,32 +143,51 @@ export default function PostJobPage() {
                     {JOB_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
 
-                <label className={styles.label}>Location</label>
+                <label className={styles.label}>Hiring Location</label>
                 <div className={styles.locationGrid}>
                     <select
-                        name="country"
+                        name="country_code"
                         className={styles.input}
-                        value={country}
-                        onChange={e => { setCountry(e.target.value); setCity(''); }}
+                        value={countryCode}
+                        onChange={e => setCountryCode(e.target.value)}
                         required
                     >
                         <option value="">Select Country...</option>
-                        {Object.keys(LOCATIONS).map(c => <option key={c} value={c}>{c}</option>)}
+                        {COUNTRIES.map(c => (
+                            <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
+                        ))}
                     </select>
 
-                    <select
-                        name="city"
+                    <input
+                        name="location"
+                        type="text"
                         className={styles.input}
                         value={city}
                         onChange={e => setCity(e.target.value)}
-                        disabled={!country}
-                        required
-                    >
-                        <option value="">Select City...</option>
-                        {country && LOCATIONS[country]?.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
+                        placeholder="City / Region (e.g., London, NYC)"
+                    />
                 </div>
-                <input type="hidden" name="location" value={country && city ? `${city}, ${country}` : ''} />
+
+                <label className={styles.checkboxLabel}>
+                    <input
+                        type="checkbox"
+                        name="is_remote"
+                        checked={isRemote}
+                        onChange={e => setIsRemote(e.target.checked)}
+                    />
+                    Remote / Work from anywhere
+                </label>
+
+                <div className={styles.eligibilitySection}>
+                    <label className={styles.label}>Applicant Eligibility</label>
+                    <select name="accepts_worldwide" className={styles.input} defaultValue="local">
+                        <option value="local">Local candidates only (must be eligible to work in selected country)</option>
+                        <option value="worldwide">Worldwide applicants welcome (visa sponsorship available)</option>
+                    </select>
+                    <p className={styles.helpText}>
+                        Local-only jobs will only accept applications from candidates located in the job&apos;s country.
+                    </p>
+                </div>
 
                 <div className={styles.sectionHeader}>2. Compensation & Specifications</div>
 

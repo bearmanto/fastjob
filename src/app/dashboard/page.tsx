@@ -81,6 +81,7 @@ export default async function DashboardPage() {
     const jobIds = (jobs || []).map(j => j.id);
 
     // Fetch applications using job IDs (reliable filtering)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let applications: any[] = [];
     const experienceMap: Record<string, unknown> = {};
     const educationMap: Record<string, unknown> = {};

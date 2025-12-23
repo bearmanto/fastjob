@@ -4,12 +4,17 @@ import { useState, useRef } from 'react';
 import { applyForJob } from './actions';
 import styles from './Job.module.css';
 import { createClient } from '@/utils/supabase/client';
+import { getCountryName } from '@/data/countries';
 
 interface Props {
     jobId: string;
     hasApplied: boolean;
     isSeeker: boolean;
     resumeUrl?: string | null;
+    // Eligibility props
+    jobCountryCode?: string;
+    acceptsWorldwide?: boolean;
+    seekerCountryCode?: string | null;
 }
 
 function Modal({ title, children, actions }: { title: string, children: React.ReactNode, actions: React.ReactNode }) {
@@ -30,24 +35,47 @@ function Modal({ title, children, actions }: { title: string, children: React.Re
     )
 }
 
-export function ApplyButton({ jobId, hasApplied, isSeeker, resumeUrl }: Props) {
+export function ApplyButton({
+    jobId,
+    hasApplied,
+    isSeeker,
+    resumeUrl,
+    jobCountryCode,
+    acceptsWorldwide,
+    seekerCountryCode
+}: Props) {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(hasApplied ? 'Applied' : null);
     const [uploading, setUploading] = useState(false);
 
     // Modal State
-    const [activeModal, setActiveModal] = useState<'upload_required' | 'upload_success' | 'confirm_apply' | 'confirm_delete' | 'error' | null>(null);
+    const [activeModal, setActiveModal] = useState<'upload_required' | 'upload_success' | 'confirm_apply' | 'confirm_delete' | 'error' | 'ineligible' | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     if (!isSeeker) return null;
 
+    // Check eligibility - if job is local-only and seeker's country doesn't match
+    const isEligible = acceptsWorldwide || !jobCountryCode || !seekerCountryCode || seekerCountryCode === jobCountryCode;
+
     if (message === 'Applied') {
         return (
             <button className={`${styles.applyButton} ${styles.appliedButton}`} disabled>
                 APPLIED ✅
             </button>
+        );
+    }
+
+    // Show ineligible state
+    if (!isEligible) {
+        return (
+            <div className={styles.ineligibleBox}>
+                <p className={styles.ineligibleTitle}>🚫 Not Eligible</p>
+                <p className={styles.ineligibleText}>
+                    This job only accepts candidates from {getCountryName(jobCountryCode || '')}.
+                </p>
+            </div>
         );
     }
 
