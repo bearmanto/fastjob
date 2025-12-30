@@ -365,12 +365,91 @@ export const COMMON_SKILLS = [
 ];
 
 export const COMMON_BENEFITS = [
-    "Health Insurance (BPJS)",
-    "Transportation Allowance",
-    "Meal Allowance",
+    "Health Insurance",
+    "Dental & Vision",
+    "Retirement / Pension Plan",
+    "Paid Time Off (PTO)",
+    "Remote Work Options",
     "Performance Bonus",
-    "Overtime Pay",
-    "Uniform Provided",
-    "Training & Development",
-    "Pension Scheme"
+    "Stock Options / Equity",
+    "Flexible Working Hours",
+    "Parental Leave",
+    "Professional Development",
+    "Wellness Program",
+    "Commuter Benefits",
+    "Relocation Assistance",
+    "Employee Discounts",
+    "Free Food / Snacks",
+    "Gym Membership",
+    "Mental Health Support",
+    "Life Insurance",
+    "Tuition Reimbursement",
+    "Childcare Support"
+];
+
+export const CATEGORIES = [
+    {
+        id: 'eng',
+        name: 'Engineering & Technical',
+        slug: 'engineering',
+        icon: '⚙️',
+        subcategories: ['Mechanical', 'Electrical', 'Civil', 'Chemical', 'Industrial Design', 'Project Management'],
+    },
+    {
+        id: 'mfg',
+        name: 'Manufacturing & Operations',
+        slug: 'manufacturing',
+        icon: '🏭',
+        subcategories: ['Plant Management', 'Quality Control', 'Logistics', 'Supply Chain', 'Machine Operator', 'Safety Manager'],
+    },
+    {
+        id: 'it',
+        name: 'Information Technology',
+        slug: 'it',
+        icon: '💻',
+        subcategories: ['Software Development', 'System Administration', 'Data Science', 'Product Management', 'Cybersecurity', 'IT Support'],
+    },
+    {
+        id: 'sales',
+        name: 'Sales & Marketing',
+        slug: 'sales',
+        icon: '📈',
+        subcategories: ['B2B Sales', 'Account Management', 'Digital Marketing', 'Content Strategy', 'Sales Operations'],
+    },
+    {
+        id: 'admin',
+        name: 'Admin & Finance',
+        slug: 'admin',
+        icon: 'gd',
+        subcategories: ['Accounting', 'HR & Recruiting', 'Office Administration', 'Legal', 'Executive Assistant'],
+    },
+    {
+        id: 'const',
+        name: 'Construction & Facilities',
+        slug: 'construction',
+        icon: '🏗️',
+    }
+];
+
+export const CURRENCIES = [
+    { value: 'USD', label: 'USD ($)', symbol: '$' },
+    { value: 'IDR', label: 'IDR (Rp)', symbol: 'Rp' },
+    { value: 'SGD', label: 'SGD (S$)', symbol: 'S$' },
+    { value: 'EUR', label: 'EUR (€)', symbol: '€' },
+    { value: 'GBP', label: 'GBP (£)', symbol: '£' },
+    { value: 'AUD', label: 'AUD (A$)', symbol: 'A$' },
+    { value: 'CAD', label: 'CAD (C$)', symbol: 'C$' },
+    { value: 'JPY', label: 'JPY (¥)', symbol: '¥' },
+    { value: 'CNY', label: 'CNY (¥)', symbol: '¥' },
+    { value: 'MYR', label: 'MYR (RM)', symbol: 'RM' },
+    { value: 'THB', label: 'THB (฿)', symbol: '฿' },
+    { value: 'VND', label: 'VND (₫)', symbol: '₫' },
+    { value: 'PHP', label: 'PHP (₱)', symbol: '₱' },
+];
+
+export const SALARY_PERIODS = [
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'annual', label: 'Annual' },
+    { value: 'hourly', label: 'Hourly' },
+    { value: 'weekly', label: 'Weekly' },
 ];

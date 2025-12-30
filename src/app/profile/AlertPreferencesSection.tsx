@@ -7,8 +7,7 @@ import {
     saveAlertPreferences,
     AlertPreferences
 } from '@/app/actions/alertPreferences';
-import { JOB_TYPES, WORKPLACE_TYPES, LOCATIONS } from '@/data/constants';
-import { CATEGORIES } from '@/data/mockData';
+import { JOB_TYPES, WORKPLACE_TYPES, CATEGORIES } from '@/data/constants';
 import styles from './Profile.module.css';
 
 export function AlertPreferencesSection() {
@@ -89,8 +88,7 @@ export function AlertPreferencesSection() {
         );
     }
 
-    // Get all Indonesian cities for location selection
-    const indonesianCities = LOCATIONS['Indonesia'] || [];
+
 
     return (
         <section className={styles.section} id="alerts">
@@ -129,18 +127,38 @@ export function AlertPreferencesSection() {
 
                     {/* Locations */}
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>Preferred Locations</label>
-                        <div className={styles.chipContainer}>
-                            {indonesianCities.slice(0, 15).map(city => (
-                                <button
-                                    key={city}
-                                    type="button"
-                                    className={`${styles.chip} ${selectedLocations.includes(city) ? styles.chipActive : ''}`}
-                                    onClick={() => toggleArrayItem(selectedLocations, setSelectedLocations, city)}
-                                >
-                                    {city}
-                                </button>
-                            ))}
+                        <label className={styles.label}>Preferred Locations (Cities or Countries)</label>
+                        <p className={styles.helperText} style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
+                            We accept worldwide locations. Type a city or country and press Enter to add.
+                        </p>
+                        <div className={styles.inputWithTags}>
+                            <div className={styles.chipContainer} style={{ marginBottom: '8px' }}>
+                                {selectedLocations.map(loc => (
+                                    <button
+                                        key={loc}
+                                        type="button"
+                                        className={`${styles.chip} ${styles.chipActive}`}
+                                        onClick={() => toggleArrayItem(selectedLocations, setSelectedLocations, loc)}
+                                    >
+                                        {loc} ✕
+                                    </button>
+                                ))}
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Type location and press Enter..."
+                                className={styles.textInput}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        const val = e.currentTarget.value.trim();
+                                        if (val && !selectedLocations.includes(val)) {
+                                            setSelectedLocations([...selectedLocations, val]);
+                                            e.currentTarget.value = '';
+                                        }
+                                    }
+                                }}
+                            />
                         </div>
                     </div>
 

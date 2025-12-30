@@ -38,9 +38,11 @@ export function HirerDashboard({ company, jobs = [], applications = [] }: Props)
         return false;
     });
 
-    // Filter applications: Only show applications for ACTIVE jobs in the recent list
+    // Filter applications: Only show applications for ACTIVE jobs in the recent list (limit 10)
     const activeJobIds = new Set(jobs.filter(j => j.status === 'active').map(j => j.id));
-    const recentApplications = applications.filter(app => activeJobIds.has(app.job?.id));
+    const recentApplications = applications
+        .filter(app => activeJobIds.has(app.job?.id))
+        .slice(0, 10);
 
     // Get status badge class
     const getStatusClass = () => {
@@ -98,6 +100,9 @@ export function HirerDashboard({ company, jobs = [], applications = [] }: Props)
                         <Link href="/dashboard/team" className={styles.teamButton}>
                             👥 Team
                         </Link>
+                        <Link href="/dashboard/billing" className={styles.teamButton}>
+                            💳 Billing
+                        </Link>
                         <Link href="/company/profile" className={styles.editButton}>
                             Edit Profile
                         </Link>
@@ -150,11 +155,13 @@ export function HirerDashboard({ company, jobs = [], applications = [] }: Props)
                                     <td className={styles.categoryCell}>
                                         {job.category_slug ? job.category_slug.replace('-', ' ') : 'N/A'}
                                     </td>
-                                    <td>{job.applications ? job.applications.length : 0}</td>
-                                    <td>
+                                    <td className={styles.applicationsCell}>
+                                        {job.applications ? job.applications.length : 0}
+                                    </td>
+                                    <td className={styles.statusCell}>
                                         <JobStatusBadge status={job.status} />
                                     </td>
-                                    <td>
+                                    <td className={styles.actionCell}>
                                         {activeTab === 'active' ? (
                                             <JobActions jobId={job.id} jobStatus={job.status} />
                                         ) : (

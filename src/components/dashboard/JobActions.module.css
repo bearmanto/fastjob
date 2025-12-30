@@ -73,26 +73,63 @@
 /* Action Buttons Container */
 .actionGroup {
     display: flex;
-    gap: 8px;
+    gap: 12px;
+    align-items: center;
 }
 
 .viewButton {
-    font-size: 11px;
+    font-size: 12px;
     background: var(--color-white);
-    padding: 4px 8px;
-    border-radius: 3px;
+    padding: 6px 14px;
+    border-radius: 4px;
     text-decoration: none;
     color: var(--mcm-gray-darker);
     border: 1px solid var(--mcm-gray-border);
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    transition: all 0.2s;
+}
+
+.viewButton:hover {
+    border-color: var(--hunter-green);
+    color: var(--hunter-green);
 }
 
 .closeButton {
-    font-size: 11px;
+    font-size: 12px;
     background: var(--color-white);
-    padding: 4px 8px;
-    border-radius: 3px;
+    padding: 6px 14px;
+    border-radius: 4px;
     cursor: pointer;
     color: var(--color-error);
     border: 1px solid var(--color-error);
+    min-width: 60px;
+    transition: all 0.2s;
+}
+
+.closeButton:hover {
+    background: var(--color-error-bg);
+}
+
+.manageButton {
+    font-size: 12px;
+    background: var(--hunter-green);
+    padding: 6px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--color-white);
+    border: 1px solid var(--hunter-green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    min-width: 70px;
+    transition: all 0.2s;
+}
+
+.manageButton:hover {
+    background: var(--pine-teal);
+    border-color: var(--pine-teal);
 }

@@ -41,6 +41,8 @@ export async function createJob(prevState: State | null, formData: FormData): Pr
     const location = formData.get('location') as string; // City/Region
     const isRemote = formData.get('is_remote') === 'on';
 
+    const salary_currency = formData.get('salary_currency') as string;
+    const salary_period = formData.get('salary_period') as string;
     const salary_min = Number(formData.get('salary_min'));
     const salary_max = Number(formData.get('salary_max'));
 
@@ -81,6 +83,8 @@ export async function createJob(prevState: State | null, formData: FormData): Pr
             is_remote: isRemote,
             accepts_worldwide: acceptsWorldwide,
             visa_sponsorship: visaSponsorship,
+            salary_currency: salary_currency || 'USD',
+            salary_period: salary_period || 'monthly',
             salary_min,
             salary_max,
             description_snippet: description.substring(0, 150) + '...',

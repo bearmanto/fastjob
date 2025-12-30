@@ -1,0 +1,30 @@
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 3px;
+    padding: 1px 4px;
+    vertical-align: middle;
+}
+
+.small {
+    font-size: 12px;
+}
+
+.medium {
+    font-size: 14px;
+    padding: 2px 6px;
+}
+
+.icon {
+    line-height: 1;
+}
+
+.label {
+    font-size: 9px;
+    font-weight: 700;
+    color: #5a4000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

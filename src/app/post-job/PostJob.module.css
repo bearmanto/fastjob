@@ -204,6 +204,11 @@
     max-width: 400px;
 }
 
+.row {
+    display: flex;
+    gap: 12px;
+}
+
 /* Salary Row */
 .salaryRow {
     display: flex;

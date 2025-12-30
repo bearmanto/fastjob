@@ -39,11 +39,6 @@ export async function inviteTeamMember(_prevState: ActionState, formData: FormDa
     }
 
     // Get company name for email
-    const { data: company } = await supabase
-        .from('companies')
-        .select('name')
-        .eq('id', companyId)
-        .single();
 
     // Find user by email
     const { data: invitee } = await supabase

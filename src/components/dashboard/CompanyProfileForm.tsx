@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { updateCompanyProfile } from '@/app/dashboard/actions';
-import styles from '@/app/profile/Profile.module.css'; // Reuse profile styles
+import styles from './CompanyProfileForm.module.css';
 
 import { INDUSTRIES } from '@/data/constants';
-import { COUNTRIES, getCountryFlag } from '@/data/countries';
+import { COUNTRIES } from '@/data/countries';
 
 interface Company {
     name: string;
@@ -20,7 +20,6 @@ export function CompanyProfileForm({ company }: { company: Company }) {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
 
-    // Use country_code if available, otherwise try to parse from location
     const [countryCode, setCountryCode] = useState(company.country_code || 'ID');
     const [city, setCity] = useState(company.location || '');
     const [industry, setIndustry] = useState(company.industry || INDUSTRIES[0]);
@@ -29,7 +28,6 @@ export function CompanyProfileForm({ company }: { company: Company }) {
         setLoading(true);
         setMessage(null);
 
-        // Set country code and city as location
         formData.set('country_code', countryCode);
         formData.set('location', city);
         formData.set('industry', industry);
@@ -45,23 +43,31 @@ export function CompanyProfileForm({ company }: { company: Company }) {
     }
 
     return (
-        <div className={styles.section}>
+        <div className={styles.profileCard}>
             <h2 className={styles.sectionTitle}>Company Details</h2>
-            {message && <div style={{ color: 'var(--hunter-green)', marginBottom: '10px', fontWeight: 'bold' }}>{message}</div>}
 
             <form action={handleSubmit} className={styles.formGrid}>
+                {message && (
+                    <div className={styles.successMessage}>{message}</div>
+                )}
+
+                {/* Row 1: Name + Country */}
                 <div className={styles.inputGroup}>
                     <label className={styles.label}>Company Name</label>
-                    <input name="name" defaultValue={company.name} required className={styles.input} />
+                    <input
+                        name="name"
+                        defaultValue={company.name}
+                        required
+                        className={styles.input}
+                    />
                 </div>
 
-                {/* Country Dropdown */}
                 <div className={styles.inputGroup}>
                     <label className={styles.label}>Country</label>
                     <select
                         value={countryCode}
                         onChange={(e) => setCountryCode(e.target.value)}
-                        className={styles.input}
+                        className={styles.select}
                     >
                         {COUNTRIES.map(c => (
                             <option key={c.code} value={c.code}>
@@ -71,7 +77,7 @@ export function CompanyProfileForm({ company }: { company: Company }) {
                     </select>
                 </div>
 
-                {/* City/Region Free Text */}
+                {/* Row 2: City + Industry */}
                 <div className={styles.inputGroup}>
                     <label className={styles.label}>City / Region</label>
                     <input
@@ -88,7 +94,7 @@ export function CompanyProfileForm({ company }: { company: Company }) {
                         name="industry"
                         value={industry}
                         onChange={(e) => setIndustry(e.target.value)}
-                        className={styles.input}
+                        className={styles.select}
                     >
                         <option value="">Select Industry...</option>
                         {INDUSTRIES.map(ind => (
@@ -97,25 +103,33 @@ export function CompanyProfileForm({ company }: { company: Company }) {
                     </select>
                 </div>
 
-                <div className={styles.inputGroup}>
+                {/* Row 3: Website (full width) */}
+                <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
                     <label className={styles.label}>Website</label>
-                    <input name="website" defaultValue={company.website || ''} placeholder="https://..." className={styles.input} />
+                    <input
+                        name="website"
+                        defaultValue={company.website || ''}
+                        placeholder="https://yourcompany.com"
+                        className={styles.input}
+                    />
                 </div>
 
+                {/* Row 4: Description (full width) */}
                 <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
                     <label className={styles.label}>Description (About Us)</label>
                     <textarea
                         name="description"
                         defaultValue={company.description || ''}
                         rows={6}
-                        placeholder="Briefly describe your company..."
+                        placeholder="Tell candidates about your company, culture, and what makes it a great place to work..."
                         className={styles.textarea}
                     />
                 </div>
 
-                <div className={styles.fullWidth} style={{ marginTop: '10px' }}>
+                {/* Submit */}
+                <div className={styles.submitRow}>
                     <button type="submit" className={styles.saveButton} disabled={loading}>
-                        {loading ? 'Saving...' : 'Save Company Details'}
+                        {loading ? 'Saving...' : 'Save Changes'}
                     </button>
                 </div>
             </form>

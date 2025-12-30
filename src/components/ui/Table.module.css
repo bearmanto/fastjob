@@ -1,38 +1,57 @@
-/* Shared Table Styles */
+/* Shared Table Styles - Stripe-Inspired */
+
 .jobTable {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
+    font-family: var(--font-main);
 }
 
 .jobTable th {
     text-align: left;
-    background: var(--mcm-gray-bg);
-    padding: 6px 8px;
-    border-bottom: 1px solid var(--mcm-gray-medium);
-    font-weight: bold;
+    background: var(--gray-50);
+    padding: var(--space-3) var(--space-6);
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .jobTable td {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--mcm-gray-light);
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--gray-100);
     vertical-align: middle;
+    font-size: 14px;
+    color: var(--gray-700);
+    transition: background-color 0.1s ease;
 }
 
 .jobTable tr:hover td {
-    background: var(--color-warning-bg);
+    background: var(--gray-50);
     cursor: pointer;
 }
 
+.jobTable tr:last-child td {
+    border-bottom: none;
+}
+
 .jobTitle {
-    font-weight: 600;
-    color: var(--mcm-link);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-800);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.jobTitle:hover {
+    color: var(--brand-primary);
     text-decoration: none;
 }
 
 .jobSnippet {
-    color: var(--mcm-gray-dark);
-    font-size: 11px;
+    color: var(--gray-500);
+    font-size: 13px;
     margin-top: 2px;
 }
 
@@ -42,47 +61,27 @@
     justify-content: center;
     padding: 6px 12px;
     background: var(--color-white);
-    border: 1px solid var(--mcm-gray-border);
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--mcm-gray-darker);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-700);
     text-decoration: none;
     cursor: pointer;
-    line-height: 1.2;
-    transition: all 0.1s ease;
+    transition: all 0.15s ease;
+    white-space: nowrap;
 }
 
 .actionButton:hover {
-    background: var(--mcm-gray-bg);
-    border-color: var(--mcm-gray-medium);
-    color: var(--color-black);
-}
-
-/* Table Column Widths */
-.colRole {
-    width: 40%;
-}
-
-.colCompany {
-    width: 25%;
-}
-
-.colLocation {
-    width: 15%;
-}
-
-.colSalary {
-    width: 10%;
-}
-
-.colPosted {
-    width: 10%;
+    background: var(--gray-50);
+    border-color: var(--gray-300);
+    color: var(--gray-900);
 }
 
 /* Empty State */
 .emptyRow {
-    padding: 20px;
+    padding: var(--space-8);
     text-align: center;
     font-style: italic;
+    color: var(--gray-500);
 }

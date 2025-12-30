@@ -3,20 +3,40 @@ import { createClient } from '@/utils/supabase/server';
 import { signout } from '@/app/login/actions';
 import styles from './Header.module.css';
 import { NavLink } from './NavLink';
+import { GoldBadge } from '@/components/ui/GoldBadge';
+import { getCompanyPlan, isPro } from '@/lib/subscription';
 
 export async function Header() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Fetch role if user exists
+    // Fetch role and plan if user exists
     let role = null;
+    let showGoldBadge = false;
+
     if (user) {
+        // Get Profile
         const { data: profile } = await supabase
             .from('profiles')
             .select('role')
             .eq('id', user.id)
             .single();
         role = profile?.role;
+
+        // If Hirer, Get Company & Plan for Badge
+        if (role === 'hirer') {
+            const { data: company } = await supabase
+                .from('companies')
+                .select('id')
+                .eq('owner_id', user.id)
+                .single();
+
+            if (company) {
+                // Use the helper that has the RPC fallback!
+                const plan = await getCompanyPlan(company.id);
+                showGoldBadge = isPro(plan);
+            }
+        }
     }
 
     const isHirer = role === 'hirer';
@@ -41,9 +61,14 @@ export async function Header() {
                     <div className={styles.rightActions}>
                         {user ? (
                             <div className={styles.userNav}>
+                                {showGoldBadge && <GoldBadge size="small" />}
+
                                 <Link href="/dashboard" className={styles.dashboardLink}>
                                     Dashboard
                                 </Link>
+
+                                <span className={styles.divider}>/</span>
+
                                 <form action={signout} className={styles.inlineForm}>
                                     <button type="submit" className={styles.logoutButton}>
                                         Logout

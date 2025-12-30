@@ -11,8 +11,8 @@ export async function POST(request: NextRequest) {
     try {
         const { jobId, source = 'direct' } = await request.json();
 
-        if (!jobId) {
-            return NextResponse.json({ error: 'Missing jobId' }, { status: 400 });
+        if (!jobId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(jobId)) {
+            return NextResponse.json({ error: 'Invalid jobId' }, { status: 400 });
         }
 
         const today = new Date().toISOString().split('T')[0];

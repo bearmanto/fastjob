@@ -9,6 +9,8 @@ import { checkIsJobSaved } from '@/app/actions/savedJobs';
 import { BookmarkButton } from '@/components/jobs/BookmarkButton';
 import { ViewTracker } from '@/components/analytics/ViewTracker';
 import { getCountryFlag, getCountryName } from '@/data/countries';
+import { ShareButton } from '@/components/jobs/ShareButton';
+import { SimilarJobs } from '@/components/jobs/SimilarJobs';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -54,7 +56,7 @@ export default async function JobPage({ params }: PageProps) {
         visaSponsorship: jobRaw.visa_sponsorship || false,
         categorySlug: jobRaw.category_slug,
         salary: (jobRaw.salary_min && jobRaw.salary_max)
-            ? `IDR ${jobRaw.salary_min.toLocaleString()} - ${jobRaw.salary_max.toLocaleString()}`
+            ? `${new Intl.NumberFormat('en-US', { style: 'currency', currency: jobRaw.salary_currency || 'IDR', maximumFractionDigits: 0 }).format(jobRaw.salary_min)} - ${new Intl.NumberFormat('en-US', { style: 'currency', currency: jobRaw.salary_currency || 'IDR', maximumFractionDigits: 0 }).format(jobRaw.salary_max)} / ${(jobRaw.salary_period || 'monthly').replace('monthly', 'mo').replace('annual', 'yr')}`
             : 'Salary confidential',
         jobType: jobRaw.job_type ? jobRaw.job_type.replace('_', ' ').toUpperCase() : 'FULL TIME',
         workplaceType: jobRaw.workplace_type ? jobRaw.workplace_type.replace('_', ' ').toUpperCase() : 'ON-SITE',
@@ -119,7 +121,29 @@ export default async function JobPage({ params }: PageProps) {
                 <h1 className={styles.title}>{job.title}</h1>
                 <div className={styles.company}>
                     {job.company} — {getCountryFlag(job.countryCode)} {job.location || getCountryName(job.countryCode)}
-                    {job.isRemote && <span className={styles.remoteBadge}>🌍 Remote</span>}
+
+                    {/* Dynamic Workplace Badge */}
+                    {(() => {
+                        const type = (job.workplaceType || 'on_site').toLowerCase().replace('-', '_'); // Handle on-site/on_site
+                        if (type.includes('remote')) return <span className={styles.remoteBadge}>🌍 Remote</span>;
+                        if (type.includes('hybrid')) return <span className={styles.hybridBadge}>🏡 Hybrid</span>;
+                        return <span className={styles.onSiteBadge}>🏢 On-site</span>;
+                    })()}
+
+                    {/* Job Type Badge */}
+                    {(() => {
+                        const type = (job.jobType || 'FULL TIME').toLowerCase().replace(' ', '_');
+
+                        if (type.includes('full')) return <span className={styles.fullTimeBadge}>Full Time</span>;
+                        if (type.includes('part')) return <span className={styles.partTimeBadge}>Part Time</span>;
+                        if (type.includes('contract')) return <span className={styles.contractBadge}>Contract</span>;
+                        if (type.includes('intern')) return <span className={styles.internshipBadge}>Internship</span>;
+                        if (type.includes('daily')) return <span className={styles.dailyBadge}>Daily</span>;
+
+                        // Fallback that tries to look like a badge if we have a value but it didn't match
+                        return job.jobType ? <span className={styles.fullTimeBadge}>{job.jobType}</span> : null;
+                    })()}
+
                     {job.visaSponsorship && <span className={styles.visaBadge}>✈️ Visa Sponsorship</span>}
                 </div>
 
@@ -136,8 +160,6 @@ export default async function JobPage({ params }: PageProps) {
                             <td className={styles.specLabel}>Location</td>
                             <td>
                                 {getCountryFlag(job.countryCode)} {job.location || getCountryName(job.countryCode)}
-                                <span className={styles.workplaceNote}>({job.workplaceType})</span>
-                                {job.isRemote && <span className={styles.remoteBadge}>Remote OK</span>}
                             </td>
                         </tr>
                         <tr>
@@ -199,6 +221,9 @@ export default async function JobPage({ params }: PageProps) {
                         )}
                     </div>
                 </div>
+
+                {/* Similar Jobs */}
+                <SimilarJobs currentJobId={job.id} categorySlug={job.categorySlug} />
             </div>
 
             <div className={styles.sideColumn}>
@@ -227,6 +252,9 @@ export default async function JobPage({ params }: PageProps) {
                                 withText={true}
                                 className={styles.savedJobButton}
                             />
+
+                            {/* Share Button */}
+                            <ShareButton jobTitle={job.title} />
                         </>
                     ) : (
                         <>

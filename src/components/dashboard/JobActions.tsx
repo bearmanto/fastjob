@@ -79,6 +79,9 @@ export function JobActions({ jobId, jobStatus }: Props) {
             )}
 
             <div className={styles.actionGroup}>
+                <Link href={`/dashboard/job/${jobId}/applicants`} className={styles.manageButton}>
+                    Manage
+                </Link>
                 <Link href={`/job/${jobId}`} className={styles.viewButton}>
                     View
                 </Link>

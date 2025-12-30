@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { COUNTRIES, getCountryFlag } from '@/data/countries';
-import styles from './page.module.css';
+import { COUNTRIES } from '@/data/countries';
+import styles from '@/app/page.module.css';
 
 export function CountryFilter() {
     const router = useRouter();

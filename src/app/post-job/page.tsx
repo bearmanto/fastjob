@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useActionState } from 'react';
 import styles from './PostJob.module.css';
-import { JOB_TYPES, WORKPLACE_TYPES, COMMON_SKILLS, COMMON_BENEFITS, INDUSTRIES } from '@/data/constants';
+import { JOB_TYPES, WORKPLACE_TYPES, COMMON_SKILLS, COMMON_BENEFITS, INDUSTRIES, CURRENCIES, SALARY_PERIODS } from '@/data/constants';
 import { COUNTRIES } from '@/data/countries';
 import { createJob } from './actions';
 
@@ -191,9 +191,22 @@ export default function PostJobPage() {
 
                 <div className={styles.sectionHeader}>2. Compensation & Specifications</div>
 
-                <label className={styles.label}>Salary Range (Monthly)</label>
+                <label className={styles.label}>Payment Terms</label>
+                <div className={styles.row}>
+                    <div style={{ flex: 1 }}>
+                        <select name="salary_currency" className={styles.input} defaultValue="USD">
+                            {CURRENCIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                        </select>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <select name="salary_period" className={styles.input} defaultValue="monthly">
+                            {SALARY_PERIODS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+                        </select>
+                    </div>
+                </div>
+
+                <label className={styles.label}>Salary Range</label>
                 <div className={styles.salaryRow}>
-                    <span className={styles.salaryLabel}>IDR</span>
                     <input name="salary_min" type="number" className={`${styles.input} ${styles.salaryInput}`} placeholder="Min" />
                     <span className={styles.salaryLabel}>-</span>
                     <input name="salary_max" type="number" className={`${styles.input} ${styles.salaryInput}`} placeholder="Max" />

@@ -1,8 +1,11 @@
 import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
 import styles from './page.module.css';
-import { CountryFilter } from './CountryFilter';
+import { CountryFilter } from '@/components/jobs/CountryFilter';
 import { getCountryFlag, getCountryName } from '@/data/countries';
+import { formatRelativeTime, isFresh } from '@/utils/date';
+import { JobStreamItem } from '@/components/jobs/JobStreamItem';
+import { LoadMoreJobs } from '@/components/jobs/LoadMoreJobs';
 
 // ISR: Regenerate page every 60 seconds
 export const revalidate = 60;
@@ -16,14 +19,22 @@ interface JobListing {
   visa_sponsorship: boolean;
   salary_min: number | null;
   salary_max: number | null;
+  salary_currency: string;
+  salary_period: string;
   created_at: string;
   description: string | null;
   category_slug: string;
   workplace_type: string;
+  job_type: string;
   experience_level: string;
   company: {
+    id: string;
     name: string;
     verified: boolean;
+    subscriptions?: {
+      plan: string;
+      status: string;
+    }[] | null;
   }[] | null;
 }
 
@@ -46,18 +57,23 @@ export default async function Home({ searchParams }: PageProps) {
       visa_sponsorship,
       salary_min,
       salary_max,
+      salary_currency,
+      salary_period,
       created_at,
       description,
       category_slug,
       workplace_type,
+      job_type,
       experience_level,
       company:companies (
+          id,
           name,
           verified
       )
     `)
     .eq('status', 'active')
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .range(0, 19); // Initial load of 20
 
   // Apply Collection Filters
   if (collection === 'fresh') {
@@ -75,7 +91,24 @@ export default async function Home({ searchParams }: PageProps) {
     query = query.eq('country_code', country);
   }
 
-  const { data: jobs } = await query;
+  const { data: jobs, error } = await query;
+
+  if (error) {
+    console.error('Error fetching jobs:', error);
+  } else {
+    // Debug logging
+    console.log(`[Home] Fetched ${jobs?.length} jobs`);
+    jobs?.forEach((job, i) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const company = (job as any).company;
+      if (company) {
+        console.log(`[Job ${i}] Company: ${Array.isArray(company) ? company[0]?.name : company?.name}, Sub:`,
+          JSON.stringify(Array.isArray(company) ? company[0]?.subscriptions : company?.subscriptions)
+        );
+      }
+    });
+  }
+
   const typedJobs = (jobs || []) as JobListing[];
 
   return (
@@ -94,35 +127,12 @@ export default async function Home({ searchParams }: PageProps) {
 
         <div className={styles.jobStream}>
           {typedJobs.length > 0 ? (
-            typedJobs.map((job) => (
-              <div key={job.id} className={styles.streamItem}>
-                <div className={styles.streamHeader}>
-                  <Link href={`/job/${job.id}`} className={styles.streamTitle}>
-                    {job.title}
-                  </Link>
-                  <span className={styles.streamTime}>{new Date(job.created_at).toLocaleDateString()}</span>
-                </div>
-                <div className={styles.streamCompany}>
-                  {job.company?.[0]?.name} {job.company?.[0]?.verified && '✅'} &mdash;
-                  {getCountryFlag(job.country_code)} {job.location || getCountryName(job.country_code)}
-                  {job.is_remote && <span className={styles.remoteTag}>🌍 Remote</span>}
-                  {job.visa_sponsorship && <span className={styles.visaTag}>✈️ Visa Sponsorship</span>}
-                </div>
-                <div className={styles.streamMeta}>
-                  {job.salary_min && job.salary_max ?
-                    `IDR ${(job.salary_min / 1000000).toFixed(0)}mn - ${(job.salary_max / 1000000).toFixed(0)}mn`
-                    : 'Salary Disclosed'
-                  }
-                  <span className={styles.metaSeparator}>•</span>
-                  <span className={styles.categorySlug}>{job.category_slug}</span>
-                  <span className={styles.metaSeparator}>•</span>
-                  <span className={styles.tag}>{job.workplace_type}</span>
-                </div>
-                <p className={styles.streamSnippet}>
-                  {job.description ? job.description.substring(0, 140) + '...' : 'No description.'}
-                </p>
-              </div>
-            ))
+            <>
+              {typedJobs.map((job) => (
+                <JobStreamItem key={job.id} job={job} />
+              ))}
+              {typedJobs.length >= 20 && <LoadMoreJobs initialOffset={20} />}
+            </>
           ) : (
             <div className={styles.emptyJobsState}>
               No jobs found matching your filters.
