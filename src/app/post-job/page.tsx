@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useRef, useEffect, useActionState } from 'react';
+import { useState, useRef, useEffect, useActionState, useCallback } from 'react';
 import styles from './PostJob.module.css';
 import { JOB_TYPES, WORKPLACE_TYPES, COMMON_SKILLS, COMMON_BENEFITS, INDUSTRIES, CURRENCIES, SALARY_PERIODS } from '@/data/constants';
 import { COUNTRIES } from '@/data/countries';
 import { createJob } from './actions';
+import { HealthcareCertificationSelect } from './HealthcareCertificationSelect';
 
 // Helper for multi-select dropdown
 function MultiSelect({
@@ -96,6 +97,12 @@ export default function PostJobPage() {
     const [countryCode, setCountryCode] = useState('');
     const [city, setCity] = useState('');
     const [isRemote, setIsRemote] = useState(false);
+    const [healthcareCerts, setHealthcareCerts] = useState<{
+        certification_id: string;
+        name: string;
+        abbreviation: string | null;
+        is_required: boolean;
+    }[]>([]);
 
     // Server Action State - Updated for React 19/Next 15
     const [state, formAction] = useActionState(createJob, null);
@@ -107,6 +114,10 @@ export default function PostJobPage() {
             setList([...list, item]);
         }
     };
+
+    const handleHealthcareCertsChange = useCallback((certs: typeof healthcareCerts) => {
+        setHealthcareCerts(certs);
+    }, []);
 
     return (
         <div className={styles.container}>
@@ -262,6 +273,13 @@ export default function PostJobPage() {
 
                 <label className={`${styles.label} ${styles.labelTopLarge}`}>Job Description</label>
                 <textarea name="description" className={styles.textarea} placeholder="Describe the role responsibilities..." rows={6}></textarea>
+
+                {/* Healthcare Certification Section */}
+                <HealthcareCertificationSelect
+                    onSelectionChange={handleHealthcareCertsChange}
+                    selectedCountryCode={countryCode}
+                />
+                <input type="hidden" name="healthcare_certifications" value={JSON.stringify(healthcareCerts)} />
 
                 <div className={styles.sectionHeader}>4. Listing Options</div>
 

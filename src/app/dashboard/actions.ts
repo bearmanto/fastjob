@@ -18,6 +18,10 @@ export async function updateCompanyProfile(formData: FormData) {
     const industry = formData.get('industry') as string;
     const description = formData.get('description') as string;
 
+    // New Fields
+    const companySize = formData.get('company_size') as string;
+    const foundedYear = formData.get('founded_year') ? parseInt(formData.get('founded_year') as string) : null;
+
     // We assume the user is the owner of the company.
     // RLS policies should enforce this, but we can also look up the company ID first if needed.
     // simpler: update companies where owner_id = user.id
@@ -31,6 +35,8 @@ export async function updateCompanyProfile(formData: FormData) {
             website: website,
             industry: industry,
             description: description,
+            company_size: companySize,
+            founded_year: foundedYear
         })
         .eq('owner_id', user.id);
 

@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { SeekerDashboard } from '@/components/dashboard/SeekerDashboard';
 import { HirerDashboard } from '@/components/dashboard/HirerDashboard';
 import { getSavedJobs } from '@/app/actions/savedJobs';
+import { getCompanyPlan, isPro } from '@/lib/subscription';
 
 export default async function DashboardPage() {
     const supabase = await createClient();
@@ -57,6 +58,16 @@ export default async function DashboardPage() {
         .select('*')
         .eq('owner_id', user.id)
         .single();
+
+    // Fetch Subscription Plan
+    let planType = 'free';
+    if (company) {
+        try {
+            planType = await getCompanyPlan(company.id);
+        } catch (e) {
+            console.error("Plan fetch error:", e);
+        }
+    }
 
     if (!company) {
         return <HirerDashboard company={null} jobs={[]} applications={[]} />;
@@ -169,6 +180,7 @@ export default async function DashboardPage() {
             company={company}
             jobs={jobs || []}
             applications={enrichedApplications}
+            planType={planType}
         />
     );
 }

@@ -10,6 +10,13 @@ export type State = {
     success?: boolean;
 } | null;
 
+interface HealthcareCertInput {
+    certification_id: string;
+    name: string;
+    abbreviation: string | null;
+    is_required: boolean;
+}
+
 export async function createJob(prevState: State | null, formData: FormData): Promise<State> {
     const supabase = await createClient();
 
@@ -49,11 +56,13 @@ export async function createJob(prevState: State | null, formData: FormData): Pr
     // Parse JSON arrays
     let skills: string[] = [];
     let benefits: string[] = [];
+    let healthcareCerts: HealthcareCertInput[] = [];
     try {
         skills = JSON.parse(formData.get('skills') as string || '[]');
         benefits = JSON.parse(formData.get('benefits') as string || '[]');
+        healthcareCerts = JSON.parse(formData.get('healthcare_certifications') as string || '[]');
     } catch {
-        return { error: 'Invalid data format for skills or benefits.' };
+        return { error: 'Invalid data format for skills, benefits, or certifications.' };
     }
 
     // 4. Validation (Basic)
@@ -104,6 +113,25 @@ export async function createJob(prevState: State | null, formData: FormData): Pr
         return { error: `Failed to create job: ${error.message}` };
     }
 
-    // 6. Redirect
+    // 6. Insert Healthcare Certifications if any
+    if (healthcareCerts.length > 0) {
+        const certInserts = healthcareCerts.map(cert => ({
+            job_id: job.id,
+            certification_id: cert.certification_id,
+            is_required: cert.is_required
+        }));
+
+        const { error: certError } = await supabase
+            .from('job_required_certifications')
+            .insert(certInserts);
+
+        if (certError) {
+            console.error('Healthcare cert insert error:', certError);
+            // Don't fail the job creation, just log it
+        }
+    }
+
+    // 7. Redirect
     redirect(`/job/${job.id}`);
 }
+

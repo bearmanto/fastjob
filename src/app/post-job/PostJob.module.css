@@ -1,17 +1,125 @@
+/* Post Job Page - Stripe-Inspired Design */
+
 .container {
-    max-width: 700px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 20px 0 60px;
+    padding: var(--space-6);
+    width: 100%;
 }
 
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gray-800);
+    border-bottom: 1px solid var(--gray-200);
+    padding-bottom: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
+/* Form Grid */
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    align-items: start;
+}
+
+@media (min-width: 768px) {
+    .formGrid {
+        grid-template-columns: 180px 1fr;
+        gap: var(--space-4) var(--space-5);
+    }
+}
+
+/* Section Header */
+.sectionHeader {
+    grid-column: 1 / -1;
+    background: var(--gray-800);
+    color: var(--color-white);
+    padding: var(--space-3) var(--space-4);
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    margin: var(--space-5) 0 var(--space-3) 0;
+}
+
+/* Labels */
+.label {
+    font-weight: 500;
+    font-size: 14px;
+    text-align: left;
+    padding-right: 0;
+    color: var(--gray-700);
+    padding-top: 8px;
+}
+
+@media (min-width: 768px) {
+    .label {
+        text-align: right;
+        padding-right: var(--space-4);
+    }
+}
+
+.labelTop {
+    align-self: start;
+    padding-top: 10px;
+}
+
+.labelTopLarge {
+    align-self: start;
+    padding-top: var(--space-4);
+}
+
+/* Inputs */
+.input {
+    width: 100%;
+    max-width: 450px;
+    height: 40px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--color-white);
+    color: var(--gray-800);
+    transition: all 0.15s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(82, 121, 111, 0.15);
+}
+
+.textarea {
+    width: 100%;
+    max-width: 550px;
+    min-height: 120px;
+    padding: var(--space-3);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--color-white);
+    color: var(--gray-800);
+    resize: vertical;
+    transition: all 0.15s ease;
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(82, 121, 111, 0.15);
+}
+
+/* Checkbox */
 .checkboxLabel {
     grid-column: 1 / -1;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-3);
     font-size: 14px;
-    color: var(--mcm-gray-darker);
-    margin-top: 4px;
+    color: var(--gray-700);
     cursor: pointer;
     padding-left: 0;
 }
@@ -23,134 +131,139 @@
 }
 
 .checkboxLabel input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--brand-primary);
 }
 
+/* Eligibility Section */
 .eligibilitySection {
     grid-column: 1 / -1;
-    margin-top: 8px;
+    margin-top: var(--space-2);
+}
+
+@media (min-width: 768px) {
+    .eligibilitySection {
+        grid-column: 2 / -1;
+    }
 }
 
 .helpText {
     font-size: 12px;
-    color: var(--mcm-gray-medium);
-    margin: 4px 0 0 0;
+    color: var(--gray-500);
+    margin: var(--space-1) 0 0 0;
     font-style: italic;
 }
 
-.title {
-    font-size: 20px;
-    color: var(--mcm-green);
-    border-bottom: 2px solid var(--mcm-green);
-    padding-bottom: 8px;
-    margin-bottom: 20px;
+/* Location Grid */
+.locationGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    max-width: 450px;
 }
 
-.formGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
+.row {
+    display: flex;
+    gap: var(--space-3);
     align-items: center;
 }
 
-@media (min-width: 768px) {
-    .formGrid {
-        grid-template-columns: 200px 1fr;
-    }
+/* Salary Row */
+.salaryRow {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.label {
-    font-weight: bold;
-    font-size: 13px;
-    text-align: left;
-    padding-right: 0;
-    color: var(--mcm-gray-darker);
-}
-
-@media (min-width: 768px) {
-    .label {
-        text-align: right;
-        padding-right: 16px;
-    }
-}
-
-.input {
-    width: 100%;
-    max-width: 400px;
-    height: 32px;
-}
-
-.textarea {
-    width: 100%;
-    max-width: 500px;
-    height: 100px;
-    border: 1px solid var(--mcm-gray-border);
-    padding: 8px;
-    font-family: inherit;
-    font-size: 13px;
-}
-
-.sectionHeader {
-    grid-column: 1 / -1;
-    background: var(--mcm-gray-light);
-    padding: 6px 12px;
-    font-weight: bold;
-    border-top: 1px solid var(--mcm-gray-border);
-    border-bottom: 1px solid var(--mcm-gray-border);
-    margin: 16px 0 8px 0;
-    color: var(--color-black);
-}
-
-.submitRow {
-    grid-column: 2;
-    margin-top: 20px;
-}
-
-.submitButton {
-    background: var(--mcm-yellow);
-    border: 1px solid var(--color-accent-dark);
-    padding: 10px 30px;
-    font-weight: bold;
+.salaryLabel {
     font-size: 14px;
+    color: var(--gray-600);
 }
 
-.submitButton:hover {
-    background: var(--color-accent-lighter);
+.salaryInput {
+    width: 130px;
+    height: 40px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    background: var(--color-white);
 }
 
-/* MultiSelect Component */
+.salaryInput:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(82, 121, 111, 0.15);
+}
+
+/* Benefits Grid */
+.benefitsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+}
+
+@media (max-width: 768px) {
+    .benefitsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.benefitLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--gray-700);
+    padding: var(--space-2) 0;
+}
+
+.benefitLabel input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--brand-primary);
+}
+
+/* Multi-Select Component */
 .multiSelectWrapper {
     position: relative;
+    max-width: 450px;
 }
 
 .chipContainer {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
 }
 
 .chip {
-    background: #e0f2f1;
-    color: #00695c;
-    border: 1px solid #b2dfdb;
-    border-radius: 4px;
-    padding: 4px 8px;
+    background: var(--brand-primary);
+    color: var(--color-white);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
     font-size: 13px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: var(--space-2);
 }
 
 .chipRemove {
     background: none;
     border: none;
     cursor: pointer;
-    color: #004d40;
+    color: rgba(255, 255, 255, 0.8);
     font-weight: bold;
     font-size: 14px;
     line-height: 1;
+    padding: 0;
+}
+
+.chipRemove:hover {
+    color: var(--color-white);
 }
 
 .dropdownMenu {
@@ -161,103 +274,200 @@
     max-height: 200px;
     overflow-y: auto;
     background: var(--color-white);
-    border: 1px solid var(--mcm-gray-border);
-    border-radius: 4px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
     z-index: 100;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
+    margin-top: var(--space-1);
 }
 
 .dropdownOption {
-    padding: 8px 12px;
+    padding: 10px var(--space-4);
     cursor: pointer;
-    font-size: 13px;
-    border-bottom: 1px solid var(--mcm-gray-light);
+    font-size: 14px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
 }
 
 .dropdownOption:hover {
-    background: var(--mcm-gray-bg);
+    background: var(--gray-50);
+}
+
+.dropdownOption:last-child {
+    border-bottom: none;
 }
 
 .dropdownEmpty {
-    padding: 8px 12px;
-    color: var(--mcm-gray-medium);
-    font-size: 13px;
+    padding: 10px var(--space-4);
+    color: var(--gray-500);
+    font-size: 14px;
+}
+
+/* Submit Row */
+.submitRow {
+    grid-column: 1 / -1;
+    margin-top: var(--space-6);
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .submitRow {
+        grid-column: 2 / -1;
+        text-align: left;
+    }
+}
+
+.submitButton {
+    background: var(--brand-primary);
+    color: var(--color-white);
+    border: none;
+    padding: 12px 32px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.submitButton:hover {
+    background: var(--brand-primary-hover);
+    transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
 /* Error Message */
 .errorMessage {
     grid-column: 1 / -1;
-    background: var(--color-error-bg);
-    color: var(--color-error);
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #ffcdd2;
+    background: #fef2f2;
+    color: #991b1b;
+    padding: var(--space-4);
+    border-radius: var(--radius-sm);
+    border: 1px solid #fecaca;
     font-size: 14px;
     font-weight: 500;
-}
-
-/* Location Grid */
-.locationGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    max-width: 400px;
-}
-
-.row {
-    display: flex;
-    gap: 12px;
-}
-
-/* Salary Row */
-.salaryRow {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.salaryLabel {
-    font-size: 13px;
-}
-
-.salaryInput {
-    width: 120px;
-}
-
-/* Help Text */
-.helpText {
-    font-size: 11px;
-    color: var(--mcm-gray-dark);
-    font-weight: normal;
-}
-
-/* Label Alignment */
-.labelTop {
-    align-self: start;
-    margin-top: 8px;
-}
-
-.labelTopLarge {
-    align-self: start;
-    margin-top: 16px;
-}
-
-/* Benefits Grid */
-.benefitsGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-
-.benefitLabel {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    cursor: pointer;
 }
 
 /* Closes At Input */
 .closesAtInput {
     max-width: 200px;
+    height: 40px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    background: var(--color-white);
+}
+
+.closesAtInput:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(82, 121, 111, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--space-4);
+    }
+}
+
+/* Healthcare Certification Section */
+.healthcareSection {
+    grid-column: 1 / -1;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    margin: var(--space-3) 0;
+}
+
+.healthcareHeader {
+    margin-bottom: var(--space-3);
+}
+
+.healthcareContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.healthcareRow {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.certList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.certItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+}
+
+.certName {
+    font-weight: 500;
+    color: var(--gray-800);
+}
+
+.certAbbr {
+    color: var(--gray-500);
+    margin-left: 4px;
+    font-weight: 400;
+}
+
+.certActions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.requiredToggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--gray-600);
+    cursor: pointer;
+}
+
+.requiredToggle input {
+    accent-color: var(--brand-primary);
+}
+
+.certRemove {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.certRemove:hover {
+    color: #dc2626;
+}
+
+.certCategory {
+    display: block;
+    font-size: 11px;
+    color: #9ca3af;
+    text-transform: capitalize;
 }

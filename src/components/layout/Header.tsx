@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 import { signout } from '@/app/login/actions';
 import styles from './Header.module.css';
 import { NavLink } from './NavLink';
+import { SearchForm } from './SearchForm';
 import { GoldBadge } from '@/components/ui/GoldBadge';
 import { getCompanyPlan, isPro } from '@/lib/subscription';
 
@@ -23,19 +24,12 @@ export async function Header() {
             .single();
         role = profile?.role;
 
-        // If Hirer, Get Company & Plan for Badge
+        // If Hirer, Get Company (Plan fetching moved to Dashboard)
         if (role === 'hirer') {
-            const { data: company } = await supabase
-                .from('companies')
-                .select('id')
-                .eq('owner_id', user.id)
-                .single();
-
-            if (company) {
-                // Use the helper that has the RPC fallback!
-                const plan = await getCompanyPlan(company.id);
-                showGoldBadge = isPro(plan);
-            }
+            /* 
+               Gold badge moved to Dashboard page as per user request.
+               Logic removed from global header.
+            */
         }
     }
 
@@ -49,19 +43,12 @@ export async function Header() {
                         FAST<span className={styles.logoHighlight}>JOB</span>
                     </Link>
 
-                    <div className={styles.searchContainer}>
-                        <input
-                            type="text"
-                            placeholder="Search for jobs, companies, skills..."
-                            className={styles.searchInput}
-                        />
-                        <button className={styles.searchButton}>GO</button>
-                    </div>
+                    <SearchForm />
 
                     <div className={styles.rightActions}>
                         {user ? (
                             <div className={styles.userNav}>
-                                {showGoldBadge && <GoldBadge size="small" />}
+                                {/* GoldBadge moved to Dashboard */}
 
                                 <Link href="/dashboard" className={styles.dashboardLink}>
                                     Dashboard

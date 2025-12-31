@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { JobStatusBadge } from '@/components/ui/StatusBadge';
+import { GoldBadge } from '@/components/ui/GoldBadge';
 import styles from '@/app/dashboard/Dashboard.module.css';
 import tableStyles from '@/components/ui/Table.module.css';
 import { Company } from '@/types';
@@ -22,9 +23,10 @@ interface Props {
     company: Company | null;
     jobs?: Job[];
     applications?: ApplicationData[];
+    planType?: string;
 }
 
-export function HirerDashboard({ company, jobs = [], applications = [] }: Props) {
+export function HirerDashboard({ company, jobs = [], applications = [], planType = 'free' }: Props) {
     const [activeTab, setActiveTab] = useState<'active' | 'closed'>('active');
 
     const isVerified = company?.verification_status === 'verified';
@@ -56,11 +58,33 @@ export function HirerDashboard({ company, jobs = [], applications = [] }: Props)
             <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Dashboard' }]} />
 
             <div className={styles.headerRow}>
-                <h1 className={`${styles.heading} ${styles.headingNoMargin}`}>
-                    My Dashboard (Hirer)
-                </h1>
-                <div className={getStatusClass()}>
-                    Status: {company?.verification_status?.toUpperCase() || 'UNVERIFIED'}
+                {/* H1 removed as per layout refinement */}
+
+                {/* Badge Row */}
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginTop: '12px' }}>
+                    <div className={getStatusClass()}>
+                        {company?.verification_status === 'verified' ? 'VERIFIED' : (company?.verification_status?.toUpperCase() || 'UNVERIFIED')}
+                    </div>
+
+                    {company?.industry && (
+                        <span className={styles.industryBadge}>
+                            🏢 {company.industry}
+                        </span>
+                    )}
+
+                    {/* Subscription Plan Badge */}
+                    {planType === 'free' ? (
+                        <span className={styles.freeBadge}>
+                            FREE PLAN
+                        </span>
+                    ) : (
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            {/* Re-using GoldBadge for Pro/Enterprise but with text */}
+                            <span className={styles.proBadge}>
+                                🏆 {planType.toUpperCase()} PLAN
+                            </span>
+                        </div>
+                    )}
                 </div>
             </div>
 

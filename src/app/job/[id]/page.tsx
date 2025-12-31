@@ -20,8 +20,8 @@ export default async function JobPage({ params }: PageProps) {
     const { id } = await params;
     const supabase = await createClient();
 
-    // PARALLELIZE: Fetch user, job, and saved status
-    const [userResult, jobResult, isSaved] = await Promise.all([
+    // PARALLELIZE: Fetch user, job, saved status, and healthcare certs
+    const [userResult, jobResult, isSaved, certsResult] = await Promise.all([
         supabase.auth.getUser(),
         supabase
             .from('jobs')
@@ -31,11 +31,19 @@ export default async function JobPage({ params }: PageProps) {
             `)
             .eq('id', id)
             .single(),
-        checkIsJobSaved(id)
+        checkIsJobSaved(id),
+        supabase
+            .from('job_required_certifications')
+            .select(`
+                *,
+                certification:healthcare_certifications(name, abbreviation, category)
+            `)
+            .eq('job_id', id)
     ]);
 
     const user = userResult.data?.user;
     const jobRaw = jobResult.data;
+    const healthcareCerts = certsResult.data || [];
 
     // Fallback to Mock
     const mockJob = JOBS.find((j) => j.id === id);
@@ -66,7 +74,8 @@ export default async function JobPage({ params }: PageProps) {
         description: jobRaw.description || 'No description provided.',
         requirements: jobRaw.requirements,
         descriptionSnippet: jobRaw.description_snippet,
-        owner_id: jobRaw.owner_id
+        owner_id: jobRaw.owner_id,
+        healthcareCerts: healthcareCerts
     } : {
         ...mockJob!,
         countryCode: 'ID',
@@ -79,7 +88,8 @@ export default async function JobPage({ params }: PageProps) {
         requirements: null,
         skills: ['React', 'TypeScript', 'Next.js'],
         benefits: ['Health Insurance', 'Remote Work'],
-        categorySlug: 'engineering'
+        categorySlug: 'engineering',
+        healthcareCerts: []
     };
 
     // Check Application Status
@@ -196,6 +206,27 @@ export default async function JobPage({ params }: PageProps) {
                             </span>
                         )) : <span className={styles.emptyTags}>No specific benefits listed.</span>}
                     </div>
+
+                    {/* Healthcare Certifications */}
+                    {job.healthcareCerts && job.healthcareCerts.length > 0 && (
+                        <>
+                            <h3 className={`${styles.sectionHeader} ${styles.sectionHeaderMargin}`}>
+                                🏥 Required Healthcare Credentials
+                            </h3>
+                            <div className={styles.tagContainer}>
+                                {job.healthcareCerts.map((cert: { id: string; is_required: boolean; certification: { name: string; abbreviation: string | null; category: string } | null }) => (
+                                    <span
+                                        key={cert.id}
+                                        className={`${styles.credentialTag} ${cert.is_required ? styles.requiredCred : styles.preferredCred}`}
+                                    >
+                                        {cert.certification?.abbreviation || cert.certification?.name}
+                                        {cert.is_required && <span className={styles.requiredLabel}>Required</span>}
+                                        {!cert.is_required && <span className={styles.preferredLabel}>Preferred</span>}
+                                    </span>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <div className={styles.descriptionSection}>

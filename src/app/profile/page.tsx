@@ -6,6 +6,7 @@ import { ExperienceSection } from './ExperienceSection';
 import { EducationSection } from './EducationSection';
 import { ResumeSection } from './ResumeSection';
 import { AlertPreferencesSection } from './AlertPreferencesSection';
+import { HealthcareCredentialsSection } from './HealthcareCredentialsSection';
 import styles from '../dashboard/Dashboard.module.css';
 
 export default async function ProfilePage() {
@@ -42,6 +43,16 @@ export default async function ProfilePage() {
         .eq('profile_id', user.id)
         .order('start_date', { ascending: false });
 
+    // Fetch Healthcare Credentials
+    const { data: healthcareCredentials } = await supabase
+        .from('profile_certifications')
+        .select(`
+            *,
+            certification:healthcare_certifications(*)
+        `)
+        .eq('profile_id', user.id)
+        .order('created_at', { ascending: false });
+
     // Generate Resume URL if exists
     // Resume is public, so we just use the stored URL
     const resumeDownloadUrl = profile?.resume_url;
@@ -56,6 +67,10 @@ export default async function ProfilePage() {
             <div style={{ maxWidth: '800px' }}>
                 <BasicInfoForm profile={profile || {}} />
                 <ResumeSection resumeUrl={profile?.resume_url} resumeDownloadUrl={resumeDownloadUrl} />
+                <HealthcareCredentialsSection
+                    profileId={user.id}
+                    initialCredentials={healthcareCredentials || []}
+                />
                 <ExperienceSection experiences={experiences || []} />
                 <EducationSection education={education || []} />
                 <AlertPreferencesSection />
@@ -63,3 +78,4 @@ export default async function ProfilePage() {
         </div>
     );
 }
+

@@ -10,13 +10,17 @@ export async function getCompanyPlan(companyId: string): Promise<PlanType> {
     // 1. Try standard query first
     const { data, error } = await supabase
         .from('subscriptions')
-        .select('plan, status')
+        .select('*')
         .eq('company_id', companyId)
-        .single();
+        .order('created_at', { ascending: false })
+        .limit(1);
 
     // 2. If valid data found, return it
-    if (data && !error && data.status === 'active') {
-        return (data.plan as PlanType) || 'free';
+    if (data && data.length > 0 && !error) {
+        const sub = data[0];
+        if (sub.status && sub.status.toLowerCase() === 'active') {
+            return (sub.plan as PlanType) || 'free';
+        }
     }
 
     // 3. Fallback: Try RPC if standard query fails (e.g. schema cache issues)
@@ -30,7 +34,7 @@ export async function getCompanyPlan(companyId: string): Promise<PlanType> {
 
             if (!rpcError && rpcData && rpcData.length > 0) {
                 const sub = rpcData[0];
-                if (sub.status === 'active') {
+                if (sub.status && sub.status.toLowerCase() === 'active') {
                     return (sub.plan as PlanType) || 'free';
                 }
             }
@@ -252,10 +256,11 @@ export async function getSubscription(companyId: string) {
         .from('subscriptions')
         .select('*')
         .eq('company_id', companyId)
-        .single();
+        .order('created_at', { ascending: false })
+        .limit(1);
 
-    if (data && !error) {
-        return data;
+    if (data && data.length > 0 && !error) {
+        return data[0];
     }
 
     // 2. Fallback: RPC (Use upgraded v2 for full object)

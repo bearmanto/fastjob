@@ -54,6 +54,52 @@
     color: var(--color-error);
 }
 
+.industryBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 4px;
+    /* radius-sm */
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #f3f4f6;
+    /* gray-100 */
+    color: #374151;
+    /* gray-700 */
+}
+
+.freeBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #eff6ff;
+    /* blue-50 */
+    color: #2563eb;
+    /* blue-600 */
+}
+
+.proBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #fff7ed;
+    /* orange-50 */
+    color: #ea580c;
+    /* orange-600 */
+}
+
 /* Alert Box */
 .alertBox {
     margin-bottom: var(--space-6);

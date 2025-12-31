@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
 import styles from './page.module.css';
 import { CountryFilter } from '@/components/jobs/CountryFilter';
+import { HealthcareFilter } from '@/components/jobs/HealthcareFilter';
 import { getCountryFlag, getCountryName } from '@/data/countries';
 import { formatRelativeTime, isFresh } from '@/utils/date';
 import { JobStreamItem } from '@/components/jobs/JobStreamItem';
@@ -36,15 +37,29 @@ interface JobListing {
       status: string;
     }[] | null;
   }[] | null;
+  healthcare_certs_count?: number;
 }
 
 interface PageProps {
-  searchParams: Promise<{ collection?: string; country?: string }>;
+  searchParams: Promise<{ collection?: string; country?: string; q?: string; certification?: string }>;
 }
 
 export default async function Home({ searchParams }: PageProps) {
   const supabase = await createClient();
-  const { collection, country } = await searchParams;
+  const { collection, country, q: searchQuery, certification: certId } = await searchParams;
+
+  // Pre-filter by certification if present
+  let filteredJobIds: string[] | null = null;
+  if (certId) {
+    const { data: certJobs } = await supabase
+      .from('job_required_certifications')
+      .select('job_id')
+      .eq('certification_id', certId);
+
+    if (certJobs) {
+      filteredJobIds = certJobs.map(r => r.job_id);
+    }
+  }
 
   let query = supabase
     .from('jobs')
@@ -69,11 +84,23 @@ export default async function Home({ searchParams }: PageProps) {
           id,
           name,
           verified
-      )
+      ),
+      job_required_certifications(count)
     `)
     .eq('status', 'active')
     .order('created_at', { ascending: false })
     .range(0, 19); // Initial load of 20
+
+  // Apply Certification Filter
+  if (filteredJobIds !== null) {
+    // If we have IDs, filter by them. If array is empty, we must filter by empty (return no results)
+    if (filteredJobIds.length > 0) {
+      query = query.in('id', filteredJobIds);
+    } else {
+      // No jobs found with this cert
+      query = query.eq('id', '00000000-0000-0000-0000-000000000000');
+    }
+  }
 
   // Apply Collection Filters
   if (collection === 'fresh') {
@@ -91,7 +118,18 @@ export default async function Home({ searchParams }: PageProps) {
     query = query.eq('country_code', country);
   }
 
-  const { data: jobs, error } = await query;
+  // Apply Search Query Filter (case-insensitive search on title, company name, location, description)
+  if (searchQuery) {
+    query = query.ilike('title', `%${searchQuery}%`);
+  }
+
+  const { data: rawJobs, error } = await query;
+
+  // Transform data to match interface (flatten cert count)
+  const jobs = rawJobs?.map(job => ({
+    ...job,
+    healthcare_certs_count: job.job_required_certifications?.[0]?.count || 0
+  }));
 
   if (error) {
     console.error('Error fetching jobs:', error);
@@ -117,11 +155,18 @@ export default async function Home({ searchParams }: PageProps) {
       {/* Latest Jobs Stream */}
       <section className={styles.jobsSection}>
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionHeading}>Latest Opportunities</h2>
-          <CountryFilter />
+          <h2 className={styles.sectionHeading}>
+            {searchQuery ? `Search Results for "${searchQuery}"` : 'Latest Opportunities'}
+          </h2>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <CountryFilter />
+            <HealthcareFilter />
+          </div>
         </div>
         <p className={styles.introText}>
-          Fresh jobs added directly from verified employers.
+          {searchQuery
+            ? `Found ${typedJobs.length} jobs matching your search.`
+            : 'Fresh jobs added directly from verified employers.'}
           {country && <span className={styles.filterTag}> Showing jobs in {getCountryFlag(country)} {getCountryName(country)}</span>}
         </p>
 

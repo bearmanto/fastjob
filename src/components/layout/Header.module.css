@@ -7,7 +7,7 @@
 }
 
 .mainRow {
-    padding: var(--space-4) 0;
+    padding: var(--space-4) var(--space-6);
     border-bottom: 1px solid var(--gray-100);
 }
 
@@ -17,6 +17,9 @@
     align-items: center;
     gap: var(--space-5);
     justify-content: space-between;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 /* Logo */
@@ -217,7 +220,7 @@
 /* Nav Bar */
 .navBar {
     background: var(--gray-900);
-    padding: 0;
+    padding: 0 var(--space-6);
     display: block;
     font-size: 13px;
     font-weight: 500;
@@ -226,6 +229,8 @@
 .navContainer {
     display: flex;
     gap: var(--space-1);
+    max-width: 1000px;
+    margin: 0 auto;
     width: 100%;
     padding: 4px 0;
 }

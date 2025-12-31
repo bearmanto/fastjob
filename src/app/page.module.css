@@ -1,7 +1,10 @@
 /* Homepage Styles - Stripe-Inspired */
 
 .container {
-    padding: 0 0 var(--space-6) 0;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 var(--space-6) var(--space-6) var(--space-6);
+    width: 100%;
 }
 
 /* Jobs Section */
@@ -238,6 +241,12 @@
 .visaTag {
     background: #f3e5f5;
     color: #7b1fa2;
+}
+
+.healthcareTag {
+    background: #dcfce7;
+    color: #166534;
+    font-weight: 500;
 }
 
 .fullTimeTag {

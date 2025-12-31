@@ -38,9 +38,7 @@ export default async function CompanyProfilePage() {
                 { label: 'Company Profile' }
             ]} />
 
-            <h1 className={styles.heading}>
-                My Company Profile
-            </h1>
+            {/* Heading removed as per user request (handled by form component) */}
 
             {company && (
                 <CompanyProfileForm company={company} />

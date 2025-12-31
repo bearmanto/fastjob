@@ -25,6 +25,8 @@ export interface JobListing {
         name: string;
         verified: boolean;
     }[] | null;
+    // Healthcare fields (optional for backward compat)
+    healthcare_certs_count?: number;
 }
 
 export function JobStreamItem({ job }: { job: JobListing }) {
@@ -84,6 +86,11 @@ export function JobStreamItem({ job }: { job: JobListing }) {
                 })()}
 
                 {job.visa_sponsorship && <span className={styles.visaTag}>✈️ Visa Sponsorship</span>}
+
+                {/* Healthcare Badge */}
+                {(job.healthcare_certs_count || 0) > 0 && (
+                    <span className={styles.healthcareTag}>🏥 Healthcare</span>
+                )}
             </div>
             <div className={styles.streamMeta}>
                 {formatSalary()}
@@ -96,3 +103,4 @@ export function JobStreamItem({ job }: { job: JobListing }) {
         </div>
     );
 }
+
